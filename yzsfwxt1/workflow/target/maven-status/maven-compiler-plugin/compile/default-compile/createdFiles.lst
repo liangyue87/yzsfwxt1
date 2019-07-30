@@ -1,0 +1,9 @@
+com\ljx\hfgsjt\workflow\bean\TaskQueryCondition.class
+com\ljx\hfgsjt\workflow\utils\ThreadLocalContext.class
+com\ljx\hfgsjt\workflow\bean\CandidateUtils.class
+com\ljx\hfgsjt\workflow\service\flow\ActivitiService.class
+com\ljx\hfgsjt\workflow\bean\constant\FlowQueryTypeEnum.class
+com\ljx\hfgsjt\workflow\dao\FlowTaskInfoEODao.class
+com\ljx\hfgsjt\workflow\bean\TaskInfoBean.class
+com\ljx\hfgsjt\workflow\service\FlowTaskInfoEOService.class
+com\ljx\hfgsjt\workflow\bean\WorkFlowBean.class

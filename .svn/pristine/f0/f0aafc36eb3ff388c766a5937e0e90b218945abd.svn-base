@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+        <property name="jdbcDriver" value="oracle.jdbc.driver.OracleDriver"></property>
+        <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.1.249:1521:ljx"></property>
+        <property name="jdbcUsername" value="XZYWBJXT"></property>
+        <property name="jdbcPassword" value="XZYWBJXT"></property>
+        <property name="databaseSchemaUpdate" value="true"></property>
+    </bean>
+    <!-- 引擎工厂bean-->
+    <bean id="processEngine"
+          class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration"
+                  ref="processEngineConfiguration" />
+    </bean>
+
+    <!-- activiti的7个service接口对象;
+    项目中可通过注解的方式将activiti的service接口对象注入到spring代理的bean-->
+    <bean id="repositoryService" factory-bean="processEngine"
+          factory-method="getRepositoryService" />
+    <bean id="runtimeService" factory-bean="processEngine"
+          factory-method="getRuntimeService" />
+    <bean id="taskService" factory-bean="processEngine"
+          factory-method="getTaskService" />
+    <bean id="historyService" factory-bean="processEngine"
+          factory-method="getHistoryService" />
+    <bean id="managementService" factory-bean="processEngine"
+          factory-method="getManagementService" />
+    <bean id="identityService" factory-bean="processEngine"
+          factory-method="getIdentityService" />
+    <bean id="formService " factory-bean="processEngine"
+          factory-method="getFormService" />
+</beans>

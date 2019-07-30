@@ -1,0 +1,120 @@
+.all{
+    margin: 0 auto;
+    padding: 0 auto;
+}
+.head{
+
+}
+.headImg{
+    margin-left: 50px;
+}
+.body{
+    height: 580px;
+    background-image: url("../../static/img/background01.png");
+    background-color: #00a0e9;
+}
+.bodyL{
+   /* width: 416px;
+    height: 352px;
+    background-image: url("photo/供水系统登录_07.png");*/
+    width: 46%;
+    float: left;
+    margin-top: 125px;
+}
+.bodyR{
+    height: 352px;
+    width: 50%;
+    /*background-color: red;*/
+    float: right;
+    margin-top: 125px;
+}
+.bodyForm{
+    height: 28px;
+    width: 300px;
+    margin: auto;
+}
+.bodyFormLx{
+    width: 6px;
+    height: 22px;
+    background-color: #409EFF;
+    float: left;
+    margin-top: 30px
+}
+.bodyFormYhdl{
+    height: 28px;
+    width: 80%;
+    float: left;
+    margin-top: 30px;
+    margin-left: 20px;
+
+}
+.bodyFormYhdl_zt{
+     font-family: "Microsoft Yahei", "Hiragino Sans GB", "Helvetica Neue", Helvetica, tahoma, arial, Verdana, sans-serif;
+    font-size: 18px;
+    color: #4d4d4d;
+}
+.inputZh{
+    width: 280px;
+    height: 35px;
+    margin-left:  25px;
+    margin-top: 30px;
+    border: 1px solid #CCCCCC;
+    background-image: url("../../static/img/供水系统登录_10.png");
+    background-repeat: no-repeat;/*背景小图标不重复*/
+    background-size: 20px 20px;/*小图标的大小*/
+    background-position: 260px 7px;/*小图标在input的位置*/
+    padding-left: 10px;
+}
+.inputMa{
+    width: 280px;
+    height: 35px;
+    margin-left:  25px;
+    margin-top: 20px;
+    border: 1px solid #CCCCCC;
+    background-image: url("../../static/img/供水系统登录_13.png");
+    background-repeat: no-repeat;/*背景小图标不重复*/
+    background-size: 20px 20px;/*小图标的大小*/
+    background-position: 260px 7px;/*小图标在input的位置*/
+    padding-left: 10px;
+}
+
+.remember{
+    margin-left: 25px;
+    margin-top: 12px;
+    border-radius: 0;
+}
+.buttonDl{
+    width: 290px;
+    height: 39px;
+    margin-left:  25px;
+    margin-top: 20px;
+    border: 0;
+    background-color: #409EFF;
+    font-size: 17px;
+    color: white;
+}
+.buttonDl:hover{
+    background-color: #70B6FF;
+
+}
+.foot{
+    color: #989898;
+    text-align: center;
+    margin-top: 20px;
+}
+/*--------------------------修改个人信息css样式----------------------*/
+.grszxmm{
+    width: 280px;
+    height: 35px;
+    margin-left:  25px;
+    margin-top: 20px;
+    border: 1px solid #CCCCCC;
+    background-repeat: no-repeat;/*背景小图标不重复*/
+    background-size: 20px 20px;/*小图标的大小*/
+    background-position: 260px 7px;/*小图标在input的位置*/
+    padding-left: 10px;
+
+}
+
+
+/*------------------------------------------------------------------*/

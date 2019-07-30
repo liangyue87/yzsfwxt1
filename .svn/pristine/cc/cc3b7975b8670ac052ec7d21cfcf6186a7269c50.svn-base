@@ -1,0 +1,730 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/dcfl.css" rel="stylesheet" />
+		<!--	<link rel="stylesheet" href="../css/xlk.css" />-->
+		<link rel="stylesheet" href="../css/mui.picker.css" />
+		<link rel="stylesheet" href="../css/mui.dtpicker.css" />
+		<link rel="stylesheet" href="../css/mui.poppicker.css" />
+		<link rel="stylesheet" href="../css/public.css">
+		<link rel="stylesheet" href="../css/swiper.min.css" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+	</head>
+	<style type="text/css">
+		.app-input {
+			text-align: right;
+			font-size: 14px;
+		}
+		
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #ffffff;
+			font-size: 14px;
+			font-family: 'Microsoft YaHei', 'Times New Roman', Times, serif;
+			letter-spacing: 0;
+			color: #333333;
+		}
+		
+		.select_box_sj {
+			border: none;
+			padding: 0 10px;
+			/*	position: relative;*/
+			height: 30px;
+			line-height: 30px;
+			color: #666666;
+			user-select: none;
+			font-size: 14px;
+			font-family: "黑体";
+			text-align: right;
+		}
+	</style>
+
+	<header class="mui-bar mui-bar-nav" style="background-color:#007aff" id="fanhui">
+		<a class="mui-icon mui-icon-left-nav mui-pull-left" style="color: #FFFFFF"></a>
+		<h4 style=" text-align:center;padding-top: 7px;color: #FFFFFF;font-family: '黑体';">调查分类项</h4>
+		<h5 style="float: right;margin-top: -35px;color: #FFFFFF" class="mui-icon iconfont icon-diandian" onclick="fanhui()"></h5>
+	</header>
+
+	<div class="mui-content">
+		<div id="slider" class="mui-slider mui-fullscreen" style="padding-top: 5%;">
+			<div style="padding-left: 25%;position: relative; ">
+				<!--mui-active-->
+				<div id="sliderSegmentControl" class=" mui-slider-indicator mui-segmented-control" style="width: 200px;">
+					<div style="text-align: center;font-size: 14px;font-family: '黑体';">
+						<a class="mui-control-item mui-active" href="#ybd">
+							<span>项目周边管网</span>
+						</a>
+						<a class="mui-control-item" href="#wbd">
+							<span>具体位置测压</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="mui-slider-group" style="padding-top: 20px;">
+				<div id="ybd" class="mui-active md-f1 mui-slider-item mui-control-content detailInfos md-box md-ver ">
+					<!-- 	<div id="ybdshow"></div> -->
+					<div class="mui-scroll">
+						<div class="list-wrapper">
+							<ul class="mui-table-view" style="font-family: '黑体';">
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>线路主路</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+									</div>
+									<div style="float: right;">
+										<input type="text" id="xlzl" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>管线路段</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+									</div>
+									<div style="float: right;">
+										<input type="text" id="gxld" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;"><label>管线在主路</label></div>
+									<div style="float: right;width: 170px;height: 20px;">
+										<!--<div class="btn1 select_box" id="stlect_1">
+											<div>请选择</div>
+										</div>-->
+										<input class="btn1" style="width: 140px; text-align: right; border: none; font-size: 14px;" id="gxzzl" placeholder="请选择" readonly />
+										<span class="mui-icon mui-icon-arrowdown" style="font-size: 14px;"></span>
+										<span class="gxzzl_bm" id="gxzzl_bm" style="display: none;"></span>
+										<div class="select_box select_box1"></div>
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>距中线中路</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">&nbsp;</label>
+									</div>
+									<div style="float: right;">
+										<input type="text" id="jzxzl" placeholder="请输入" class="app-input" style=" border: none; text-align: right;width: 160px;height: 22px;">米
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;"><label>正上方覆盖物</label></div>
+									<div style="float: right; width: 170px;height: 20px;">
+										<!--	<div class="select_box_2" id="stlect_2">
+											<div>请选择</div>
+										</div>-->
+										<input class="btn2" style="width: 140px; text-align: right; border: none; font-size: 14px;" id="zsffgw" placeholder="请选择" readonly></input>
+										<span class="mui-icon mui-icon-arrowdown" style="font-size: 14px;"></span>
+										<span class="zsffgw_bm" id="zsffgw_bm" style="display: none;"></span>
+										<div class="select_box select_box2"></div>
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;"><label>管线口径</label></div>
+									<div style="float: right; width: 170px;height: 20px;">
+										<!--<div class="select_box_3" id="stlect_3">
+											<div>请选择</div>
+										</div>-->
+										<input class="btn3" style="width: 140px;text-align: right; border: none; font-size: 14px;" id="gxkj" placeholder="请选择" readonly></input>
+										<span class="mui-icon mui-icon-arrowdown" style="font-size: 14px;"></span>
+										<span class="gxkj_bm" id="gxkj_bm" style="display: none;"></span>
+										<div class="select_box select_box3"></div>
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;"><label>管线材质</label></div>
+									<div style="float: right; width: 170px;height: 20px;">
+										<!--<div class="select_box_4" id="stlect_4">
+											<div>请选择</div>
+										</div>-->
+										<input class="btn4" style="width: 140px; text-align: right; border: none; font-size: 14px;" id="gxcz" placeholder="请选择" readonly></input>
+										<span class="mui-icon mui-icon-arrowdown" style="font-size: 14px;"></span>
+										<span class="gxcz_bm" id="gxcz_bm" style="display: none;"></span>
+										<span class="select_box select_box4"></span>
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>调查人</label>
+									</div>
+									<div style="float: right;">
+										<input type="text" id="gw_dcr" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;"><label>调查时间</label></div>
+									<div style="float: right;">
+										<div id='daytime_2' class="select_box_sj" type='button'>
+											<span id='daytimeshow_2'></span>
+											<span class="mui-icon mui-icon-arrowdown" style="font-size: 15px;"></span>
+										</div>
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>备注</label>
+									</div>
+									<div style="float: right;">
+										<input id="gw_bz" type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+							</ul>
+
+							<div style="padding-top: 20px;padding-left: 5%;padding-bottom: 20%;">
+								<button type="button" onClick="xmzbgw()" style="position: initial; width: 95%; height: 45px; background-color: #007aff; color: #FFFFFF;font-size: 14px;">保存</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div id="wbd" class=" md-f1 mui-slider-item mui-control-content detailInfos md-box md-ver">
+					<!-- <div id="wbdshow"></div> -->
+					<div class="mui-scroll">
+						<div class="list-wrapper">
+							<ul class="mui-table-view" style="font-family: '黑体';">
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>测压对象</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+									</div>
+									<div style="float: right;">
+										<input id="cydx" type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;"><label>测压时间</label></div>
+									<div style="float: right;">
+										<div id='daytime' class="select_box_sj" type='button' style="height: 35px;border: none;font-size: 13px;line-height: 30px;">
+											<span id='daytimeshow'>请选择</span>
+											<span class="mui-icon mui-icon-arrowdown" style="font-size: 15px;"></span>
+										</div>
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>调查点位置</label>
+									</div>
+									<div style="float: right;">
+										<input id="dcdwz" type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>测压点压力</label>
+									</div>
+									<div style="float: right;">
+										<input id="cydyl" type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>测压点标高</label>
+									</div>
+									<div style="float: right;">
+										<input id="cydbg" type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+
+								<li class="mui-table-view-cell" style="height: 45px;" id="checkbox">
+									<div style="float: left;">
+										<label>并网通水</label>
+									</div>
+									<div class="" style="float: right;">
+										<div class="mui-switch" id="bwts">
+											<div class="mui-switch-handle"></div>
+										</div>
+									</div>
+									<!--	<div style="font-size: 17px;padding-left: 35%;">
+										<div style="width: 60px;">
+											<input id="bwts" type="checkbox" name="checkboxName" value="" style="width: 20px;height: 20px;">&nbsp;是
+										</div>
+									</div>
+									<div style="font-size: 17px;padding-left:60%;margin-top: -24px;">
+										<div style="width: 60px;">
+											<input type="checkbox" name="checkboxName" value="" style="width: 20px;height: 20px;">&nbsp;否
+										</div>
+									</div>-->
+
+								</li>
+								<li class="mui-table-view-cell" style="height: 45px;">
+									<div style="float: left;">
+										<label>网管移交</label>
+									</div>
+									<div class="" style="float: right;">
+										<div class="mui-switch" id="gwyj">
+											<div class="mui-switch-handle"></div>
+										</div>
+									</div>
+									<!--	<div style="font-size: 17px;padding-left: 35%;">
+										<div style="width: 60px;">
+											<input id="gwyj" type="checkbox" name="checkboxName_1" value="" style="width: 20px;height: 20px;">&nbsp;是
+										</div>
+									</div>
+									<div style="font-size: 17px;padding-left:60%;margin-top: -24px;">
+										<div style="width: 60px;">
+											<input type="checkbox" name="checkboxName_1" value="" style="width: 20px;height: 20px;">&nbsp;否
+										</div>
+									</div>-->
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>调查人</label>
+									</div>
+									<div style="float: right;">
+										<input id="cy_dcr" type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;"><label>调查时间</label></div>
+									<div style=" float: right;">
+										<div id='daytime_1' class="select_box_sj" type='button'>
+											<span id='daytimeshow_1'>请选择</span>
+											<span class="mui-icon mui-icon-arrowdown" style="font-size: 15px;"></span>
+										</div>
+									</div>
+								</li>
+								<li class="mui-table-view-cell" style="height: 40px;">
+									<div style="float: left;">
+										<label>备注</label>
+									</div>
+									<div style="float: right;">
+										<input id="cy_bz" type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+									</div>
+								</li>
+							</ul>
+
+							<div style="padding-top: 20px;padding-left: 5%;padding-bottom: 20%;">
+								<button type="button" onClick="jtwzcy()" style="position: initial; width: 95%; height: 45px; background-color: #007aff; color: #FFFFFF;font-size: 14px;">保存</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<body>
+		<script src="../js/mui.min.js "></script>
+		<script type="text/javascript " src="../js/mui.js "></script>
+		<script type="text/javascript " src="../js/jquery-1.9.1.min.js "></script>
+		<script type="text/javascript " src="../js/mui.poppicker.js "></script>
+		<script type="text/javascript " src="../js/mui.picker.js "></script>
+		<script type="text/javascript " src="../js/mui.dtpicker.js "></script>
+		<script type="text/javascript " src="../js/xiala.js "></script>
+		<script type="text/javascript" src="../js/http.js"></script>
+		<script type="text/javascript" src="../js/swiper.min.js"></script>
+		<script type="text/javascript" src="../layer/layer.js"></script>
+		<script src="../js/dySelect.js"></script>
+		<!--<script src="../js/index.js"></script>-->
+		<script>
+			mui.init();
+			var shuzi = /^\d+(\.\d+)?$/;
+			//项目周边管网
+			var dl = 0; //防频繁点击登录按钮
+			var dl_1 = 0
+
+			function xmzbgw() {
+				var xlzl = $("#xlzl").val(); //线路主路
+				var gxld = $("#gxld").val(); //管线路段
+				var gxzzl = document.getElementById("gxzzl_bm").innerText; //管线在主路
+				var jzxzl = $("#jzxzl").val(); //距中线中路
+				if(jzxzl != "") {
+					if(!shuzi.exec(jzxzl)) {
+						mui.alert("距中线主路需输入数字！", "温馨提示");
+						return false;
+					}
+				}
+				var zsffgw = document.getElementById("zsffgw_bm").innerText; //正上方覆盖物
+				var gxkj = document.getElementById("gxkj_bm").innerText; //管线口径
+				var gxcz = document.getElementById("gxcz_bm").innerText; //管线材质
+				var gw_dcr = $("#gw_dcr").val(); //调查人
+				var gw_dcsj = document.getElementById("daytimeshow_2").innerText; //调查时间
+				var gw_bz = $("#gw_bz").val(); //备注
+				var xmid = localStorage.getItem("xmid");
+				if(xlzl == "") {
+					mui.alert("线路主路不能为空！", "温馨提示");
+					return false;
+				}
+				if(gxld == "") {
+					mui.alert("管线路段不能为空！", "温馨提示");
+					return false;
+				}
+				if(gxkj == "") {
+					mui.alert("管线口径不能为空！", "温馨提示");
+					return false;
+				}
+ 
+				if(dl == 0) {
+					dl++;
+					var csqq = $.ajax({
+						type: "post",
+						async: true,
+						url: common.ip + "/XkylxController/saveQsXmzbgw",
+						data: {
+							"xmid": xmid,
+							"gxzl": xlzl,
+							"gxld": gxld,
+							"gxzzl": gxzzl,
+							"gxjzl": jzxzl,
+							"gxzsf": zsffgw,
+							"gxkj": gxkj,
+							"gxcz": gxcz,
+							"dcr": gw_dcr,
+							"dcrq": gw_dcsj,
+							"bz": gw_bz,
+						},
+						timeout: 10000, //超时时间设置，单位毫秒
+						success: function(res) {
+							var jsonObject = eval("(" + res + ")");
+							if(jsonObject.result = "success") {
+								mui.toast("保存成功");
+								goto("qs_fk.html", 2);
+							} else {
+								layer.msg('保存失败！', {
+									time: 1000,
+								});
+							}
+						},
+						error: function(XMLHttpRequest, status) {
+							if(status == 'timeout' || status == 'error') {
+								csqq.abort(); // 超时后中断请求
+								dl = 0;
+								mui.alert("请求超时！", "温馨提示：");
+							}
+						}
+					});
+				}
+
+			}
+
+			function jtwzcy() {
+				var bwts = "0";
+				var gwyj = "0";
+				var cydx = $("#cydx").val(); //测压对象
+				var cy_cysj = document.getElementById("daytimeshow").innerText; //测压时间
+				var dcdwz = $("#dcdwz").val(); //调查点位置
+				var cydyl = $("#cydyl").val(); //测压点压力
+				var cydbg = $("#cydbg").val(); //测压点标高
+				if(cydyl != "") {
+					if(!shuzi.test(cydyl)) {
+						mui.alert("测压点压力需输入数字！", "温馨提示");
+						return false;
+					}
+				}
+				if(cydbg != "") {
+					if(!shuzi.exec(cydbg)) {
+						mui.alert("测压点标高需输入数字！", "温馨提示");
+						return false;
+					}
+				}
+
+				var cy_dcr = $("#cy_dcr").val(); //调查人
+				var cy_dcsj = document.getElementById("daytimeshow_1").innerText; //调查时间
+				var cy_bz = $("#cy_bz").val(); //备注
+				var xmid = localStorage.getItem("xmid");
+				var bwts = document.getElementById("bwts").classList.contains("mui-active");
+				var gwyj = document.getElementById("gwyj").classList.contains("mui-active");
+				if(bwts) {
+					bwts = "1" //并网通水				
+				}
+				if(gwyj) {
+					gwyj = "1" //管网移交				
+				}
+
+				/*	if($("#bwts").is(':checked') == true) {
+						bwts = "1" //并网通水				
+					}
+					if($("#gwyj").is(':checked') == true) {
+						gwyj = "1" //管网移交					
+					}*/
+				if(dl_1 == 0) {
+					dl_1++;
+					var csqq_1 = $.ajax({
+						type: "post",
+						async: true,
+						url: common.ip + "/XkylxController/saveQsJtwzcy",
+						data: {
+							"xmid": xmid,
+							"cydx": cydx,
+							"cy_cysj": cy_cysj,
+							"dcdwz": dcdwz,
+							"cydyl": cydyl,
+							"cydbg": cydbg,
+							"bwts": bwts,
+							"gwyj": gwyj,
+							"cy_dcr": cy_dcr,
+							"cy_dcsj": cy_dcsj,
+							"cy_bz": cy_bz,
+						},
+						timeout: 10000, //超时时间设置，单位毫秒
+						success: function(res) {
+							dl_1 = 0;
+							var jsonObject = eval("(" + res + ")");
+							if(jsonObject.result = "success") {
+								mui.toast("保存成功");
+
+								goto("qs_fk.html", 2);
+							} else {
+								mui.alert("保存失败", "温馨提示");
+							}
+						},
+						error: function(XMLHttpRequest, status) {
+							if(status == 'timeout' || status == 'error') {
+								csqq_1.abort(); // 超时后中断请求
+								dl_1 = 0;
+								mui.alert("请求超时!", "温馨提示");
+
+							}
+						}
+
+					});
+				}
+			}
+
+			(function($, doc) {
+				$.ready(function() {
+
+					getFkQsCode();
+					var username = localStorage.getItem("username");
+
+					var day = new Date().format("yyyy-MM-dd");
+					document.getElementById("daytimeshow").innerText = day;
+					document.getElementById("daytimeshow_1").innerText = day;
+					document.getElementById("daytimeshow_2").innerText = day;
+					document.getElementById("gw_dcr").value = username;
+					document.getElementById("cy_dcr").value = username;
+
+					var dtpickerday = new mui.DtPicker({
+						type: "date", //设置日历初始视图模式    
+						//真正的月份比写的多一个月。  type的类型你还是可以选择date, datetime month time  hour 
+						beginDate: new Date(2000, 00, 01), //设置开始日期   
+						endDate: new Date(), //设置结束日期    //真正的是10.21
+						labels: ['年', '月', '日'], //设置默认标签区域提示语 
+
+					})
+
+					var showUserPickerButton = doc.getElementById('daytime');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						dtpickerday.show(function(e) {
+							document.getElementById('daytimeshow').innerText = (e.y.text + "-" + e.m.text + "-" + e.d.text + "-");
+							var day = (e.y.text + "-" + e.m.text + "-" + e.d.text + "-");
+							//loadData(day,'');
+						})
+					}, false);
+
+					var showUserPickerButton = doc.getElementById('daytime_1');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						dtpickerday.show(function(e) {
+							document.getElementById('daytimeshow_1').innerText = (e.y.text + "-" + e.m.text + "-" + e.d.text + "-");
+							var day = (e.y.text + "-" + e.m.text + "-" + e.d.text + "-");
+							//loadData('',month);
+						})
+					}, false);
+
+					var showUserPickerButton = doc.getElementById('daytime_2');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						dtpickerday.show(function(e) {
+							document.getElementById('daytimeshow_2').innerText = (e.y.text + "-" + e.m.text + "-" + e.d.text + "-");
+							var day = (e.y.text + "-" + e.m.text + "-" + e.d.text + "-");
+							//loadData(day,'');
+						})
+					}, false);
+
+				});
+			})(mui, document);
+
+			Date.prototype.format = function(fmt) { //author: meizz   
+				var o = {
+					"M+": this.getMonth() + 1, //月份   
+					"d+": this.getDate(), //日   
+					"h+": this.getHours(), //小时   
+					"m+": this.getMinutes(), //分   
+					"s+": this.getSeconds(), //秒   
+					"q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+					"S": this.getMilliseconds() //毫秒   
+				};
+				if(/(y+)/.test(fmt))
+					fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				for(var k in o)
+					if(new RegExp("(" + k + ")").test(fmt))
+						fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+				return fmt;
+			}
+
+			//获取区所反馈表单下拉框数据 
+			//管线材质 管线口径 正上方覆盖物 相对主路位置
+			function getFkQsCode() {
+				var zlwz = new Array(); //主路位置
+				var zlwzid = new Array(); //主路位置
+				var zsffgw = new Array(); //正上方覆盖物
+				var zsffgwid = new Array(); //正上方覆盖物
+				var gxkj = new Array(); //管线口径
+				var gxkjid = new Array(); //管线口径
+				var gxcz = new Array(); //管线材质
+				var gxczid = new Array(); //管线材质
+
+				$.ajax({
+					type: "get",
+					async: true,
+					url: common.ip + "/XkylxController/getFkQsCode",
+					data: {},
+					success: function(res) {
+						var jsonObject = eval("(" + res + ")");
+						for(var i = 0; i < jsonObject.zlwz.length; i++) {
+							zlwz.push(jsonObject.zlwz[i].codename);
+							zlwzid.push(jsonObject.zlwz[i].id);
+						}
+						for(var i = 0; i < jsonObject.zsffgw.length; i++) {
+							zsffgw.push(jsonObject.zsffgw[i].codename);
+							zsffgwid.push(jsonObject.zsffgw[i].id);
+						}
+						for(var i = 0; i < jsonObject.gxkj.length; i++) {
+							gxkj.push(jsonObject.gxkj[i].codename);
+							gxkjid.push(jsonObject.gxkj[i].id);
+						}
+						for(var i = 0; i < jsonObject.gxcz.length; i++) {
+							gxcz.push(jsonObject.gxcz[i].codename);
+							gxczid.push(jsonObject.gxcz[i].id);
+						}
+						var hgS1 = new selectSwiper({
+							el: '.select_box1',
+							data: zlwz,
+							/*dataid:zlwzid,*/
+							init: function(index) {
+								if(index !== -1) {
+									$('.gxzzl_bm').html(zlwzid[index]);
+									$('.btn1').val(this.data[index]);
+								}
+							},
+							okFunUndefind: function() {
+								alert('必须选择一项');
+								return false;
+							},
+							okFun: function(index) {
+
+								$('.gxzzl_bm').html(zlwzid[index]);
+								$('.btn1').val(this.data[index]);
+							},
+							closeFun: function() {
+								console.log('取消');
+							},
+						});
+						$('.btn1').on('click', function() {
+							hgS1.openSelectSwiper();
+						});
+
+						var hgS2 = new selectSwiper({
+							el: '.select_box2',
+							data: zsffgw,
+							init: function(index) {
+								if(index !== -1) {
+									$('.zsffgw_bm').html(zsffgwid[index]);
+									$('.btn2').val(this.data[index]);
+								}
+							},
+							okFunUndefind: function() {
+								alert('必须选择一项');
+								return false;
+							},
+							okFun: function(index) {
+
+								$('.zsffgw_bm').html(zsffgwid[index]);
+								$('.btn2').val(this.data[index]);
+							},
+							closeFun: function() {
+								console.log('取消');
+							},
+						});
+						$('.btn2').on('click', function() {
+							hgS2.openSelectSwiper();
+						});
+
+						var hgS3 = new selectSwiper({
+							el: '.select_box3',
+							data: gxkj,
+							init: function(index) {
+								if(index !== -1) {
+									$('.gxkj_bm').html(gxkjid[index]);
+									$('.btn3').val(this.data[index]);
+								}
+							},
+							okFunUndefind: function() {
+								alert('必须选择一项');
+								return false;
+							},
+							okFun: function(index) {
+
+								$('.gxkj_bm').html(gxkjid[index]);
+								$('.btn3').val(this.data[index]);
+							},
+							closeFun: function() {
+								console.log('取消');
+							},
+						});
+						$('.btn3').on('click', function() {
+							hgS3.openSelectSwiper();
+						});
+
+						var hgS4 = new selectSwiper({
+							el: '.select_box4',
+							data: gxcz,
+							init: function(index) {
+								if(index !== -1) {
+									$('.gxcz_bm').html(gxczid[index]);
+									$('.btn4').val(this.data[index]);
+								}
+							},
+							okFunUndefind: function() {
+								alert('必须选择一项');
+								return false;
+							},
+							okFun: function(index) {
+
+								$('.gxcz_bm').html(gxczid[index]);
+								$('.btn4').val(this.data[index]);
+							},
+							closeFun: function() {
+								console.log('取消');
+							},
+						});
+						$('.btn4').on('click', function() {
+							hgS4.openSelectSwiper();
+						});
+
+					}
+				});
+			}
+
+			//给退出登录绑定事件
+			function fanhui() {
+				var btnArray = ['否', '是'];
+				mui.confirm('您确定要退出登录！', '温馨提示', btnArray, function(e) {
+					if(e.index == 1) {
+						goto("login.html", 2);
+					}
+					return false;
+				})
+			}
+			//返回标签
+			mui('#fanhui').on('tap', 'a', function(a) { //绑定所有a标签							
+				goto("qs_fk.html", 2);
+			});
+			//防输入法挤压背景图
+			//获取原始窗口的高度
+			var originalHeight = document.documentElement.clientHeight || document.body.clientHeight;
+			window.onresize = function() {
+				//软键盘弹起与隐藏  都会引起窗口的高度发生变化
+				var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+				if(resizeHeight * 1 < originalHeight * 1) { //resizeHeight<originalHeight证明窗口被挤压了
+					plus.webview.currentWebview().setStyle({
+						height: originalHeight
+					});
+				}
+			}
+		</script>
+	</body>
+
+</html>

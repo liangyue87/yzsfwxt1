@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/index.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/mui.zoom.css" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+		<link>
+	</head>
+	<header class="mui-bar mui-bar-nav" style="background-color:#007aff" id="fanhui">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #FFFFFF"></a>
+		<h4 style=" text-align:center;padding-top: 7px;color: #FFFFFF;font-family: '黑体';">设计院查看</h4>
+		<h5 style="float: right;margin-top: -35px;color: #FFFFFF" class="mui-icon iconfont icon-diandian"></h5>
+	</header>
+	<ul class="mui-table-view" style="padding-top: 50px;">
+		<li class="mui-table-view-cell">
+			<div class="" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-chatbubble"></span>&nbsp;反馈意见</div>
+			<div style="padding-top: 15px;"><textarea readonly id="fkyj" rows="2" placeholder="" style="font-size: 14px;font-family: '黑体';"></textarea></div>
+		</li>
+		<!--<li class="mui-table-view-cell" style="list-style-type:none;"><textarea readonly id="fkyj" rows="2" placeholder="请输入您的意见与建议" style="font-size: 14px;font-family: '黑体';"></textarea></li>
+	--></ul>
+	<div class="upImg" style="padding-bottom:10px;padding-top: 10px;padding-left: 20px;">
+		<div style="font-size: 14px;font-family: '黑体';">
+			<span class="mui-icon mui-icon-chatboxes"></span>&nbsp;图片预览
+		</div>
+		<div class="uplodeMain">
+			<div id="list" class="row image-list" style="padding-top: 10px;">
+				<!--<img style="width: 60px;height: 60px;" src="../../icon.png" />-->
+			</div>
+		</div>
+	</div>
+	<body>
+
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../js/http.js"></script>
+		<script type="text/javascript" src="../layer/layer.js"></script>
+		<script type="text/javascript" src="../js/mui.zoom.js"></script>
+		<script type="text/javascript" src="../js/mui.previewimage.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.previewImage();
+			var kczt="0";
+			mui.plusReady(function initdata() {
+				var tp = new Array();
+				var xmid = localStorage.getItem("xmid");
+				var bh = localStorage.getItem("bh");
+				/*if(bh == "xmjl") {
+					kczt="3";
+				}*/
+				$.ajax({
+					type: "get",
+					url: common.ip + "/XkylxController/getFkpjKcbm",
+					async: false,
+					data: {
+						"xmid": xmid,
+						"kczt": kczt,
+					},
+					success: function(res) {
+						console.log(res);
+						var jsonObject = eval("(" + res + ")");
+						$("#fkyj").val(jsonObject.sjyFkyj);
+						for(var i = 0; i < jsonObject.sjyFj.length; i++) {
+							tp.push(jsonObject.sjyFj[i].fjlj);
+						}
+
+					}
+				});
+
+				$.ajax({
+					type: "post",
+					url: common.ip + "/XkylxController/gettpck",
+					async: false,
+					async: false,
+					cache: false,
+					traditional: true,
+					data: {
+						tp: tp,
+					},
+					success: function(res) {
+						var sjy_yl = "";
+						var jsonObject = eval("(" + res + ")");
+						for(var i = 0; i < jsonObject.imgStr.length; i++) {
+							sjy_yl += '<lable style="padding-left:20px;">';
+							sjy_yl += '<img style="width: 80px;height: 80px;" data-preview-src="" data-preview-group="1" src="' + jsonObject.imgStr[i] + '" />';
+							sjy_yl += '</lable>';
+						}
+						$("#list").html(sjy_yl);
+					}
+				});
+			});
+
+			//给退出登录绑定事件
+			mui('#fanhui').on('tap', 'h5', function(a) { //绑定所有a标签				
+				var btnArray = ['否', '是'];
+				mui.confirm('您确定要退出登录！', '温馨提示', btnArray, function(e) {
+					if(e.index == 1) {
+						goto("login.html", 2);
+					}
+					return false;
+				})
+			});
+			
+		</script>
+	</body>
+
+</html>

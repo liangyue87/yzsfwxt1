@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ljx.hfgsjt.sjst.mapper.SjstMapper">
+
+    <select id="getTcxmCount" resultType="java.lang.Integer">
+        select count(1) from get_xmgl t where
+        (t.xmfzr=#{userid} or t.SJR=#{userid}  or t.YSR = #{userid})
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="xmzt!=null and xmzt!=''">
+            and t.status = #{xmzt}
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and t.azlx = #{azlx}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj <![CDATA[ < ]]> to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+    </select>
+
+    <select id="getTcxmtList" resultType="java.util.Map">
+        select z.id,z.pxmid,z.xmbh,z.sqlx,z.azlx,z.azlx_vue,z.slid,z.sqbh,z.xmlb,z.xmtzf,z.qbid,z.status,z.slrbh,to_char(z.lxsj,'yyyy-MM-dd HH24:mi') lxsj,z.xmfzr,z.xmmc,z.lxr,z.lxrsjh,
+        z.XMDZ,z.DWMC,to_char(z.SLSJ,'yyyy-MM-dd HH24:mi') SLSJ,z.ISZJ,z.LXDH,z.XZQYBH,z.ZJZMJ,z.SJFZR,z.STFZR,z.JLFZR,z.YSFZR,z.QSFZR,z.SGFZR,z.BZ,z.BMBM_QS,to_char(z.JHKSSJ,'yyyy-MM-dd HH24:mi') JHKSSJ,
+        to_char(z.JHJSSJ,'yyyy-MM-dd HH24:mi') JHJSSJ,z.XMDZ_SHENG,z.XMDZ_SHI,z.XMDZ_XZQYBH,z.USERID,z.PXMBH,z.SLSJ_STR,z.GSFS,z.SJR,z.ysr,z.xzqy,z.sjstid,z.ysid,z.isornotstop
+        from (select ROWNUM rn,tt.* from(
+        select t.*,a.CODENAME azlx_vue,b.MC xzqy,( select count(1) from xm_instance xm where not exists (
+        select it.proc_inst_id from wf_ru_inst it left join wf_ru_inst_content ic on it.proc_inst_id = ic.proc_inst_id
+        where it.procstatus = '1' and upper(ic.table_name) = 'XM_INSTANCE' and xm.id = ic.contentvalue
+        )
+        and xm.status = '1' and xm.id=t.id) isornotstop from get_xmgl t
+        left join (select * from XTGL_CODE where PARENTID in (select id from XTGL_CODE where type in ('gsk','hgk','jmk')))a on a.CODEVALUE=t.azlx
+        left join XTGL_XZQY b on b.BH=t.XMDZ_XZQYBH
+        where (t.xmfzr=#{userid} or t.SJR=#{userid}  or t.YSR = #{userid})
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="xmzt!=null and xmzt!=''">
+            and t.status = #{xmzt}
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and t.azlx = #{azlx}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj <![CDATA[ < ]]> to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+        order by t.lxsj desc
+        )tt)z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+
+    <update id="stopProject">
+        update XM_INSTANCE set STATUS='-1',zzyy=#{zzyy} where id=#{xmid}
+    </update>
+
+    <select id="getProjectCount" resultType="java.lang.Integer">
+        select count(1)
+        from XM_INSTANCE t
+        where  t.xmfzr = #{xmfzr} and t.PXMID is not null and t.STATUS='1'
+        <if test="isfq==2 or isfq=='2'">
+            and not exists (select 1 from get_all_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="isfq==1 or isfq=='1'">
+            and exists (select 1 from get_all_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="iswc==2 or iswc=='2'">
+            and exists (select 1 from wf_ru_inst_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="iswc==1 or iswc=='1'">
+            and exists (select 1 from wf_hi_inst_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj <![CDATA[ < ]]> to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+    </select>
+    <select id="getProjectList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.ProjectModel">
+        select z.*
+        from (select ROWNUM rn,tt.* from(
+        select t.id, t.xmbh, t.xmmc, t.dwmc, t.xmdz, t.lxr, to_char(t.lxsj,'yyyy-MM-dd HH24:mi')lxsj,t.xmfzr,
+        (select count(1) from wf_hi_inst_content where contenttype='sjst' and contentvalue=t.id) iswcs
+        from XM_INSTANCE t
+        where t.PXMID is not null and t.STATUS='1' and t.xmfzr = #{xmfzr}
+        <if test="isfq==2 or isfq=='2'">
+            and not exists (select 1 from get_all_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="isfq==1 or isfq=='1'">
+            and exists (select 1 from get_all_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="iswc==2 or iswc=='2'">
+            and exists (select 1 from wf_ru_inst_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="iswc==1 or iswc=='1'">
+            and exists (select 1 from wf_hi_inst_content a where a.contenttype='sjst' and a.contentvalue=t.id)
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+        order by t.lxsj desc
+        )tt)z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getTable" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+		select a.parentid, a.id codevalue,a.name codename,count(b.id) count from xtgl_fjzlgl a
+left join XM_SLFJ b on a.id=b.fjlx_ej and b.XMID=#{xmid}  and b.sc_flag=0
+where a.parentid=#{yjfjlx}
+group by a.id,a.name,a.parentid
+	</select>
+    <select id="submitShow" resultType="java.lang.Integer">
+        select count(1) from XM_INSTANCE c where c.id=#{xmid} and c.id in (
+        select d.contentvalue from wf_ru_inst_content d where LOWER (d.table_name) = 'xm_instance' and LOWER
+        (d.contentname) = 'id' and d.proc_inst_id in (
+        select e.proc_inst_id from wf_ru_inst e where e.pdef_id in ('30002','30003')))
+    </select>
+    <select id="fjzlPreview" resultType="java.util.Map">
+        select * from XM_SLFJ where xmid=#{xmid} and FJLX_YJ=#{yjfjlx} and FJLX_EJ=#{ejfjlx} and SC_FLAG=0
+    </select>
+    <select id="getQtzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstYhzl">
+		select  a.id,a.name fjlxEjname,a.parentid,count(c.id) count from XTGL_FJZLGL a
+left join SJST_YHZL c on a.id = c.fjlx_ej and c.xmid=#{xmid} and c.sc_flag=0
+where a.parentid =#{fjlx}
+group by a.id,a.name,a.parentid
+	</select>
+    <select id="getXmjlQtzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstYhzl">
+        select a.id,a.xmid,a.FJLX_YJ fjlxYj,a.FJLX_EJ fjlxEj,a.fjlj,a.fjhz,a.fjmc,b.USERNAME scr,
+        to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj_vue from SJST_YHZL a
+        left join XTGL_USER b on a.SCR=b.USERID
+        where xmid=#{xmid} and FJLX_EJ=#{ejfjlx} and FJLX_YJ='yhtgzl' and sc_flag=0
+    </select>
+    <insert id="insertImportFh">
+		insert into SJST_YHZL (ID,XMID,FJLX_YJ,FJLX_EJ,FJLJ,FJHZ,FJMC,SCR,SCSJ,SC_FLAG) values
+		(
+		#{id},#{xmid},#{fjlxYj},#{fjlxEj},#{fjlj},#{fjhz},#{fjmc},#{scr},sysdate,0
+		)
+	</insert>
+    <update id="deleteFj">
+        UPDATE SJST_YHZL set SC_FLAG=1,SHCR=#{userid},SHCSJ=sysdate where id=#{id}
+    </update>
+    <select id="getInstList" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfRuInstEntity">
+select a.PROC_INST_ID procInstId,a.pdef_id pdefId,a.parammap,a.startdt,a.startuser,a.procstatus,a.stopuser,a.stopdt from wf_ru_inst a where a.proc_inst_id in (
+select t.proc_inst_id from WF_RU_INST_CONTENT t where lower(t.table_name)='xm_instance' and lower(t.contentname)='id' and t.contentvalue=#{xmid} and t.CONTENTTYPE=#{type}
+)
+	</select>
+    <select id="getPdefId" resultType="java.lang.String">
+         select t.pdef_id from WF_RE_NODE t where t.activityid=#{activityId}
+    </select>
+    <update id="updateInst">
+    update WF_RU_INST b
+   set b.pdef_id = (select a.nextnode from WF_RE_NODE a where a.activityid = #{activityId} and a.DIRECTION=#{direction})
+   <if test="rwbh!='' and rwbh!=null">
+       , b.PARAMMAP=#{rwbh}
+   </if>
+ where b.pdef_id = #{activityId}
+   and b.proc_inst_id in
+       (select d.proc_inst_id
+          from WF_RU_INST_CONTENT d
+         where lower(d.table_name) = 'xm_instance'
+           and lower(d.contentname) = 'id'
+           and d.contentvalue = #{xmid})
+    </update>
+    <select id="getNowTask" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfTaskEntity">
+      select t.TASKID,t.PTASKID,t.PROC_INST_ID procInstId,t.c_activityid cActivityid,t.iscurrent,t.czr,t.qssj,t.jssj,t.czsm,t.ischeck,t.check_time check_time,t.thyy,
+      t.check_memo checkMemo,t.jssx,t.jssj_memo jssjMemo,t.check_user checkUser,t.js_user jsUser,t.check_sx ,t.yssm,t.hasnew,t.slmx,t.jssx_yl ,t.refkey,t.refid,t.RWBLR
+  from WF_TASK t
+ where t.proc_inst_id in
+       (select d.proc_inst_id
+          from WF_RU_INST_CONTENT d
+         where lower(d.table_name) = 'xm_instance'
+           and lower(d.contentname) = 'id'
+           and d.contentvalue = #{xmid})
+   and t.c_activityid = #{activityId}
+    </select>
+    <select id="getActivityEntity" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfDfActivityEntity">
+        select t.ACTIVITYID,t.ACTIVITYNAME,t.BJJSGZ,t.BZ,t.CHECK_LIMITED checkLimited,t.CHECK_MINUTE checkMinute,
+        t.DEFAULT_CZR defaultCzr,t.DELAY,t.FINISH_LIMITED finishLimited,t.FINISH_MINUTE finishMinute,t.FLAG,t.FORMID,t.TYPE,t.WFID,t.YELLOW_FINISH yellowFinish
+        from WF_DF_ACTIVITY t where t.ACTIVITYID=#{activitiId}
+    </select>
+    <delete id="deleteTask">
+        delete from WF_TASK t where t.taskid=#{taskid}
+    </delete>
+
+    <select id="getRwblr" resultType="java.util.Map">
+        select * from XTGL_USERROLE
+       where roleid in (select roleid from WF_ACTIVITY_ROLE
+       where ACTIVITYID =(select a.nextnode from WF_RE_NODE a
+       where a.activityid = #{activityId} and a.DIRECTION=#{direction}))
+    </select>
+
+    <select id="getNextTaskEntity" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfTaskEntity">
+        select t.proc_inst_id procInstId,
+       t.taskid ptaskid,
+       (select max(userid) from XTGL_USERROLE
+       where roleid in (select roleid from WF_ACTIVITY_ROLE
+       where ACTIVITYID =(select a.nextnode from WF_RE_NODE a
+       where a.activityid = #{activityId} and a.DIRECTION=#{direction}))) rwblr,
+       (select a.nextnode from WF_RE_NODE a where a.activityid = #{activityId} and a.DIRECTION=#{direction}) cActivityid
+  from WF_TASK t
+
+ where t.proc_inst_id in
+       (select d.proc_inst_id
+          from WF_RU_INST_CONTENT d
+         where lower(d.table_name) = 'xm_instance'
+           and lower(d.contentname) = 'id'
+           and d.contentvalue = #{xmid})
+   and t.c_activityid = #{activityId}
+    </select>
+    <!--设计院分派至设计专人-->
+    <select id="getRoleList" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfActivityRoleEntity">
+select a.id wybs, a.activityid, a.roleid, a.ordinal
+  from wf_activity_role a
+ where a.activityid = #{activityId} and
+ a.roleid in
+       (select t.roleid from XTGL_USERROLE t where t.userid = #{userid})
+    </select>
+    <select id="getSjrwfpXmlbCount" resultType="java.lang.Integer">
+select count(t.id)
+  from XM_INSTANCE t
+ where t.id in
+       (select a.contentvalue
+          from wf_ru_inst_content a
+         where lower(a.table_name) = 'xm_instance'
+           and lower(a.contentname) = 'id'
+           and a.proc_inst_id in (select b.proc_inst_id
+                                   from wf_task b
+                                  where b.c_activityid = #{activityId}
+                                    and b.iscurrent <![CDATA[ != ]]> 0))
+        and t.PXMID is not null and t.STATUS='1'
+    </select>
+    <select id="getSjrwfpXmlbList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.ProjectModel">
+        select z.id,z.xmbh,z.xmfzr,z.xmmc,z.dwmc,z.xmdz,z.lxr,to_char(z.lxsj, 'yyyy-MM-dd HH24:mi')
+  from (select ROWNUM rn,t.id, t.xmbh,t.xmmc,t.dwmc,t.xmdz,t.lxr,t.lxsj,t.xmfzr
+          from XM_INSTANCE t
+         where t.id in (select a.contentvalue
+                         from wf_ru_inst_content a
+                        where lower(a.table_name) = 'xm_instance'
+                          and lower(a.contentname) = 'id'
+                          and a.proc_inst_id in
+                              (select b.proc_inst_id
+                                 from wf_task b
+                                where b.c_activityid = #{activityId}
+                                  and b.iscurrent <![CDATA[ != ]]> 0))
+                  and t.PXMID is not null and t.STATUS='1'
+         order by t.lxsj desc) z
+ where z.rn between #{startRow} and #{endRow}
+    </select>
+
+    <update id="updateTask">
+        update WF_TASK t set t.ISCHECK=#{ischeck},t.CHECK_TIME=#{check_time},t.CHECK_USER=#{checkUser} where t.TASKID=#{taskid}
+    </update>
+    <select id="getZlfl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+      select t.id, t.codename, count(b.id) count
+  from xtgl_code t
+  left join xm_slfj b
+    on b.fjlx_ej = t.id
+   and b.xmid = #{xmid}
+ where t.parentid in (select a.sqlx from xm_instance a where a.id =#{xmid})
+ group by t.id, t.codename
+union all
+select c.fjlx_ej id, '其他资料' codename, count(c.id) count
+  from SJST_YHZL c
+ where c.fjlx_ej = 'qtzl'
+ group by c.fjlx_ej
+    </select>
+
+    <select id="getYhzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstYhzl">
+select a.id,a.xmid,a.FJLX_YJ fjlxYj,a.FJLX_EJ fjlxEj,a.fjlj,a.fjhz,a.fjmc,b.USERNAME scr,to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj_vue from xm_slfj a
+    left join XTGL_USER b on a.SCR=b.USERID
+    where xmid=#{xmid} and FJLX_EJ=#{id} and sc_flag=0
+    </select>
+
+    <insert id="saveSjstRw">
+        insert into SJST_RWB (ID,FQR,BZ,SJSTZT,RWBH,SJSX) values (#{id},#{fqr},#{bz,jdbcType=VARCHAR},#{sjstzt},#{rwbh},#{sjsx})
+    </insert>
+    <insert id="saveXmSjstRela">
+        insert into XM_SJST_RELA (ID,xmid,SJSTID) values (#{id},#{xmid},#{sjstid})
+    </insert>
+
+    <select id="getZpry" resultType="java.util.Map">
+        select a.userid,a.username,count(t.taskid) num from xtgl_user a
+left join (select * from wf_task where C_ACTIVITYID='30003') t on t.RWBLR=a.userid
+left join xtgl_userrole b on b.userid=a.userid
+where b.roleid=#{roleid}
+group by a.userid,a.username
+order by a.userid
+    </select>
+
+    <select id="getMrzpryid" statementType="CALLABLE"  parameterType="java.util.Map" >
+        {call get_mrzpr(#{v_XMID,mode=IN,jdbcType=VARCHAR},#{v_Type,mode=IN,jdbcType=VARCHAR},#{i_result,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
+    <update id="updateSjstRw">
+        update SJST_RWB set FPR=#{fpr},FPSJ=sysdate,SJKSSJ=sysdate,SJR=#{sjr} where id=(select sjstid from XM_SJST_RELA where xmid=#{xmid})
+    </update>
+
+    <select id="getSjrySjrwXmlbCount" resultType="java.lang.Integer">
+        select count(t.id) from XM_INSTANCE t
+         where t.id in
+        (select a.contentvalue from wf_ru_inst_content a
+        where lower(a.table_name) = 'xm_instance'
+        and lower(a.contentname) = 'id'
+        and a.proc_inst_id in
+        (select b.proc_inst_id from wf_task b
+         where b.c_activityid = #{activityId}
+        and b.iscurrent = '1'))
+        and t.PXMID is not null and t.STATUS='1'
+        and t.id in (select c.xmid from xm_sjst_rela c where c.sjstid in(
+        select d.id from sjst_rwb d where d.sjr=#{userid}))
+    </select>
+    <select id="getSjrySjrwXmlbList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.ProjectModel">
+        select z.id,z.xmbh,z.xmfzr,z.xmmc,z.dwmc,z.xmdz,z.lxr,to_char(z.lxsj, 'yyyy-MM-dd HH24:mi'),z.sqlx,z.SJSTID sjstrzwid
+        from (select ROWNUM rn,t.id, t.xmbh,t.xmmc,t.dwmc,t.xmdz,t.lxr,t.lxsj,t.xmfzr,t.sqlx,e.SJSTID
+        from XM_INSTANCE t
+        left join xm_sjst_rela e on t.ID=e.XMID
+        where t.id in (select a.contentvalue
+        from wf_ru_inst_content a
+        where lower(a.table_name) = 'xm_instance'
+        and lower(a.contentname) = 'id'
+        and a.proc_inst_id in
+        (select b.proc_inst_id
+        from wf_task b
+        where b.c_activityid = #{activityId}
+        and b.iscurrent = '1'))
+        and t.PXMID is not null  and t.STATUS='1'
+        and t.id in (select c.xmid from xm_sjst_rela c where c.sjstid in(
+        select d.id from sjst_rwb d where d.sjr=#{userid}))
+        order by t.lxsj desc) z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getZlzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.id,t.name codename,t.parentid,count(a.id) count from XTGL_FJZLGL t
+        left join (select * from XM_SLFJ where xmid=#{xmid} and sc_flag=0) a on t.id=a.fjlx_yj
+        where t.id=#{yjfjlx}
+        group by t.id,t.name,t.parentid
+        union all
+        select t.id,t.name codename,t.parentid,count(a.id) count from XTGL_FJZLGL t
+        left join (select * from SJST_YHZL b where b.xmid=#{xmid} and b.sc_flag=0 and b.fjlx_ej in (select id from XTGL_FJZLGL where parentid=b.fjlx_yj)) a on t.id=a.fjlx_yj
+        where t.id='yhtgzl'
+        group by t.id,t.name,t.parentid
+        union all
+        select  a.id,a.name codename,a.parentid,count(c.id) count from XTGL_FJZLGL a
+        left join (select * from XM_SLFJ where xmid=#{xmid} and sc_flag=0) c on a.id = c.fjlx_ej
+        where a.parentid =#{yjfjlx}
+        group by a.id,a.name,a.parentid
+        union all
+        select  a.id,a.name codename,a.parentid,count(c.id) count from XTGL_FJZLGL a
+        left join (select * from SJST_YHZL where xmid=#{xmid} and sc_flag=0) c on a.id = c.fjlx_ej
+        where a.parentid ='yhtgzl'
+        group by a.id,a.name,a.parentid
+        <if test="type != null and type != '' ">
+            union all
+            select t.id,t.name codename,t.parentid,count(c.id) count from XTGL_FJZLGL t
+            left join (select * from ht_qdzbfj a where a.HTQDID in (select b.id from HT_QDZB b where b.xmid = #{xmid} and b.htzt<![CDATA[ < ]]>2) and a.sc_flag = 0)c
+            on t.id = c.fjlx_yj
+            where t.id='htqd'
+            group by t.id,t.name,t.parentid
+            union all
+            select t.id,t.name codename,t.parentid,count(c.id) count from XTGL_FJZLGL t
+            left join (select * from ht_qdzbfj a where a.HTQDID in (select b.id from HT_QDZB b where b.xmid = #{xmid} and b.htzt<![CDATA[ < ]]>2) and a.sc_flag = 0)c
+            on t.id = c.fjlx_ej
+            where t.parentid='htqd'
+            group by t.id,t.name,t.parentid
+        </if>
+    </select>
+
+    <select id="getKey" statementType="CALLABLE"  parameterType="java.util.Map" >
+        {call p_get_number(#{mc,mode=IN,jdbcType=VARCHAR},#{key,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+    <select id="getSblhh" statementType="CALLABLE"  parameterType="java.util.Map" >
+        {call P_GET_YXXTHH(#{mc,mode=IN,jdbcType=VARCHAR},#{key,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+    <insert id="addTY">
+        INSERT INTO XM_TY VALUES (#{id},#{xmid},#{bh},#{mc},#{cjr},sysdate,#{zt})
+    </insert>
+    <update id="updateTY">
+        UPDATE XM_TY SET mc=#{mc},zt=#{zt} where bh=#{bh}
+    </update>
+    <select id="initTYTable" resultType="com.ljx.hfgsjt.entity.dto.Sjst.TyModel">
+        select t.id,t.bh,t.mc from XM_TY t where t.xmid=#{xmid} and t.zt='1' order by t.bh desc
+    </select>
+    <insert id="addDXS">
+        INSERT INTO XM_DXS VALUES (#{id},#{xmid},#{bh},#{mc},#{cjr},sysdate,#{zt})
+    </insert>
+    <update id="updateDXS">
+        UPDATE XM_DXS SET mc=#{mc},zt=#{zt} where bh=#{bh}
+    </update>
+    <select id="initDXSTable" resultType="com.ljx.hfgsjt.entity.dto.Sjst.TyModel">
+        select t.id,t.bh,t.mc from XM_DXS t where t.xmid=#{xmid} and t.zt='1' order by t.bh desc
+    </select>
+    <insert id="addBF">
+        INSERT INTO XM_BF VALUES (#{id},#{xmid},#{bh},#{mc},#{cjr},sysdate,#{zt})
+    </insert>
+    <update id="updateBF">
+        UPDATE XM_BF SET mc=#{mc},zt=#{zt} where bh=#{bh}
+    </update>
+    <select id="initBFTable" resultType="com.ljx.hfgsjt.entity.dto.Sjst.TyModel">
+        select t.id,t.bh,t.mc from XM_BF t where t.xmid=#{xmid} and t.zt='1' order by t.bh desc
+    </select>
+    <select id="findAllByXmid" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XmSx">
+        SELECT a.*,b.MC bfmc FROM XM_SX a left join XM_BF b on a.BFID=b.ID WHERE a.XMID = #{xmid} and a.zt='1' order by a.SXBH desc
+    </select>
+    <select id="initBFOption" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.id codevalue,t.mc codename from XM_BF t where t.xmid=#{xmid} and t.ZT='1'
+    </select>
+    <update id="updateSX">
+        UPDATE XM_SX SET BFID=#{bfid},sxmc=#{sxmc},zt=#{zt},cd=#{cd},kd=#{kd},gd=#{gd},rj=#{rj},bz=#{bz} where sxbh=#{sxbh}
+    </update>
+    <select id="initLYOption" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.id codevalue,t.MC codename from XM_TY t where t.xmid=#{xmid} and t.ZT='1' order by t.CJSJ desc
+    </select>
+    <select id="initLDTable" resultType="com.ljx.hfgsjt.entity.dto.Sjst.LdModel">
+      select t.id,t.tyid,a.mc tymc,t.ldbh,t.ldmc,t.lfsx,t.ghhs,t.ldsbkj,c.MC kjmc,t.CJSJ,
+count(b.id) fqsl,(case count(b.id) when 0 then '' else
+to_char(wm_concat(b.fqmc||'('||b.qslc||'-'||b.zdlc||')')) end) jyfq
+from XM_LD t
+left join xm_ty a on a.id=t.tyid
+left join xm_ldfq b on b.ldid=t.id
+left join xtgl_kj c on t.LDSBKJ=c.BH
+where t.xmid=#{xmid} and t.zt='1'
+group by t.id,t.tyid,a.mc,t.ldbh,t.ldmc,t.lfsx,t.ghhs,t.ldsbkj,c.MC,t.CJSJ
+order by t.CJSJ desc
+    </select>
+    <select id="checkLdbh" resultType="com.ljx.hfgsjt.entity.dto.Sjst.LdModel">
+      select t.id from XM_LD t where t.XMID=#{xmid} and t.LDBH=#{ldbh} and t.ZT='1'
+      <if test="id!=null and id!=''">
+          and t.ID<![CDATA[ <> ]]>#{id}
+      </if>
+    </select>
+    <insert id="addLD">
+        INSERT INTO XM_LD (id,xmid,tyid,ldbh,cjr,cjsj,zt,lfsx,ghhs,LDSBKJ) values (#{id},#{xmid},#{tyid},#{ldbh},#{cjr},sysdate,#{zt},#{lfsx},#{ghhs},#{ldsbkj})
+    </insert>
+    <update id="updateLD">
+        update XM_LD set tyid=#{tyid},ldbh=#{ldbh},zt=#{zt},lfsx=#{lfsx},ghhs=#{ghhs},ldsbkj=#{ldsbkj,jdbcType=VARCHAR} where id=#{id}
+    </update>
+    <delete id="deleteFQ">
+        delete from XM_LDFQ t where t.xmid=#{xmid} and t.ldid=#{ldid}
+    </delete>
+    <insert id="addFQ">
+        insert into XM_LDFQ (id,xmid,ldid,qslc,zdlc,sybz,fqmc,fqbh) values (#{id},#{xmid},#{ldid},#{qslc},#{zdlc},#{sybz},#{fqmc},#{fqbh})
+    </insert>
+    <select id="getFQData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.Fqmodel">
+        select * from XM_LDFQ t where t.XMID=#{xmid} and t.LDID=#{ldid} order by t.FQBH
+    </select>
+    <select id="xmsqlx" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.id,t.type codevalue  from XTGL_FJZLGL t where t.id= (select a.SQLX from XM_INSTANCE a where a.ID=#{xmid})
+    </select>
+    <select id="xjxqld" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XjxqldModel">
+        select t.* from YWSL_XJXQSQ_LDXX t where t.XMID=#{xmid}
+    </select>
+    <select id="getWlDataCount" resultType="java.lang.Integer">
+        select count(1) from XTGL_WLK t
+        where 1=1
+        <if test="wlbm!='' and wlbm!=null">
+            and t.WLBM like concat('%',concat(#{wlbm},'%'))
+        </if>
+        <if test="wlmc!='' and wlmc!=null">
+            and t.WLMC like concat('%',concat(#{wlmc},'%'))
+        </if>
+
+    </select>
+    <select id="getWlData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XtglwlkModel">
+        select z.* from (
+        select ROWNUM rn ,tt.* from (select * from XTGL_WLK t
+        where 1=1
+        <if test="wlbm!='' and wlbm!=null">
+            and t.WLBM like concat('%',concat(#{wlbm},'%'))
+        </if>
+        <if test="wlmc!='' and wlmc!=null">
+            and t.WLMC like concat('%',concat(#{wlmc},'%'))
+        </if>
+        order by t.WLBM) tt
+        )z where  z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="pickHandleCount" resultType="java.lang.Integer">
+        select count(1) from XM_WLQD t
+        join XTGL_WLK a on a.ID=t.WLKID
+        where t.xmid=#{xmid}
+        <if test="wlbm!='' and wlbm!=null">
+            and a.WLBM like concat('%',concat(#{wlbm},'%'))
+        </if>
+        <if test="wlmc!='' and wlmc!=null">
+            and a.WLMC like concat('%',concat(#{wlmc},'%'))
+        </if>
+    </select>
+    <select id="pickHandle" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XtglwlkModel">
+        select z.WLKID,z.ID,z.WLMC,z.WLBM,z.GGXH,z.JBJLDW,z.WLJBFL,z.SXSL from (
+        select ROWNUM rn ,t.WLKID,t.ID,a.WLMC,a.WLBM,a.GGXH,a.JBJLDW,a.WLJBFL,t.SXSL from XM_WLQD t
+        join XTGL_WLK a on a.ID=t.WLKID
+        where t.xmid=#{xmid}
+        <if test="wlbm!='' and wlbm!=null">
+            and a.WLBM like concat('%',concat(#{wlbm},'%'))
+        </if>
+        <if test="wlmc!='' and wlmc!=null">
+            and a.WLMC like concat('%',concat(#{wlmc},'%'))
+        </if>) z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getWlByWlkid" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XmwlqdModel">
+        select * from XM_WLQD t where t.XMID=#{xmid} and t.WLKID=#{wlkid}
+    </select>
+    <insert id="wlHandleAdd">
+        insert into XM_WLQD (ID, XMID, WLKID, SXSL, CJR, CJSJ)  VALUES (#{id},#{xmid},#{wlkid},#{sxsl},#{cjr},sysdate)
+    </insert>
+    <update id="wlqdHandleEdit">
+        UPDATE XM_WLQD set sxsl=#{sxsl} ,bgr=#{bgr},bgsj=sysdate where id=#{id}
+    </update>
+    <delete id="wlqdHandleDelete">
+        DELETE FROM XM_WLQD where id=#{id}
+    </delete>
+
+    <select id="initStcgTable" resultType="com.ljx.hfgsjt.entity.dto.Sjst.FjzlglModel">
+        select a.id,a.name,a.parentid,a.sort,'0' type,
+(select count(b.id) from SJST_RW_SJSTCG b where a.id=b.fjlx_ej and b.xmid=#{xmid} and b.SJSTRZWID=#{sjstid} and a.parentid=b.fjlx_yj and LOWER(b.fjhz) in ('jpg','png') and b.SC_FLAG=0) pictureNumber,
+(select count(c.id) from SJST_RW_SJSTCG c where a.id=c.fjlx_ej and c.xmid=#{xmid} and c.SJSTRZWID=#{sjstid} and a.parentid=c.fjlx_yj and c.SC_FLAG=0) fjNumber from XTGL_FJZLGL a
+        where a.parentid=(
+        select t.id from XTGL_FJZLGL t where t.type=#{type})
+<if test="flag=='wtys' and type=='sjcg'">
+    union all
+    select a.id,a.name,a.parentid,a.sort,'1' type,
+    (select count(b.id) from XCKC_RWCB_FJ b
+    where a.id=b.fjlx_ej and  b.KCFKID in (select id from xckc_rwcb where KCRWZBID in (select XCKCID from XM_XCKC_RELA where xmid=#{xmid}))  and a.parentid=b.fjlx_yj and LOWER(b.fjhz) in ('jpg','png') and b.SC_FLAG=0) pictureNumber,
+    (select count(c.id) from XCKC_RWCB_FJ c
+    where a.id=c.fjlx_ej and  c.KCFKID in (select id from xckc_rwcb where KCRWZBID in (select XCKCID from XM_XCKC_RELA where xmid=#{xmid})) and a.parentid=c.fjlx_yj and c.SC_FLAG=0) fjNumber
+    from XTGL_FJZLGL a where a.type='ksjsfa'
+</if>
+
+    </select>
+    <select id="stManage" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstcgModel">
+        select t.ID,a.username scr,t.FJHZ,t.FJMC,to_char(t.SCSJ,'yyyy-MM-dd HH24:mi') scsj,t.FJLJ from SJST_RW_SJSTCG t
+left join xtgl_user a on a.userid=t.scr
+where t.XMID=#{xmid} and t.SJSTRZWID=#{sjstrzwid}
+        and t.FJLX_YJ=#{fjlxYj} and t.FJLX_EJ=#{fjlxEj} and t.SC_FLAG=0
+    </select>
+    <select id="ksjsfaManage" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstcgModel">
+        select t.ID,a.username scr,t.FJHZ,t.FJMC,to_char(t.SCSJ,'yyyy-MM-dd HH24:mi') scsj,t.FJLJ from XCKC_RWCB_FJ t
+        left join xtgl_user a on a.userid=t.scr
+        where t.KCFKID in
+               (select id
+                  from xckc_rwcb
+                 where KCRWZBID in (select XCKCID from XM_XCKC_RELA where xmid = #{xmid}))
+        and t.FJLX_YJ=#{fjlxYj} and t.FJLX_EJ=#{fjlxEj} and t.SC_FLAG=0
+    </select>
+    <update id="stDelete">
+        UPDATE SJST_RW_SJSTCG set SC_FLAG=#{flag} where id=#{id}
+    </update>
+    <insert id="stcgsc">
+        insert into SJST_RW_SJSTCG (ID,XMID,SJSTRZWID,FJLX_YJ,FJLX_EJ,FJLJ,FJHZ,FJMC,SCR,SCSJ,SC_FLAG) values
+		(
+		#{id},#{xmid},#{sjstrzwid},#{fjlxYj},#{fjlxEj},#{fjlj},#{fjhz},#{fjmc},#{scr},sysdate,0
+		)
+    </insert>
+    <select id="getKjData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select bh codevalue,mc codename from XTGL_KJ
+    </select>
+    <select id="getCodeData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select id,codevalue,codename from XTGL_CODE where parentid in (select id from XTGL_CODE where type=#{type} )
+    </select>
+    <select id="getHyflCodeData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select id,codevalue,codename from XTGL_CODE where parentid =#{parentid}
+    </select>
+    <select id="getYsxzData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select bh codevalue,mc codename from XTGL_YSXZ
+    </select>
+    <select id="getHyflData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select bh codevalue,mc codename from XTGL_HYFL
+    </select>
+    <select id="getKhzhData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select distinct yhbh codevalue,yhmc codename from XTGL_FZYH
+    </select>
+    <select id="getKhyhData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select bh codevalue,mc codename from XTGL_FZYH where yhbh=#{type}
+    </select>
+    <insert id="addDb">
+        insert into XM_SB (id,XM_ID,bzlb,JFFSBH,YSXZBH,KJBH,HH,HM,DZ,KHYH,KHMC,YHZH,HYFLBH,ZT,HHLXBH,MPH,LDID,ykjbh,type)
+        values (#{id},#{xmId},#{bzlb},#{jffsbh,jdbcType=VARCHAR},#{ysxzbh},#{kjbh},#{hh},#{hm},#{dz},#{khyh,jdbcType=VARCHAR},#{khmc,jdbcType=VARCHAR},#{yhzh,jdbcType=VARCHAR},#{hyflbh},#{zt},#{hhlxbh},#{mph,jdbcType=VARCHAR},#{ldid,jdbcType=VARCHAR},#{ykjbh,jdbcType=VARCHAR},#{type,jdbcType=INTEGER})
+    </insert>
+    <update id="updateDb">
+        UPDATE XM_SB set hh=#{hh},hm=#{hm},dz=#{dz},kjbh=#{kjbh},ysxzbh=#{ysxzbh},hyflbh=#{hyflbh},jffsbh=#{jffsbh,jdbcType=VARCHAR},zt=#{zt},bzlb=#{bzlb},
+        KHYH=#{khyh,jdbcType=VARCHAR},KHMC=#{khmc,jdbcType=VARCHAR},YHZH=#{yhzh,jdbcType=VARCHAR},ykjbh=#{ykjbh,jdbcType=VARCHAR},type=#{type,jdbcType=INTEGER}
+        where id=#{id}
+    </update>
+    <select id="initDbpzTable" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XmSb">
+        select z.*
+        from (select ROWNUM rn,tt.* from(
+        select g.SQLX,t.id,t.xm_id xmid,t.hh,t.hm,t.dz,t.kjbh,t.ysxzbh,t.hyflbh,t.jffsbh,t.bzlb,t.hhlxbh,t.KHYH,t.KHMC,t.YHZH
+        ,t.mph,t.ykjbh,t.type,t.sfzh,t.lxdh,h.mc ysxzname,
+        (select LDBH from XM_LD where id=t.LDID) ldbh,
+        a.mc hyflname,
+        (select c.codename from XTGL_CODE c where t.jffsbh=c.codevalue and c.parentid=(select id from XTGL_CODE where type='jffs')) jffsname,
+        d.mc kjname,f.mc ykjname,e.mc khyhname,e.yhbh,e.yhmc khzhname from XM_SB t
+        left join xtgl_hyfl a on a.bh=t.hyflbh
+        left join xtgl_ysxz h on h.bh=t.ysxzbh
+        left join XM_INSTANCE g on t.xm_id=g.ID
+        left join XTGL_KJ d on t.kjbh=d.bh
+        left join XTGL_KJ f on t.ykjbh=f.bh
+        left join XTGL_FZYH e on t.khyh=e.bh
+        where t.hhlxbh=#{hhlxbh} and t.xm_id=#{xmId} and t.ZT=0
+        <if test="hhlxbh=='HB'">
+            and t.LDID=#{ldid}
+        </if>
+        order by t.hh desc
+        )tt)z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="initDbpzTableCount" resultType="java.lang.Integer">
+        select count(1) from XM_SB where hhlxbh=#{hhlxbh} and xm_id=#{xmId}and ZT=0
+        <if test="ldid!='' and ldid!=null">
+            and LDID=#{ldid}
+        </if>
+    </select>
+    <update id="dbpzDelete">
+        UPDATE XM_SB set zt=#{zt} where id=#{id}
+    </update>
+    <select id="initLdhb" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+select t.id,
+('['||a.mc||']'||'['||t.ldbh||']'||'['||
+(case t.lfsx when 0 then '多层' when 1 then '高层' else '' end)||'户数:'||
+(select count(1) from xm_sb b where b.xm_id=#{xmid} and b.ldid=t.id and b.zt='0')||']')label
+from XM_LD t
+left join xm_ty a on a.id=t.tyid
+where t.xmid=#{xmid} and t.zt='1'
+    </select>
+    <delete id="deleteLdhb">
+        delete from XM_SB where XM_ID=#{xmId} and LDID=#{ldid}
+    </delete>
+    <select id="dbpzAdd" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XmSb">
+select ROWNUM rn, t.id,t.xm_id,t.hh,t.hm,t.dz,t.kjbh,t.ysxzbh,a.XMDZ,
+        t.hyflbh,t.jffsbh,t.hhlxbh,t.KHYH,t.KHMC,t.YHZH,e.YHBH from xm_sb t
+        left join XM_INSTANCE a on t.XM_ID=a.ID
+left join XTGL_FZYH e on t.khyh=e.bh
+        where t.xm_id=#{xmid} and t.ldid=#{ldid} and t.ZT='0'
+    </select>
+    <select id="getMph" resultType="java.lang.String">
+        select to_char(wm_concat(t.MPH)) from xm_sb t where t.XM_ID=#{xmid} and t.LDID=#{ldid} and t.ZT='0'
+        group by t.xm_id,t.ldid
+    </select>
+    <update id="mphHandel">
+        UPDATE xm_sb set mph=#{mph} where id=#{id}
+    </update>
+    <select id="queryWfRuInstContentEntity" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfRuInstContentEntity">
+select t.contentid,t.proc_inst_id procInstId,t.table_name tableName,t.contentremark,t.contentname,t.contenttype,t.readonly,t.contentvalue from WF_RU_INST_CONTENT t
+where t.PROC_INST_ID=#{id}
+    </select>
+     <delete id="deleteInst">
+    DELETE  from WF_RU_INST where PROC_INST_ID=#{procInstId}
+</delete>
+    <delete id="deleteInstContent">
+        DELETE FROM WF_RU_INST_CONTENT where PROC_INST_ID=#{procInstId}
+    </delete>
+    <update id="updateSjstRwBz">
+        update SJST_RWB set SJRYBZ=#{sjrybz,jdbcType=VARCHAR},sjstzt=#{sjstzt} where id=(select sjstid from XM_SJST_RELA where xmid=#{xmid})
+    </update>
+    <select id="getzlTypeOptions" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select id codevalue,name codename from XTGL_FJZLGL where PARENTID='yhtgzl'
+    </select>
+    <select id="getProjectLists" resultType="com.ljx.hfgsjt.entity.dto.Sjst.ProjectModel">
+        select id,sqlx from XM_INSTANCE where id=#{xmid}
+    </select>
+
+    <!--and LOWER(d.contentname) = 'id'-->
+    <select id="initHhld" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfTaskEntity">
+        select t.TASKID,QSSJ,a.FINISH_LIMITED,to_char(QSSJ,'yyyy-MM-dd HH24:mi:ss') greenLight,JSSX,to_char(t.JSSX,'yyyy-MM-dd HH24:mi:ss') yellowLight,JSSX_YL,to_char(t.JSSX_YL,'yyyy-MM-dd HH24:mi:ss') redLight from WF_TASK t
+        left join wf_df_activity a on a.ACTIVITYID=t.C_ACTIVITYID
+        where t.C_ACTIVITYID=#{activityid} and t.PROC_INST_ID in (select d.proc_inst_id
+          from WF_RU_INST_CONTENT d
+         where lower(d.table_name) in ('xm_instance','ywsl_xjxqsqb','ywsl_chgzsqb','ywsl_gshbsqb')
+           and d.contentvalue = #{xmid})
+    </select>
+    <select id="queryGdczList" resultType="java.util.Map">
+        select * from XTGL_GXCZ order by bh
+    </select>
+    <select id="queryKjList" resultType="java.util.Map">
+        select * from XTGL_GDKJ order by bh
+    </select>
+    <select id="getGdList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.GdModel">
+        select a.*,b.mc gdkj_vue,c.mc gdcz_vue,e.CODENAME gwzt_vue from XM_GD a
+        left join xtgl_gdkj b on a.GDKJ=b.BH
+        left join xtgl_gxcz c on a.GDCZ = c.BH
+        left join (select d.* from XTGL_CODE d where d.PARENTID in (select id from XTGL_CODE where type='gwzt')) e on e.CODEVALUE=a.GWZT
+        where a.xmid=#{xmid} and a.ZT=1 order by a.gdbh desc
+    </select>
+    <select id="getGdListByid" resultType="com.ljx.hfgsjt.entity.dto.Sjst.GdModel">
+        select a.*,to_char(a.CJSJ,'yyyy-MM-dd HH24:mi:ss') cjsj_vue from XM_GD a where a.id=#{id}
+    </select>
+    <select id="getGlgList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.GlgModel">
+        select a.* from XM_GD_GLG a where a.XMGDID=#{id}
+    </select>
+    <update id="GWHandleDelete">
+        UPDATE XM_GD set zt=0 where id=#{id}
+    </update>
+    <delete id="GLGHandleDelete">
+        delete from XM_GD_GLG where id=#{id}
+    </delete>
+    <update id="updateXmjlsjh">
+        update XTGL_USER set MOBILEPHONE=#{xmfzr_sjh} where USERID=#{xmfzr}
+    </update>
+    <update id="updateXmjbxx">
+        update XM_INSTANCE set XMMC=#{xmmc},xmdz=#{xmdz},lxr=#{lxr},LXRSJH=#{lxrsjh} where id=#{xmid}
+    </update>
+    <select id="buttonshow" resultType="java.util.Map">
+        select * from WF_RE_NODE where ACTIVITYID=#{activityId} and direction=#{direction}
+    </select>
+    <update id="updatezdTask">
+        update wf_task set RWBLR=#{radio} where C_ACTIVITYID=#{activityId} and PROC_INST_ID in (select a.PROC_INST_ID
+        from wf_ru_inst_content a
+        where lower(a.table_name) = 'xm_instance'
+        and lower(a.contentname) = 'id'
+        and a.CONTENTVALUE=#{xmid})
+    </update>
+    <update id="updaterwb">
+        update SJST_RWB set sjr=#{radio} where id in (select sjstid from XM_SJST_RELA where xmid=#{xmid})
+    </update>
+    <select id="getsqyqxx" resultType="java.util.Map">
+        select to_char(t.JSSX_YL,'yyyy-mm-dd HH24:mi') yqwcsj,b.XMFZR,c.USERNAME,c.MOBILEPHONE from WF_TASK t
+        left join wf_ru_inst_content a on a.PROC_INST_ID=t.PROC_INST_ID
+        left join XM_INSTANCE b on b.id=a.CONTENTVALUE
+        left join XTGL_USER c on b.XMFZR=c.USERID
+        where t.C_ACTIVITYID=#{activityId} and t.PROC_INST_ID in
+        (select PROC_INST_ID from wf_ru_inst_content where lower(table_name) = 'xm_instance'
+        and CONTENTVALUE=#{xmid})
+    </select>
+    <select id="getTask" resultType="java.util.Map">
+        select t.* from WF_TASK t  where t.C_ACTIVITYID=#{activityId} and t.PROC_INST_ID in
+        (select PROC_INST_ID from wf_ru_inst_content where lower(table_name) = 'xm_instance'
+
+        and CONTENTVALUE=#{xmid})
+    </select>
+    <insert id="sqyq">
+      insert into WF_TASK_DELAY (id,taskid,RED_KS,BASJ,CSYY,JHYQJZ,SQR,SPR,spzt) VALUES (#{id},#{taskId},to_date(#{yqwcsj},'yyyy-MM-dd HH24:mi'),sysdate,#{csyy},to_date(#{jhyqjz_vue},'yyyy-MM-dd HH24:mi'),#{sqrid},#{sprid},0)
+    </insert>
+    <select id="getActivity" resultType="java.util.Map">
+        select * from wf_df_activity where ACTIVITYID=#{activityId} and FLAG=1
+    </select>
+
+    <select id="getspXmlbCount" resultType="java.lang.Integer">
+        select count(1) from WF_TASK_DELAY t
+        left join WF_TASK a on a.TASKID = t.TASKID
+        left join wf_ru_inst_content b on a.PROC_INST_ID=b.PROC_INST_ID
+        left join XM_INSTANCE c on c.id=b.CONTENTVALUE
+        where (t.SPR=#{spr} or t.SQR=#{spr})
+        <if test="xmbh!=null and xmbh!=''">
+            and c.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="spzt!=null and spzt!=''">
+            and t.spzt = #{spzt}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.BASJ<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.BASJ <![CDATA[ < ]]> to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+    </select>
+
+    <select id="getspXmlb" resultType="java.util.Map">
+        select z.* from (select ROWNUM rn,tt.* from(
+        select a.bjzt,g.ACTIVITYNAME,f.username sqrname,d.username sprname,c.XMBH,c.xmmc,c.xmfzr,e.username xmfzrname,to_char(a.QSSJ,'yyyy-MM-dd HH24:mi')RWKSSJ,to_char(t.RED_KS,'yyyy-MM-dd HH24:mi')HDBJSX,to_char(a.JSSX,'yyyy-MM-dd HH24:mi')JSSX,t.ID,t.TASKID,to_char(t.BASJ,'yyyy-MM-dd HH24:mi')BASJ,t.CSYY,to_char(t.JHYQJZ,'yyyy-MM-dd HH24:mi')JHYQJZ,t.SPR,t.SPYJ,t.SPSFTY,to_char(t.SPSJ,'yyyy-MM-dd HH24:mi')SPSJ,t.SQR,t.SPZT
+        from WF_TASK_DELAY t
+        left join get_all_task a on a.TASKID = t.TASKID
+        left join (select CONTENTID,PROC_INST_ID,CONTENTVALUE from wf_ru_inst_content union all select CONTENTID,PROC_INST_ID,CONTENTVALUE from wf_hi_inst_content) b on a.PROC_INST_ID=b.PROC_INST_ID
+        left join XM_INSTANCE c on c.id=b.CONTENTVALUE
+        left join XTGL_USER d on d.USERID = t.SPR
+        left join XTGL_USER e on e.USERID = c.xmfzr
+        left join XTGL_USER f on f.USERID = t.SQR
+        left join WF_DF_ACTIVITY g on a.C_ACTIVITYID=g.ACTIVITYID
+        where (t.SPR=#{spr} or t.SQR=#{spr})
+        <if test="xmbh!=null and xmbh!=''">
+            and c.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="spzt!=null and spzt!=''">
+            and t.spzt = #{spzt}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.BASJ<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.BASJ <![CDATA[ < ]]> to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+        order by t.BASJ desc
+        )tt)z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <update id="passdelay">
+        update WF_TASK_DELAY set SPYJ=#{spyj},SPSFTY=#{spsfty},SPSJ=sysdate,SPZT=1 where id=#{id}
+    </update>
+    <select id="getDelay" resultType="java.util.Map">
+        select * from WF_TASK_DELAY where TASKID=#{taskid}
+    </select>
+    <select id="getxmList" resultType="java.util.Map">
+        select * from XM_INSTANCE where id=#{xmid}
+    </select>
+    <update id="updateTasksj">
+        update WF_TASK set JSSX_YL=to_date(#{jhyqsj},'yyyy-MM-dd HH24:mi')  where TASKID=(select TASKID from WF_TASK_DELAY where id=#{id})
+    </update>
+    <select id="initSjsx" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstSxpzb">
+        select * from SJST_SXPZB where PZ_FLAG = 1
+    </select>
+    <select id="getSjstrw" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstRwModel">
+        select * from sjst_rwb where ID in (select SJSTID from xm_sjst_rela where xmid=#{xmid})
+    </select>
+    <select id="getRwtxfsdx" resultType="java.util.Map">
+      select a.REFKEY,a.REFID,a.RWBLR,b.MOBILEPHONE from wf_task a
+      left join XTGL_USER b on b.USERID=a.RWBLR
+      where a.c_activityid in (select NEXTNODE from wf_re_node where activityid=#{activitiId} and direction =#{direction})
+and a.proc_inst_id in (select PROC_INST_ID from wf_ru_inst_content where lower(table_name) = 'xm_instance' and CONTENTVALUE=#{xmid})
+    </select>
+    <select id="getTaskRwtxfsdx" resultType="java.util.Map">
+        select a.REFKEY,a.REFID,
+        (select XMFZR from XM_INSTANCE where id=#{xmid}) RWBLR,
+        (select MOBILEPHONE from XTGL_USER where USERID=(select XMFZR from XM_INSTANCE where id=#{xmid})) MOBILEPHONE from WF_TASK_HISTORY a
+        where a.c_activityid =#{activitiId}
+        and a.proc_inst_id in (select PROC_INST_ID from wf_hi_inst_content where lower(table_name) = 'xm_instance' and CONTENTVALUE=#{xmid})
+    </select>
+    <select id="getdxList" resultType="java.util.Map">
+        select a.xmmc,
+(select ACTIVITYNAME from wf_df_activity where 1=1
+ <if test="direction==3">
+     and activityid=#{activitiId}
+ </if>
+<if test="direction!=3">
+    and activityid=(select NEXTNODE from wf_re_node where activityid=#{activitiId} and direction =#{direction})
+</if>
+) ACTIVITYNAME,
+(select rwbh from ${tablename} where id=#{id}) rwbh
+from xm_instance a
+where a.id=#{xmid}
+    </select>
+
+    <select id="getXmjbxxById" resultType="com.ljx.hfgsjt.entity.xqsl.GetXqslEntity">
+select a.azlx xm_azlx,to_char(a.slsj,'yyyy-MM-dd') slrq_vue,a.xmdz_xzqybh ssqy,a.xmdz xm_xmdz,a.dwmc xm_dwmc,a.lxr xm_lxr,a.lxrsjh xm_lxrsjh,a.lxdh,a.xmmc xm_xmmc,a.id xmid,t.*,to_char(t.jfsj,'yyyy-MM-dd') xjfsj,t.jhkgsj jhkgsj_str,c.codename azlxname from get_xqsl t
+left join (select * from xtgl_code c where c.parentid in (select id from xtgl_code where type in ('gsk','jmk','hgk'))) c on c.codevalue = t.AZLX
+left join XM_INSTANCE a on a.QBID=t.id
+where a.id=#{xmid}
+    </select>
+    <insert id="insertImportFh_xqsl">
+        insert into XM_SLFJ (ID,XMID,FJLX_YJ,FJLX_EJ,FJLJ,FJHZ,FJMC,SCR,SCSJ,SC_FLAG) values
+        (
+        #{id},#{xmid},#{fjlx_yj},#{fjlx_ej},#{fjlj},#{fjhz},#{fjmc},#{scr},sysdate,0
+        )
+    </insert>
+    <insert id="insertImportFh_delay">
+        insert into WF_TASK_DELAY_FJ (ID,DELAYID,FJLJ,FJHZ,FJMC,SCR,SCSJ,SC_FLAG) values
+        (
+        #{id},#{delayid},#{fjlj},#{fjhz},#{fjmc},#{scr},sysdate,0
+        )
+    </insert>
+    <select id="gettoDetial_xqslCount" resultType="java.lang.Integer">
+        select COUNT(1) from XM_SLFJ
+        where xmid=#{xmid} and FJLX_EJ=#{ejfjlx} and FJLX_YJ=#{yjfjlx} and sc_flag=0
+    </select>
+    <select id="gettoDetial_xqslList" resultType="java.util.Map">
+        select z.*
+        from (select ROWNUM rn,tt.* from(
+        select a.id,a.xmid,a.FJLX_YJ fjlxYj,a.FJLX_EJ fjlxEj,a.fjlj,a.fjhz,a.fjmc,b.USERNAME,
+        to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj from XM_SLFJ a
+        left join XTGL_USER b on a.SCR=b.USERID
+        where a.xmid=#{xmid} and a.FJLX_EJ=#{ejfjlx} and a.FJLX_YJ=#{yjfjlx} and a.sc_flag=0
+        order by a.SCSJ desc
+        )tt)z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="gettoDetial_delayList" resultType="java.util.Map">
+        select a.id,a.delayid,a.fjlj,a.fjhz,a.fjmc,b.USERNAME,
+        to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj from WF_TASK_DELAY_FJ a
+        left join XTGL_USER b on a.SCR=b.USERID
+        where a.delayid=#{delayid} and a.sc_flag=0
+        order by a.SCSJ desc
+    </select>
+    <update id="deleteFj_xqsl">
+        UPDATE XM_SLFJ set SC_FLAG=1,SHCR=#{userid},SHCSJ=sysdate where id=#{id}
+    </update>
+    <update id="deleteDelayFj">
+        UPDATE WF_TASK_DELAY_FJ set SC_FLAG=1,SHCR=#{userid},SHCSJ=sysdate where id=#{id}
+    </update>
+    <update id="handleAdd">
+        update XM_INSTANCE  set BMBM_QS=#{bmbmQs},sqlx=#{sqlx},azlx=#{azlx},slsj=to_date(#{slsj},'yyyy-MM-dd'),xmdz_xzqybh=#{xmdz_xzqybh},xmdz=#{xmdz},xmmc=#{xmmc},dwmc=#{dwmc},lxr=#{lxr},lxrsjh=#{lxrsjh},lxdh=#{lxdh,jdbcType=VARCHAR} where id=#{id}
+    </update>
+    <select id="getSbxx" resultType="java.util.Map">
+        select * from xm_sb where xm_id=#{id} and BZLB=4 and YYZX_HH is not null
+    </select>
+    <update id="updateSblhh">
+        UPDATE XM_SB set YYZX_HH=#{db} where id=#{id}
+    </update>
+    <select id="getLdList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.LdModel">
+        SELECT * from xm_ld where ID=#{ldid}
+    </select>
+    <select id="getsjstrwList" resultType="java.util.Map">
+        SELECT * from SJST_RWB where ID in (select SJSTID from xm_sjst_rela where XMID=#{xmid})
+    </select>
+    <select id="getdelayList" resultType="java.util.Map">
+select t.*,to_char(t.BASJ,'yyyy-MM-dd HH24:mi') sqsj,to_char(t.SPSJ,'yyyy-MM-dd HH24:mi')spsj_str,c.xmmc,c.xmbh,d.activityname,e.username sprname,f.username sqrname,e.mobilephone sprdh,f.mobilephone sqrdh from WF_TASK_DELAY t
+join (select PROC_INST_ID,C_ACTIVITYID,taskid from wf_task union all select PROC_INST_ID,C_ACTIVITYID,taskid from wf_task_history) a on a.taskid=t.taskid
+join (select CONTENTVALUE,PROC_INST_ID from wf_ru_inst_content union all select CONTENTVALUE,PROC_INST_ID from wf_hi_inst_content)b on a.proc_inst_id=b.PROC_INST_ID
+join (select xmmc,xmbh,id from xm_instance)c on b.CONTENTVALUE=c.id
+join wf_df_activity d on d.activityid = a.c_activityid
+join xtgl_user e on t.spr=e.userid
+join xtgl_user f on t.sqr=f.userid
+where t.id=#{id}
+    </select>
+    <update id="editChgzHb">
+        update xm_sb set hm = #{hm,jdbcType=VARCHAR},mph=#{mph,jdbcType=VARCHAR},sfzh=#{sfzh,jdbcType=VARCHAR},zjlxbh='01',lxdh=#{lxdh,jdbcType=VARCHAR},JFFSBH=#{jffsbh,jdbcType=VARCHAR},YSXZBH=#{ysxzbh,jdbcType=VARCHAR},KJBH=#{kjbh,jdbcType=VARCHAR},KHYH=#{khyh,jdbcType=VARCHAR},KHMC=#{khmc,jdbcType=VARCHAR},YHZH=#{yhzh,jdbcType=VARCHAR},HYFLBH=#{hyflbh,jdbcType=VARCHAR},DZ=#{dz,jdbcType=VARCHAR} where id=#{id}
+    </update>
+</mapper>

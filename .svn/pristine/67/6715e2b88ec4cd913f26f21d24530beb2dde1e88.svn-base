@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.yj.dao.XhsMapper">
+
+<select id="getXhsCount" resultType="java.lang.Integer">
+    select count(1) from xm_xhs where XMID=#{xmid} and zt=1
+</select>
+    <select id="getXhsData" resultType="com.ljx.hfgsjt.entity.yj.XmXhs">
+        select z.*,to_char(z.AZRQ,'yyyy-MM-dd')azrq_vue,to_char(z.CZSJ,'yyyy-MM-dd HH24:mi')czsj_vue from (
+        select ROWNUM rn, t.*,a.MC xhbhmc,b.MC azfsbhmc,c.hh sbbzh,h.xmbh ,i.username czrname,
+         (select count(1) from yj_dzjcb where fmid=t.ID)yzdzj from XM_XHS t
+        left join xtgl_xhsxh a on a.BH = t.XHBH
+        left join XTGL_XHSAZFS b on b.BH = t.AZFSBH
+        left join xm_sb c on c.id = t.sbid
+        left join XM_INSTANCE h on h.ID=t.XMID
+        left join XTGL_USER i on i.USERID = t.CZR
+        where t.XMID = #{xmid} and t.ZT=1
+        order by t.CZSJ desc
+        )z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getXhsxh" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from xtgl_xhsxh t
+    </select>
+    <select id="getXhsazfs" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from XTGL_XHSAZFS t
+    </select>
+    <select id="xhspzHandle" resultType="com.ljx.hfgsjt.entity.yj.XmXhs">
+        select t.* ,t.azrq azrq_vue ,a.HH sbbzh from XM_XHS t
+         left join xm_sb a on a.id = t.sbid
+         where t.id=#{id}
+    </select>
+    <select id="xhsdzjData" resultType="com.ljx.hfgsjt.entity.yj.XmXhs">
+        select t.ID dzjid,t.DZJBH,t.ZT,t.LM,b.XHSBH,f.FJLJ path,c.MC azfsbhmc,d.MC xhbhmc,b.xhscj,to_char(t.AZRQ,'yyyy-MM-dd HH24:mi') azrq_vue,
+        (select count(1) from YJ_DZJZB_FJ where dzjid=t.id and SC_FLAG=0) fjnumber,b.GPS,
+        to_char(t.CZRQ,'yyyy-MM-dd HH24:mi') czrq_vue,t.htr,e.USERNAME czrname,b.id from YJ_DZJZB t
+        left join YJ_DZJCB a on a.DZJZBID =t.id
+        left join xm_xhs b on b.id = a.XHSID
+        left join XTGL_XHSAZFS c on c.BH = b.AZFSBH
+        left join xtgl_xhsxh d on d.BH = b.XHBH
+        left join XTGL_USER e on e.USERID = t.CZR
+        left join YJ_DZJZB_FJ f on f.DZJID=t.ID and f.SC_FLAG=0
+        where t.id=#{id} and a.DZJCBLXBH='04' and t.DZJLXBH='03'
+    </select>
+    <update id="deleteDzjfj">
+        UPDATE YJ_DZJZB_FJ set SC_FLAG=1,SHCR=#{userid},SHCSJ=sysdate where DZJID=#{dzjid}
+    </update>
+</mapper>

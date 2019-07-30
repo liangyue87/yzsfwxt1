@@ -1,0 +1,184 @@
+sfxybqg
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+	</head>
+	<style>
+		.app-input {
+			text-align: right;
+			font-size: 14px;
+		}
+	</style>
+	<header class="mui-bar mui-bar-nav" style="background-color:#007aff" id="fanhui">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #FFFFFF"></a>
+		<h4 style=" text-align:center;padding-top: 7px;color: #FFFFFF;font-family: '黑体';">施工部反馈</h4>
+		<h5 style="float: right;margin-top: -35px;color: #FFFFFF" class="mui-icon iconfont icon-diandian"></h5>
+	</header>
+	<ul class="mui-table-view" style="padding-top: 30px;font-size: 14px;font-family: '黑体';" id="tiaozhuan">
+		<li class="mui-table-view-cell">
+			<div class="" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-chatbubble"></span>&nbsp;反馈意见</div>
+			<div style="padding-top: 15px;"><textarea id="sgdwFkyj" readonly rows="2" placeholder="" style="font-size: 14px;font-family: '黑体';"></textarea></div>
+		</li>
+		<!--<li class="mui-table-view-cell" style="height: 95px;"><textarea id="sgdwFkyj" rows="2" readonly placeholder="请输入您的意见与建议" style="font-size: 14px;font-family: '黑体';"></textarea></li>
+		-->
+		<li class="mui-table-view-cell" id="checkbox">
+			<label class="" href="#" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-gear"></span>&nbsp;接表工程</label>
+			<div style="margin-top: 10px;">
+				<label style="padding-left: 50px;"><input onclick="return false" type="checkbox" name="checkboxName" value="" id="checkbox_1" >&nbsp;需敷设表前管</label>
+				<label style="padding-left: 40px;"><input onclick="return false" type="checkbox" name="checkboxName" value="" id="checkbox_2" >&nbsp;需做过路管</label>
+			</div>
+			<div style="margin-top: 10px;">
+				<label style="padding-left: 50px;"><input onclick="return false" type="checkbox" name="checkboxName" value="" id="checkbox_3" >&nbsp;楼顶水箱</label>
+				<label style="padding-left: 70px;"><input onclick="return false" type="checkbox" name="checkboxName" value="" id="checkbox_4" >&nbsp;泵房供水位置</label>
+			</div>
+			<li class="mui-table-view-cell">
+				<label style="padding-left: 50px;"><input onclick="return false" type="checkbox" name="checkboxName" value=""  id="checkbox_5">&nbsp;有可接表预留支管</label>
+				<label style="padding-left: 15px;"><input onclick="return false" type="checkbox" name="checkboxName" value="" id="checkbox_6" >&nbsp;超高层</label>
+				<div style="margin-top: 10px;">
+					<label style="padding-left: 50px;"><input onclick="return false" type="checkbox" name="checkboxName" value="" id="checkbox_7" >&nbsp;道路绿化破复</label>
+					<label style="padding-left: 45px;"><input onclick="return false" type="checkbox" name="checkboxName" value="" id="checkbox_8" >&nbsp;需要配置地管</label>
+				</div>
+			</li>
+		</li>
+	</ul>
+	<div class="mui-slider-group">
+		<ul class="mui-table-view" style="font-family: '黑体';font-size: 14px;">
+			<li class="mui-table-view-cell" style="height:110px;padding-left: 16px; display:none" id="jbgc_1">
+				<label>需敷设表前管</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+				<div style="padding-top: 5px;">
+					<span>（约</span><input readonly id="bqg_1" type="text" style=" text-align: right;width: 70px;height: 16px;font-size: 14px;"></input><span>米，接表需开挖面积约</span>
+					<input readonly id="bqg_2" type="text" style=" text-align: right;width: 60px;height: 16px;font-size: 14px;"></input><span>㎡</span>（包含过路管开挖敷设）</span>
+				</div>
+			</li>
+			<li class="mui-table-view-cell" style="height:150px; padding-left: 16px;display:none;" id="jbgc_2">
+				<label>需做过路管</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+				<div style="padding-top: 5px;">
+					<span>（若需要过路管，拖管距离约</span><input readonly id="glg_1" type="text" style=" text-align: right;width: 70px;height: 16px;font-size: 14px;"></input><span>米，顶管管尾处破复面积约</span>
+					<input readonly id="glg_2" type="text" style=" text-align: right;width: 60px;height: 16px;font-size: 14px;"></input><span>㎡过路管勾点出破复面积约</span>
+					<input readonly id="glg_3" type="text" style=" text-align: right;width: 60px;height: 16px;font-size: 14px;"></input><span>㎡。</span>
+				</div>
+			</li>
+			<li class="mui-table-view-cell" style="height:60px; padding-left: 16px;display:none;" id="jbgc_3">
+				<div style="float: left;padding-top: 12px;">
+					<label>楼顶水箱</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+				</div>
+				<div style="float: right;10px;padding-right: 5px;padding-top: 12px;">
+					<input readonly id="ldsx" type="text" placeholder="" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+				</div>
+			</li>
+			<li class="mui-table-view-cell" style="height:60px;padding-left: 16px;display:none;" id="jbgc_4">
+				<div style="float: left;padding-top: 12px;">
+					<label>泵房供水位置</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+				</div>
+				<div style="float: right;10px;padding-right: 5px;padding-top: 12px;">
+					<input readonly id="bfgswz" type="text" placeholder="" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+				</div>
+			</li>
+			<!--<li style="height: 50px;padding-left: 16px;display:none;" id="jbgc_5">
+				<div style="float: left;padding-top: 12px;">
+					<label>过路管勾点处破复面积</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+				</div>
+				<div style="float: right;10px;padding-right: 5px;padding-top: 12px;">
+					<input type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+				</div>
+			</li>
+			<li style="height: 50px;padding-left: 16px;display:none;" id="jbgc_6">
+				<div style="float: left;padding-top: 12px;">
+					<label>泵房供水位置</label><label style="margin-left: 5px;color:#777777;font-size: 12px;">(必填)</label>
+				</div>
+				<div style="float: right;10px;padding-right: 5px;padding-top: 12px;">
+					<input type="text" placeholder="请输入" class="app-input" style="border: none; text-align: right;width: 160px;height: 22px;">
+				</div>
+			</li>-->
+		</ul>
+	</div>
+
+	<body>
+		<script src="../js/mui.min.js "></script>
+		<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../js/http.js"></script>
+		<!--<script type="text/javascript" src="../js/jbgc.js"></script>-->
+		<script type="text/javascript" src="../layer/layer.js"></script>
+		<script type="text/javascript ">
+			mui.init();
+			var kczt = "0";
+			mui.plusReady(function initdata() {
+				var xmid = localStorage.getItem("xmid");
+				var bh = localStorage.getItem("bh");
+				/*if(bh == "xmjl") {
+					kczt = "3";
+				}*/
+				$.ajax({
+					type: "get",
+					url: common.ip + "/XkylxController/getFkpjKcbm",
+					async: false,
+					data: {
+						"xmid": xmid,
+						"kczt": kczt,
+					},
+					success: function(res) {
+						var jsonObject = eval("(" + res + ")");
+						$("#sgdwFkyj").val(jsonObject.sgdwFkyj);
+						var jsObject = eval("(" + jsonObject.sgdwFk + ")");
+						if(jsObject.sfxybqg == "1") { //表前管
+							$("#checkbox_1").attr("checked", "checked");
+							$("#jbgc_1").css('display', '');
+							$("#bqg_1").val(jsObject.bqgcd);
+							$("#bqg_2").val(jsObject.jbxkwmj);
+						}
+						if(jsObject.sfxyzglg == "1") { //过路管
+							$("#checkbox_2").attr("checked", "checked");
+							$("#jbgc_2").css('display', '');
+							$("#glg_1").val(jsObject.tgjl);
+							$("#glg_2").val(jsObject.dggwcpfmj);
+							$("#glg_3").val(jsObject.glggdpfmj);
+						}
+						if(jsObject.sfyldsx == "1") { //楼顶水箱位置
+							$("#checkbox_3").attr("checked", "checked");
+							$("#jbgc_3").css('display', '');
+							$("#ldsx").val(jsObject.ldsxwz);
+
+						}
+						if(jsObject.bfgswz != "" || jsObject.bfgswz != undefined) { //泵房位置
+							$("#checkbox_4").attr("checked", "checked");
+							$("#jbgc_4").css('display', '');
+							$("#bfgswz").val(jsObject.bfgswz);
+
+						}
+						if(jsObject.sfhykjbylzg == "1") { //预留支管
+							$("#checkbox_5").attr("checked", "checked");
+						}
+						if(jsObject.sfycgc == "1") { //超高层
+							$("#checkbox_6").attr("checked", "checked");
+						}
+						if(jsObject.sfxydllhpf == "1") { //道路绿化破复
+							$("#checkbox_7").attr("checked", "checked");
+						}
+						if(jsObject.sfxypzdb == "1") { //配置地管
+							$("#checkbox_8").attr("checked", "checked");
+						}
+
+					}
+				});
+			});
+
+			//给退出登录绑定事件
+			mui('#fanhui').on('tap', 'h5', function(a) { //绑定所有a标签				
+				var btnArray = ['否', '是'];
+				mui.confirm('您确定要退出登录！', '温馨提示', btnArray, function(e) {
+					if(e.index == 1) {
+						goto("login.html", 2);
+					}
+					return false;
+				})
+			});
+		</script>
+	</body>
+
+</html>

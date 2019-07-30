@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ljx.hfgsjt.zhcx.mapper.TftzdlbMapper">
+    <select id="getProjectCount" resultType="java.lang.Integer" >
+        <!-- select count(*) from (select rownum rn,x.id,x.xmbh,y.zjzmj,y.zzjzmj,y.hs from XM_INSTANCE x left join ywsl_xjxqsqb y on x.qbid=y.sqbh and 1=1
+         <if test="xmbh!=null and xmbh!=''">
+             and x.xmbh like CONCAT('%',CONCAT(#{xmbh},'%')
+         </if>
+         and rownum&gt;#{startRow}) t where  t.rn &lt; #{endRow}-->
+        select count(*) from zhcx_tftzdlb where 1=1
+        <if test="xmbh!=null and xmbh!=''">
+            and xmbh like CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and xmmc like CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="zt!=null and zt!=''">
+            and zt =#{zt}
+        </if>
+        and  rownum between #{startRow} and #{endRow}
+    </select>
+    <select id="getProjectList" resultType="com.ljx.hfgsjt.entity.zhcx.TftzdlbModel" >
+        <!--elect rownum rn,rw.*,n.* from (select * from sjst_rwb r left join xtgl_user b on  r.sjr=b.userId  )rw,(select t.*,s.sjstId from
+        (select x.id,x.xmbh,y.zjzmj,y.zzjzmj,y.hs from XM_INSTANCE x left join ywsl_xjxqsqb y on x.qbid=y.sqbh and 1=1
+        <if test="xmbh!=null and xmbh!=''">
+            and x.xmbh like CONCAT('%',CONCAT(#{xmbh},'%')
+        </if>
+        ) t ,xm_sjst_rela s  where  t.id=s.xmid
+        ) n where  n.sjstid=rw.id and  rownum between #{startRow} and #{endRow}-->
+        select id,xmbh,xmmx,xmfxr,tzdbh,ytje,stje,to_char(qrsj,'yyyy-MM-dd') qrsj,sjh,zt from zhcx_tftzdlb where 1=1
+        <if test="xmbh!=null and xmbh!=''">
+            and xmbh like CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and xmmc like CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="zt!=null and zt!=''">
+            and zt =#{zt}
+        </if>
+        and  rownum between #{startRow} and #{endRow}
+    </select>
+</mapper>

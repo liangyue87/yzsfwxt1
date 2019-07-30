@@ -1,0 +1,17 @@
+com\ljx\hfgsjt\xqsl\mapper\XjxqsqbMapperImpl.class
+com\ljx\hfgsjt\xqsl\service\XjxqsqbService.class
+com\ljx\hfgsjt\xqsl\controller\XjxqsqbController.class
+com\ljx\hfgsjt\xqsl\service\ChgzsqbService.class
+com\ljx\hfgsjt\xqsl\serviceImpl\XqslServiceImpl.class
+com\ljx\hfgsjt\xqsl\mapper\XjxqsqbMapper.class
+com\ljx\hfgsjt\xqsl\serviceImpl\XjxqsqbServiceImpl.class
+com\ljx\hfgsjt\xqsl\dao\XqslMapper.class
+com\ljx\hfgsjt\xqsl\mapper\ChgzsqbMapperImpl.class
+com\ljx\hfgsjt\xqsl\service\XqslService.class
+com\ljx\hfgsjt\xqsl\controller\XqslController.class
+com\ljx\hfgsjt\xqsl\mapper\ChgzsqbMapper.class
+com\ljx\hfgsjt\xqsl\dto\ChgzsqbDto.class
+com\ljx\hfgsjt\xqsl\dto\XjxqsqbDto.class
+com\ljx\hfgsjt\xqsl\controller\ChgzsqbController.class
+com\ljx\hfgsjt\xqsl\dto\XjxqsqbFjDto.class
+com\ljx\hfgsjt\xqsl\serviceImpl\ChgzsqbServiceImpl.class

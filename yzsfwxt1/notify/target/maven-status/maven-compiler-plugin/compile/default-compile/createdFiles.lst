@@ -1,0 +1,4 @@
+com\ljx\hfgsjt\xmlct\mapper\XmlctMapper.class
+com\ljx\hfgsjt\xmlct\controller\XmlctController.class
+com\ljx\hfgsjt\xmlct\service\Impl\XmlctServiceImpl.class
+com\ljx\hfgsjt\xmlct\service\XmlctService.class

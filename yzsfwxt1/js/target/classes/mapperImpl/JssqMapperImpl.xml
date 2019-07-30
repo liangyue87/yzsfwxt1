@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.js.mapper.JssqMapper">
+
+    <select id="selectJssqCount" resultType="java.lang.Integer">
+        select count (v.id) from V_JSSQ v
+        where 1=1 and v.XMFZR = #{xmfzr}
+        <if test="xmmc!=null and xmmc!=''">
+            and v.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(v.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="status!=null and status!=''">
+            and v.status =#{status}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and v.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and v.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and v.azlx =#{azlx}
+        </if>
+
+
+    </select>
+
+    <select id="selectJssqList" resultType="com.ljx.hfgsjt.entity.dto.js.Jssq">
+        select * from (
+        select rownum rn,s.* from (
+        select v.*,a.codename  from V_JSSQ v left join XTGL_CODE a on v.azlx=a.codevalue where 1=1
+        and v.XMFZR = #{xmfzr}
+        <if test="xmmc!=null and xmmc!=''">
+            and v.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="status!=null and status!=''">
+            and v.status =#{status}
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(v.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and v.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and v.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and v.azlx =#{azlx}
+        </if>
+        order by v.slsj desc ) s
+        where rownum <![CDATA[ <= ]]> #{endRow}
+        ) where rn <![CDATA[ >= ]]> #{startRow}
+    </select>
+
+    <select id="selectYshz" resultType="com.ljx.hfgsjt.entity.dto.js.ys_rucb">
+        select a.* from YS_RWCB a  left join YS_RWZB b on a.ysrwzbid=b.id  where a.ysfl=#{flbh} and b.xmid=#{xmid}
+    </select>
+
+    <select id="selectBzyhjssCount" resultType="java.lang.Integer">
+        select count(v.id) from V_YHJSS v
+        where 1=1
+        <if test="xmmc!=null and xmmc!=''">
+            and v.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(v.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="qszt!=null and qszt!=''">
+            and v.qszt =#{qszt}
+        </if>
+        <if test="status!=null and status!=''">
+            and v.status =#{status}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and v.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and v.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and v.azlx =#{azlx}
+        </if>
+
+    </select>
+
+    <select id="selectBzyhjssList" resultType="com.ljx.hfgsjt.entity.dto.js.Jssq">
+        select * from (
+        select rownum rn,s.* from (
+        select v.* from V_YHJSS v where 1=1
+        <if test="xmmc!=null and xmmc!=''">
+            and v.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(v.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="qszt!=null and qszt!=''">
+            and v.qszt =#{qszt}
+        </if>
+        <if test="status!=null and status!=''">
+            and v.status =#{status}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and kssj!=''">
+            and to_date(v.lxsj,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and v.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and v.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and v.azlx =#{azlx}
+        </if>
+        order by v.slsj desc ) s
+        where rownum <![CDATA[ <= ]]> #{endRow}
+        ) where rn <![CDATA[ >= ]]> #{startRow}
+    </select>
+
+    <select id="selectJszlCount" resultType="java.lang.Integer">
+       select count(a.id) from YHJS_RW_FJ a  where a.xmid=#{xmid} and a.fjlx_yj is null
+    </select>
+
+    <select id="selectJszlList" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.js.JsRwFj">
+          select * from(
+       select c.username,a.id,a.yhjsrwid, a.fjlx_yj,a.fjlx_ej,a.fjlj, a.fjhz, a.fjmc,a.scr,a.xmid,
+       to_char(a.scsj,'yyyy-mm-dd hh24:mi:ss') as scsj_str,a.sc_flag,a.shcr,a.shcsj,a.sfgd,a.gdr,a.gdsj ,ROWNUM rn
+       from YHJS_RW_FJ a left join XTGL_USER c on a.scr=c.userid
+        where a.xmid=#{xmid}and a.fjlx_yj is null ORDER BY a.scsj DESC)
+        WHERE rn  &gt; ${page} AND rn  &lt;= ${pageSize}
+    </select>
+
+    <insert id="insertJszl" parameterType="com.ljx.hfgsjt.entity.dto.js.JsRwFj">
+    insert into YHJS_RW_FJ (ID, YHJSRWID, FJLX_YJ,
+      FJLX_EJ, FJLJ, FJHZ,
+      FJMC, SCR, SCSJ, SC_FLAG,
+      SHCR, SHCSJ, SFGD, GDR,XMID,
+      GDSJ)
+    values (#{id,jdbcType=VARCHAR}, #{yhjsrwid,jdbcType=VARCHAR}, #{fjlx_Yj,jdbcType=VARCHAR},
+      #{fjlx_Ej,jdbcType=VARCHAR}, #{fjlj,jdbcType=VARCHAR}, #{fjhz,jdbcType=VARCHAR},
+      #{fjmc,jdbcType=VARCHAR}, #{scr,jdbcType=VARCHAR}, #{scsj,jdbcType=DATE}, #{scFlag,jdbcType=DECIMAL},
+      #{shcr,jdbcType=VARCHAR}, #{shcsj,jdbcType=DATE}, #{sfgd,jdbcType=DECIMAL}, #{gdr,jdbcType=VARCHAR},#{xmid,jdbcType=VARCHAR},
+      #{gdsj,jdbcType=DATE})
+  </insert>
+
+    <insert id="insertRwzb"  parameterType="com.ljx.hfgsjt.entity.dto.js.JsRwZb">
+              insert into YHJS_RWZB (ID, RWBH, XMID,
+      FQR, FQRQ, FPR, FPSJ,
+      YSRY, CSSFTG, CSRY,
+      CSSJ, FSSFTG, FSRY, FSSJ,
+      YHSFQR, YHQRSJ, ZT, BZ,SHYJ
+      )
+    values (#{id,jdbcType=VARCHAR}, #{rwbh,jdbcType=VARCHAR}, #{xmid,jdbcType=VARCHAR},
+      #{fqr,jdbcType=VARCHAR}, #{fqrq,jdbcType=DATE}, #{fpr,jdbcType=VARCHAR}, #{fpsj,jdbcType=DATE},
+      #{ysry,jdbcType=VARCHAR}, #{cssftg,jdbcType=VARCHAR}, #{csry,jdbcType=VARCHAR},
+      #{cssj,jdbcType=DATE}, #{fssftg,jdbcType=VARCHAR}, #{fsry,jdbcType=VARCHAR}, #{fssj,jdbcType=DATE},
+      #{yhsfqr,jdbcType=VARCHAR}, #{yhqrsj,jdbcType=DATE}, #{zt,jdbcType=DECIMAL}, #{bz,jdbcType=VARCHAR},#{shyj,jdbcType=VARCHAR}
+      )
+    </insert>
+    <select id="selectRwzb" resultType="com.ljx.hfgsjt.entity.dto.js.JsRwZb">
+      select t.*, t.rowid from YHJS_RWZB t where t.xmid=#{xmid}
+    </select>
+    <update id="updataRwzb" parameterType="com.ljx.hfgsjt.entity.dto.js.JsRwZb" >
+    update YHJS_RWZB
+    set RWBH = #{rwbh,jdbcType=VARCHAR},
+      XMID = #{xmid,jdbcType=VARCHAR},
+      FQR = #{fqr,jdbcType=VARCHAR},
+      FQRQ = #{fqrq,jdbcType=DATE},
+      FPR = #{fpr,jdbcType=VARCHAR},
+      FPSJ = #{fpsj,jdbcType=DATE},
+      YSRY = #{ysry,jdbcType=VARCHAR},
+      CSSFTG = #{cssftg,jdbcType=VARCHAR},
+      CSRY = #{csry,jdbcType=VARCHAR},
+      CSSJ = #{cssj,jdbcType=DATE},
+      FSSFTG = #{fssftg,jdbcType=VARCHAR},
+      FSRY = #{fsry,jdbcType=VARCHAR},
+      FSSJ = #{fssj,jdbcType=DATE},
+      YHSFQR = #{yhsfqr,jdbcType=VARCHAR},
+      YHQRSJ = #{yhqrsj,jdbcType=DATE},
+      ZT = #{zt,jdbcType=DECIMAL},
+      BZ = #{bz,jdbcType=VARCHAR},
+      SHYJ = #{shyj,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+    <select id="selectRwcb" resultType="com.ljx.hfgsjt.entity.dto.js.JsRwCb">
+      select t.*, t.rowid from YHJS_RWCB t where t.yhjsrwzbid=#{zbid} and t.jsfl=#{jsfl}
+    </select>
+    <update id="updatRwcb" parameterType="com.ljx.hfgsjt.entity.dto.js.JsRwCb" >
+    update YHJS_RWCB
+    set YHJSRWZBID = #{yhjsrwzbid,jdbcType=VARCHAR},
+      JSFL = #{jsfl,jdbcType=VARCHAR},
+      YSJE = #{ysje,jdbcType=DECIMAL},
+      JSJE = #{jsje,jdbcType=DECIMAL},
+      BZ = #{bz,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+    <delete id="delectRwfj">
+        delete  from  YHJS_RW_FJ  where id=#{id}
+    </delete>
+
+    <delete id="delectRwZb">
+        delete  from  YHJS_RWZB  where xmid=#{xmid}
+    </delete>
+
+    <insert id="insertJsRwcb" parameterType="com.ljx.hfgsjt.entity.dto.js.JsRwCb" >
+    insert into YHJS_RWCB (ID, YHJSRWZBID, JSFL,
+      YSJE, JSJE, BZ)
+    values (#{id,jdbcType=VARCHAR}, #{yhjsrwzbid,jdbcType=VARCHAR}, #{jsfl,jdbcType=VARCHAR},
+      #{ysje,jdbcType=DECIMAL}, #{jsje,jdbcType=DECIMAL}, #{bz,jdbcType=VARCHAR})
+  </insert>
+
+    <select id="selectJsFjList" resultType="com.ljx.hfgsjt.entity.dto.js.JsRwFj">
+       select a.id,a.yhjsrwid, a.fjlx_yj,a.fjlx_ej,a.fjlj, a.fjhz, a.fjmc,a.scr,a.xmid,
+       a.sc_flag,a.shcr,a.shcsj,a.sfgd,a.gdr,a.gdsj
+       from YHJS_RW_FJ a
+        where a.xmid=#{xmid} and a.yhjsrwid is null
+
+    </select>
+
+    <update id="updateJsFj" parameterType="com.ljx.hfgsjt.entity.dto.js.JsRwFj" >
+        update YHJS_RW_FJ
+        <set>
+            <if test="yhjsrwid != null" >
+                YHJSRWID = #{yhjsrwid,jdbcType=VARCHAR},
+            </if>
+            <if test="fjlx_Yj != null" >
+                FJLX_YJ = #{fjlx_Yj,jdbcType=VARCHAR},
+            </if>
+            <if test="fjlx_Ej != null" >
+                FJLX_EJ = #{fjlx_Ej,jdbcType=VARCHAR},
+            </if>
+            <if test="fjlj != null" >
+                FJLJ = #{fjlj,jdbcType=VARCHAR},
+            </if>
+            <if test="fjhz != null" >
+                FJHZ = #{fjhz,jdbcType=VARCHAR},
+            </if>
+            <if test="fjmc != null" >
+                FJMC = #{fjmc,jdbcType=VARCHAR},
+            </if>
+            <if test="scr != null" >
+                SCR = #{scr,jdbcType=VARCHAR},
+            </if>
+            <if test="scsj != null" >
+                SCSJ = #{scsj,jdbcType=DATE},
+            </if>
+            <if test="scFlag != null" >
+                SC_FLAG = #{scFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="shcr != null" >
+                SHCR = #{shcr,jdbcType=VARCHAR},
+            </if>
+            <if test="shcsj != null" >
+                SHCSJ = #{shcsj,jdbcType=DATE},
+            </if>
+            <if test="sfgd != null" >
+                SFGD = #{sfgd,jdbcType=DECIMAL},
+            </if>
+            <if test="gdr != null" >
+                GDR = #{gdr,jdbcType=VARCHAR},
+            </if>
+            <if test="gdsj != null" >
+                GDSJ = #{gdsj,jdbcType=DATE},
+            </if>
+            <if test="xmid != null" >
+                XMID = #{xmid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--实例额-->
+    <select id="getRuInstContent" resultType="com.ljx.hfgsjt.entity.dto.Sjst.InstContentEntity">
+     select c.contentid,c.proc_Inst_Id,c.table_Name,c.contentremark,
+     c.contentname,c.contenttype,c.readonly,c.contentvalue
+     from WF_RU_INST_CONTENT c left join WF_RU_INST a on a.proc_inst_id=c.proc_inst_id
+     where a.pdef_id=#{pdef_id} and c.contentvalue=#{xmid}
+  </select>
+
+    <update id="updataInst" parameterType="com.ljx.hfgsjt.entity.dto.Sjst.InstEntity" >
+    update WF_RU_INST
+    set PDEF_ID = #{pdefId,jdbcType=VARCHAR},
+      PARAMMAP = #{parammap,jdbcType=VARCHAR},
+      STARTDT = #{startdt,jdbcType=DATE},
+      STARTUSER = #{startuser,jdbcType=VARCHAR},
+      PROCSTATUS = #{procstatus,jdbcType=DECIMAL},
+      STOPUSER = #{stopuser,jdbcType=VARCHAR},
+      STOPDT = #{stopdt,jdbcType=DATE}
+    where PROC_INST_ID = #{procInstId,jdbcType=VARCHAR}
+  </update>
+    <update id="updataTask" parameterType="com.ljx.hfgsjt.entity.dto.Sjst.TaskEntity">
+    update WF_TASK
+    set PTASKID = #{ptaskid,jdbcType=DECIMAL},
+         PROC_INST_ID=#{proc_inst_id,jdbcType=VARCHAR},
+         C_ACTIVITYID = #{c_activityid,jdbcType=DECIMAL},
+         ISCURRENT = #{iscurrent,jdbcType=DECIMAL},
+         CZR = #{czr,jdbcType=VARCHAR},
+      QSSJ = #{qssj,jdbcType=DATE},
+      JSSJ = #{jssj,jdbcType=DATE},
+      CZSM = #{czsm,jdbcType=VARCHAR},
+      ISCHECK = #{ischeck,jdbcType=DECIMAL},
+      CHECK_TIME = #{check_time,jdbcType=DATE},
+      CHECK_MEMO = #{check_memo,jdbcType=VARCHAR},
+      JSSX = #{jssx,jdbcType=DATE},
+      JSSJ_MEMO = #{jssj_memo,jdbcType=VARCHAR},
+      CHECK_USER = #{check_user,jdbcType=VARCHAR},
+      JS_USER = #{js_user,jdbcType=VARCHAR},
+      CHECK_SX = #{check_sx,jdbcType=DATE},
+      YSSM = #{yssm,jdbcType=VARCHAR},
+      HASNEW = #{hasnew,jdbcType=DECIMAL},
+      SLMX = #{slmx,jdbcType=CLOB},
+      JSSX_YL=#{jssx_yl,jdbcType=DATE},
+      REFKEY=#{refkey,jdbcType=VARCHAR},
+      REFID=#{refid,jdbcType=VARCHAR},
+      HTYY=#{htyy,jdbcType=VARCHAR}
+    where TASKID = #{taskid,jdbcType=DECIMAL}
+  </update>
+
+    <select id="getRuInst" resultType="com.ljx.hfgsjt.entity.dto.Sjst.InstEntity">
+  select a.proc_inst_id,a.pdef_id,a.parammap,a.startdt,a.startuser,a.procstatus,a.stopuser,a.stopdt
+  from WF_RU_INST a  left join WF_RU_INST_CONTENT c on c.proc_inst_id=a.proc_inst_id
+  where a.pdef_id='C0018' and c.contentvalue=#{xmid}
+  </select>
+    <select id="getTask" resultType="com.ljx.hfgsjt.entity.dto.Sjst.TaskEntity">
+    select t.taskid,t.ptaskid,t.proc_inst_id,t.c_activityid,t.iscurrent,t.czr ,t.qssj,
+     t.jssj,t.czsm,t.ischeck,t.check_time,t.check_memo,t.jssx,t.jssj_memo,
+     t.check_user,t.js_user,t.check_sx,t.yssm,t.hasnew,t.slmx,t.jssx_yl,t.refkey,t.refid,t.htyy,t.thyy
+     from WF_TASK t left join WF_RU_INST_CONTENT c on t.proc_inst_id=c.proc_inst_id
+     where t.c_activityid='C0018' and c.contentvalue=#{xmid}
+  </select>
+
+    <insert id="insertTask" parameterType="com.ljx.hfgsjt.entity.dto.Sjst.TaskEntity">
+      insert into WF_TASK (TASKID, PTASKID, PROC_INST_ID,
+      C_ACTIVITYID, ISCURRENT, CZR,
+      QSSJ, JSSJ,CZSM,ISCHECK,CHECK_TIME,CHECK_MEMO,
+      JSSX,JSSJ_MEMO,CHECK_USER,JS_USER,
+     CHECK_SX,YSSM,HASNEW,SLMX,JSSX_YL,
+     REFKEY,REFID,HTYY)
+    values (#{taskid,jdbcType=VARCHAR},#{ptaskid,jdbcType=VARCHAR},#{proc_inst_id,jdbcType=VARCHAR},
+    #{c_activityid,jdbcType=VARCHAR}, #{iscurrent,jdbcType=VARCHAR},#{czr,jdbcType=VARCHAR},
+    #{qssj,jdbcType=DATE},#{jssj,jdbcType=DATE},#{czsm,jdbcType=VARCHAR},#{ischeck,jdbcType=VARCHAR},#{check_time,jdbcType=DATE},#{check_memo,jdbcType=VARCHAR},
+    #{jssx,jdbcType=DATE},#{jssj_memo,jdbcType=VARCHAR},#{check_user,jdbcType=VARCHAR},#{js_user,jdbcType=VARCHAR},
+    #{check_sx,jdbcType=DATE},#{yssm,jdbcType=VARCHAR},#{hasnew,jdbcType=VARCHAR},#{slmx,jdbcType=CLOB},#{jssx_yl,jdbcType=DATE},
+    #{refkey,jdbcType=VARCHAR},#{refid,jdbcType=VARCHAR},#{htyy,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertHiTask" parameterType="com.ljx.hfgsjt.entity.dto.Sjst.TaskEntity">
+      insert into WF_TASK_HISTORY (TASKID, PTASKID, PROC_INST_ID,
+      C_ACTIVITYID, ISCURRENT, CZR,
+      QSSJ, JSSJ,CZSM,ISCHECK,CHECK_TIME,CHECK_MEMO,
+      JSSX,JSSJ_MEMO,CHECK_USER,JS_USER,
+     CHECK_SX,YSSM,HASNEW,SLMX,JSSX_YL,
+     REFKEY,REFID,HTYY)
+    values (#{taskid,jdbcType=VARCHAR},#{ptaskid,jdbcType=VARCHAR},#{proc_inst_id,jdbcType=VARCHAR},
+    #{c_activityid,jdbcType=VARCHAR}, #{iscurrent,jdbcType=VARCHAR},#{czr,jdbcType=VARCHAR},
+    #{qssj,jdbcType=DATE},#{jssj,jdbcType=DATE},#{czsm,jdbcType=VARCHAR},#{ischeck,jdbcType=VARCHAR},#{check_time,jdbcType=DATE},#{check_memo,jdbcType=VARCHAR},
+    #{jssx,jdbcType=DATE},#{jssj_memo,jdbcType=VARCHAR},#{check_user,jdbcType=VARCHAR},#{js_user,jdbcType=VARCHAR},
+    #{check_sx,jdbcType=DATE},#{yssm,jdbcType=VARCHAR},#{hasnew,jdbcType=VARCHAR},#{slmx,jdbcType=CLOB},#{jssx_yl,jdbcType=DATE},
+    #{refkey,jdbcType=VARCHAR},#{refid,jdbcType=VARCHAR},#{htyy,jdbcType=VARCHAR})
+  </insert>
+
+    <!--查询结算默认人-->
+    <select id="getJsmrr"  resultType="com.ljx.hfgsjt.entity.dto.zhys.XmUserEntity">
+        select a.* from XTGL_USER a left join XTGL_USERROLE b on a.userid=b.userid left join WF_ACTIVITY_ROLE c on b.roleid=c.roleid
+             where c.activityid=#{pdefid}
+            </select>
+
+</mapper>

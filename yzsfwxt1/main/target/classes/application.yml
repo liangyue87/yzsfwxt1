@@ -1,0 +1,114 @@
+server:
+  servlet:
+    context-path:
+  #    context-path: /api/v1.0
+  port: 8097
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript
+spring:
+  #resources:
+    #static-locations: classpath:static/,file:static/
+  store-type: none
+  activiti:
+    check-process-definitions: false
+  thymeleaf.cache: false
+  mvc:
+    static-path-pattern: /**
+  servlet.multipart:
+    max-request-size: 30MB
+    max-file-size: 30MB
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle10gDialect
+    database: oracle
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    #url: jdbc:oracle:thin:@127.0.0.1:301:orcl
+    url: jdbc:oracle:thin:@192.168.1.249:1521:ljx
+    #url: jdbc:oracle:thin:@127.0.0.1:1521:XE
+    username: XZYWBJXT
+    password: XZYWBJXT
+
+logging.level:
+  org.springframework: error
+  org.apache.shiro: error
+  org.hibernate.SQL: error-
+# Rest API前缀地址
+restPath: /api
+
+# App信息
+yzsfwxt:
+  application:
+    name: yzsfwxt_backfont
+    shortName: yzsfwxt
+    version: V1.0
+    powerByName: ljx
+    powerByLink: https://github.com/lcw2004
+  file:
+    type: local
+    temp: D:\Files\temp
+    local:
+      path: D:\Files
+    oss:
+      endpoint: oss-cn-shenzhen.aliyuncs.com
+      accessKeyId: test
+      accessKeySecret: test
+      bucketName: dev
+    local-oss:
+      max-time: 7
+  url: http://localhost:9000
+  weixin:
+    appId: wxa5b74cf00bb65181
+    appSecret: e105d543814851868a8e90c849bb0d82
+mail:
+  protocol: smtp
+  host: smtp.qq.com
+  port: 465
+  smtp:
+    socketFactory.port: 465
+    auth: true
+    starttls.enable: true
+    debug: true
+    starttls.required: true
+    socketFactory.fallback: false
+  from:
+    mail: 422543203@qq.com
+    name: 422543203
+  username: 422543203@qq.com
+  password: 1234567890
+
+#=============================#
+#=====   Redis Settings  =====#
+#=============================#
+spring.redis:
+  database: 0
+  host: 127.0.0.1
+  port: 6379
+  password:
+  pool:
+    max-active: 8
+    max-wait: -1
+    max-idle: 8
+    min-idle: 0
+  timeout: 0
+  #mybatis mapper.xml扫描路径
+mybatis:
+  mapper-locations: classpath*:mapperImpl/*.xml
+
+prop:
+  upload-folder: ./files
+
+
+#短信接口配置
+message:
+  dx_switch : 0    #0关   1开
+  url: http://172.20.2.159:9400/rest/msg/pushMsg
+  authcode: 6cbc3132909f4ce285c03153f11b1f6a
+  ywsysid: HF_005
+  timer: 300   #短信发送间隔 单位：second
+

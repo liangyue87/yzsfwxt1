@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true">
+        <processor name="org.mapstruct.ap.MappingProcessor" />
+      </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="base" />
+        <module name="entity" />
+        <module name="gcpd" />
+        <module name="htqd" />
+        <module name="js" />
+        <module name="login" />
+        <module name="main" />
+        <module name="message" />
+        <module name="msg" />
+        <module name="msg1" />
+        <module name="notify" />
+        <module name="redis" />
+        <module name="repository" />
+        <module name="sfkp" />
+        <module name="sgjg" />
+        <module name="sjst" />
+        <module name="sys" />
+        <module name="user" />
+        <module name="util" />
+        <module name="workflow" />
+        <module name="wtys" />
+        <module name="xkybz" />
+        <module name="xqsl" />
+        <module name="yj" />
+        <module name="zhcx" />
+        <module name="zhys" />
+        <module name="zlgd" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="base" target="1.8" />
+      <module name="entity" target="1.8" />
+      <module name="gcpd" target="1.8" />
+      <module name="htqd" target="1.8" />
+      <module name="js" target="1.8" />
+      <module name="login" target="1.8" />
+      <module name="main" target="1.8" />
+      <module name="message" target="1.8" />
+      <module name="msg" target="1.8" />
+      <module name="msg1" target="1.8" />
+      <module name="notify" target="1.8" />
+      <module name="redis" target="1.8" />
+      <module name="repository" target="1.8" />
+      <module name="sfkp" target="1.8" />
+      <module name="sgjg" target="1.8" />
+      <module name="sjst" target="1.8" />
+      <module name="sys" target="1.8" />
+      <module name="user" target="1.8" />
+      <module name="util" target="1.8" />
+      <module name="workflow" target="1.8" />
+      <module name="wtys" target="1.8" />
+      <module name="xkybz" target="1.8" />
+      <module name="xqsl" target="1.8" />
+      <module name="yj" target="1.8" />
+      <module name="yzsfwxt1" target="1.8" />
+      <module name="zhcx" target="1.8" />
+      <module name="zhys" target="1.8" />
+      <module name="zlgd" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style>
+		.app-input {
+			text-align: right;
+			font-size: 14px;
+		}
+	</style>
+	<header class="mui-bar mui-bar-nav" style="background-color:#4A82D1" id="fanhui">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #CCCCCC"></a>
+		<h4 style=" text-align:center;padding-top: 7px;color: #CCCCCC;font-family: '黑体';">施工反馈</h4>
+		<h5 style="float: right;margin-top: -35px;color: #CCCCCC" class="mui-icon mui-icon-more"></h5>
+	</header>
+	<ul class="mui-table-view" style="padding-top: 60px;font-size: 14px;font-family: '黑体';">
+		<li class="mui-table-view-cell mui-collapse">
+			<a class="mui-navigate-right" href="#" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-home"></span>&nbsp;基本信息</a>
+			<div class="mui-collapse-content">
+				<p style="margin-top: 5px;"><span>项目名称：</span>黄山路小区供水项目</p>
+				<p style="margin-top: 5px;"><span>项目地址：</span>合肥市蜀山区605号</p>
+				<p style="margin-top: 5px;"><span>联系人：</span>王青青</p>
+				<p style="margin-top: 5px;"><span>联系方式：</span>15256256874</p>
+				<p style="margin-top: 5px;"><span>项目经理：</span>张经理</p>
+				<p style="margin-top: 5px;"><span>联系方式：</span>12354686841</p>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-chatboxes"></span>&nbsp;查看其它部门反馈</a>
+		</li>
+		<li class="mui-table-view-cell" id="checkbox">
+			<label class="" href="#" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-gear"></span>&nbsp;接表工程</label>
+			<label style="padding-left: 15px;"><input type="checkbox" name="checkboxName" value="" id="checkbox_1" >&nbsp;需敷设表前管</label>
+			<label style="padding-left: 25px;"><input type="checkbox" name="checkboxName" value="" id="checkbox_2" >&nbsp;需做过路管</label>
+			<div style="margin-top: 10px;">
+				<label style="padding-left: 110px;"><input type="checkbox" name="checkboxName" value="" id="checkbox_3" >&nbsp;可接表预留支管</label>
+				<label style="padding-left: 10px;"><input type="checkbox" name="checkboxName" value="" id="checkbox_4" >&nbsp;需做过路管</label>
+			</div>
+			<div style="margin-top: 10px;">
+				<label style="padding-left: 110px;"><input type="checkbox" name="checkboxName" value=""  id="checkbox_5">&nbsp;超高层</label>
+				<label style="padding-left: 67px;"><input type="checkbox" name="checkboxName" value="" id="checkbox_6" >&nbsp;楼顶水箱</label>
+			</div>
+		</li>
+	</ul>
+	<div class="mui-slider-group">
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell">
+				<div style="font-size: 14px;font-family: '黑体';">
+					<div style="float: left;width: 50%;">
+						<span>需敷设表前管</span><span style="margin-left: 30%;color:#777777">5</span><span style="padding-left: 2px;">m<span>
+					</div>
+					<div style="float: right;width: 50%;">
+						<span>需挖开面积约</span><span style="margin-left: 33%;color:#777777">15</span><span style="padding-left: 2px;">㎡<span>
+					</div>			
+					<div style="float: left;width: 50%;">
+						<span>托管距离约</span><span style="margin-left: 35%;color:#777777">40</span><span style="padding-left: 2px;">m<span>
+					</div>
+					<div style="float: right;width: 50%;">
+						<span>管尾处破复面积</span><span style="margin-left: 25%;color:#777777">11</span><span style="padding-left: 2px;">㎡<span>
+					</div>
+					<div style="float: left;width: 50%;">
+						<span>过路管勾点处破复面积</span>
+					</div>
+					<div style="float: right;width: 50%;">
+						<span><input class="app-input" style="text-align: right;border:none;width: 100%;" placeholder="qqq" readonly /></span>
+					</div>
+					<div style="float: left;width: 50%;">
+						<span>泵房供水位置</span>
+					</div>
+					<div style="float: right;width: 50%;">
+						<span><input class="app-input" style="text-align: right;border:none; width: 100%;" placeholder="qqq" readonly /></span>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<body>
+		<script src="../js/mui.min.js "></script>
+		<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../js/jbgc.js"></script>
+		<script type="text/javascript ">
+			mui.init();
+			mui.plusReady(function() {
+
+				//loadData(day,month);
+
+			});
+			//给退出登录绑定事件
+			mui('#fanhui').on('tap', 'h5', function(a) { //绑定所有a标签				
+				var btnArray = ['否', '是'];
+				mui.confirm('您确定要退出登录！', '温馨提示', btnArray, function(e) {
+					if(e.index == 1) {
+						goto("login.html", 2);
+					}
+					return false;
+				})
+			});
+		</script>
+	</body>
+
+</html>

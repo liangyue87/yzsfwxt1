@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+
+	</head>
+	<header class="mui-bar mui-bar-nav" style="background-color:#007aff" id="fanhui">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #FFFFFF"></a>
+		<h4 style=" text-align:center;padding-top: 7px;color: #FFFFFF;font-family: '黑体';">项目经理反馈</h4>
+		<h5 style="float: right;margin-top: -35px;color: #FFFFFF" class="mui-icon iconfont icon-diandian"></h5>
+	</header>
+	<ul class="mui-table-view" style="padding-top: 50px;" id="tiaozhuan">
+		<li class="mui-table-view-cell mui-collapse">
+			<a class="mui-navigate-right" href="#" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-home"></span>&nbsp;基本信息</a>
+			<div class="mui-collapse-content">
+				<p style="margin-top: 5px;"><span>项目名称：</span><span id="xmmc"></span></p>
+				<p style="margin-top: 5px;"><span>项目地址：</span><span id="xmdz"></span></p>
+				<p style="margin-top: 5px;"><span>联系人：</span><span id="lxr"></span></p>
+				<p style="margin-top: 5px;"><span>联系方式：</span><span id="lxfs"></span></p>
+				<p style="margin-top: 5px;"><span>项目经理：</span><span id="xmjl"></span></p>
+				<p style="margin-top: 5px;"><span>联系方式：</span><span id="jl_lxfs"></span></p>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" style="font-size: 14px;font-family: '黑体';" name="qtfk"><span class="mui-icon mui-icon-chatboxes"></span>&nbsp;查看其它部门反馈</a>
+		</li>
+		<li class="mui-table-view-cell" style="height:135px;">
+			<div class="" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-chatbubble"></span>&nbsp;项目经理反馈意见</div>
+			<div style="padding-top: 15px;"><textarea id="xmjlyj" rows="2" placeholder="请输入您的意见与建议" style="font-size: 14px;font-family: '黑体';"></textarea></div>
+		</li>
+		<!--<li class="mui-table-view-cell" style="height: 95px; list-style-type:none;"><textarea id="xmjlyj" rows="2" placeholder="请输入您的意见与建议" style="font-size: 14px;font-family: '黑体';"></textarea></li>
+		-->
+		<li class="mui-table-view-cell">
+			<div class="" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-compose"></span>&nbsp;用户签字确认</div>
+			<div class="js-signature" data-background="transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADICAYAAAA0n5+2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjNGQjExNjZFNUMzRDExRThBMEVBODlEOEI3QUZEQTA3IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjNGQjExNjZGNUMzRDExRThBMEVBODlEOEI3QUZEQTA3Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6M0ZCMTE2NkM1QzNEMTFFOEEwRUE4OUQ4QjdBRkRBMDciIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M0ZCMTE2NkQ1QzNEMTFFOEEwRUE4OUQ4QjdBRkRBMDciLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4uosxwAAAJuUlEQVR42uza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)" style="background-size:cover;padding-top: 15px;"></div>
+			<button id="saveBtn" class="btn btn-default" disabled>预览</button>&nbsp;
+			<button id="clearBtn" class="btn btn-default">重写</button>
+			<div id="signature">
+				<div></div>
+			</div>
+		</li>
+	</ul>
+	<div style="padding-top: 20px;padding-left: 5%;padding-bottom: 10%;">
+		<button type="button" onClick="xmjlSubmit()" style="width: 95%; height: 45px; background-color: #007aff; color: #FFFFFF;font-size: 14px;">保存</button>
+	</div>
+
+	<body>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../js/http.js"></script>
+		<script src="../js/jq-signature.js"></script>
+		<script type="text/javascript" src="../layer/layer.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function initdata() {
+				jbxx(); //基本信息			
+			});
+			var dl = 0; //防频繁点击登录按钮	
+			var btn = ["确认", "取消"];
+
+			function xmjlSubmit() {
+				var xmjlyj = $("#xmjlyj").val();
+				if(xmjlyj == "" || xmjlyj == null) {
+					mui.alert("反馈意见不能为空！", "温馨提示");
+					return false;
+				}
+				var dataUrl = $('.js-signature').jqSignature('getDataURL');
+				var xmid = localStorage.getItem("xmid");
+				var userid = localStorage.getItem("userid");
+
+				var filedata = new FormData();
+				if(dataUrl != "") {
+					filedata.append('qztp', dataUrl);
+				} else {
+					layer.msg('温馨提示：用户没有签字确认！', {
+						time: 1000,
+					});
+					return false;
+				}
+				filedata.append('xmid', xmid);
+				filedata.append('userid', userid);
+				filedata.append('xmjlyj', xmjlyj);
+				mui.confirm("您正在递交工作结果，一旦递交确认后将不能打回或再次修改，你确定要递交吗？", '温馨提示', btn, function(e) {
+					if(e.index == 1) {
+						return false;
+					} else {
+						if(dl == 0) {
+							dl++;
+							var csqq = $.ajax({
+								type: "post",
+								url: common.ip + "/XkylxController/saveXmjlFq",
+								data: filedata,
+								timeout: 10000, //超时时间设置，单位毫秒
+								contentType: false,
+								processData: false,
+								success: function(res) {
+									dl = 0;
+									var jsonObject = eval("(" + res + ")");
+									if(jsonObject.result = "success") {
+										mui.toast("保存成功！")
+										goto("shouye.html", 2);
+									} else {
+										layer.msg('保存失败！', {
+											time: 1000,
+										});
+									}
+								},
+								error: function(XMLHttpRequest, status) {
+									if(status == 'timeout' || status == 'error') {
+										csqq.abort(); // 超时后中断请求
+										dl = 0;
+										mui.alert("请求超时！", "温馨提示：");
+
+									}
+								}
+							});
+						}
+					}
+				});
+			}
+
+			//给退出登录绑定事件
+			mui('#fanhui').on('tap', 'h5', function(a) { //绑定所有a标签				
+				var btnArray = ['否', '是'];
+				mui.confirm('您确定要退出登录！', '温馨提示', btnArray, function(e) {
+					if(e.index == 1) {
+						goto("login.html", 2);
+					}
+					return false;
+				})
+			});
+			//给其他部门标签绑定事件
+			mui('#tiaozhuan').on('tap', 'a', function(a) { //绑定所有li标签
+				var name = this.getAttribute("name"); //跳转类别
+
+				if(name == "qtfk") {
+					localStorage.setItem("bh", "xmjl");
+					goto("qtbm_fk.html", 1);
+				}
+			});
+
+			$(document).on('ready', function() {
+				if($('.js-signature').length) {
+					var _width = 600;
+					var _height = 200;
+					var rate = 0;
+					if(screen.width < _width) {
+						rate = _width / screen.width;
+						_width = _width / rate - 15;
+						_height = _height / rate;
+					}
+					$('.js-signature').jqSignature({
+						autoFit: false,
+						width: _width,
+						height: _height
+					});
+				}
+				$('.js-signature').on('jq.signature.changed', function() {
+					$('#saveBtn').attr('disabled', false);
+				});
+				$('#clearBtn').on('click', function() {
+					$('#signature').html('<p>写上签名并点击预览</p><div></div>');
+					$('.js-signature').jqSignature('clearCanvas');
+					$('#saveBtn').attr('disabled', true);
+				})
+
+				$('#saveBtn').on('click', function() {
+					var dataUrl = $('.js-signature').jqSignature('getDataURL');
+					//console.debug(dataUrl);					
+					var img = $('<img>').attr('src', dataUrl);
+					$('#signature p').html($('<p>').text("签名预览如下:"));
+					$('#signature div').html(img);
+				})
+
+			});
+
+			/*	function imgChange(e) {
+					console.info(e.target.files[0]); //图片文件
+					var dom = $("input[id^='imgTest']")[0];
+					console.info(dom.value);
+					console.log("---" + e.target.value);
+					var reader = new FileReader();
+					reader.onload = (function(file) {
+						return function(e) {
+							var img = $('<img>').attr('src', this.result);
+							$('#signature div').html(img);
+							$('.js-signature').jqSignature('setData', this.result);
+							$('#saveBtn').attr('disabled', false);
+						};
+					})(e.target.files[0]);
+					reader.readAsDataURL(e.target.files[0]);
+				}*/
+		</script>
+	</body>
+
+</html>

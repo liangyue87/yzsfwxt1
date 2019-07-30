@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+	</head>
+	<header class="mui-bar mui-bar-nav" style="background-color:#007aff" id="fanhui">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #FFFFFF"></a>
+		<h4 style=" text-align:center;padding-top: 7px;color: #FFFFFF;font-family: '黑体';">其他部门反馈</h4>
+		<h5 style="float: right;margin-top: -35px;color: #FFFFFF" class="mui-icon iconfont icon-diandian"></h5>
+	</header>
+	<div class="mui-content">
+		<ul class="mui-table-view" style="font-family: '黑体';" id="tiaozhuan">
+			<li id="sj" class="mui-table-view-cell" style="height: 60px; display:none;" name="sjb">
+				<div style="float: left;">
+					<label>设计院</label>
+					<div style="font-size: 14px;padding-top: 5px;"><span id="sjy_mc"></span>&nbsp;<span id="sjy_sjh"></span></div>
+				</div>
+				<div style="float: right;">
+					<label>
+						<span class="" style="font-size: 14px;" id="sjy_ri">未反馈</span>
+						<span class="mui-icon mui-icon-closeempty" style="" id="sjy_ys"></span>
+					</label>
+				</div>
+			</li>
+			<li id="qs" class="mui-table-view-cell" style="height: 60px;display: none;" name="qsb">
+				<div style="float: left;">
+					<label id="qsmc">区所部</label>
+					<div style="font-size: 14px;padding-top: 5px;"><span id="qs_mc"></span>&nbsp;<span id="qs_sjh"></span></div>
+				</div>
+				<div style="float: right;">
+					<label>
+						<span class="" style="font-size: 14px;" id="qs_ri">未反馈</span>
+						<span class="mui-icon mui-icon-closeempty" style="" id="qs_ys"></span>
+					</label>
+				</div>
+			</li>
+			<li id="ys" class="mui-table-view-cell" style="height: 60px;display: none;" name="ysb">
+				<div style="float: left;">
+					<label>客发预算科</label>
+					<div style="font-size: 14px;padding-top: 5px;"><span id="ys_mc"></span>&nbsp;<span id="ys_sjh"></span></div>
+				</div>
+				<div style="float: right;">
+					<label>
+						<span class="" style="font-size: 14px;" id="ys_rq">未反馈</span>
+						<span class="mui-icon mui-icon-closeempty" style="" id="ys_ys"></span>
+					</label>
+				</div>
+			</li>
+			<li id="sg" class="mui-table-view-cell" style="height: 60px;display: none;" name="sgb">
+				<div style="float: left;">
+					<label>施工单位</label>
+					<div style="font-size: 14px;padding-top: 5px;"><span id="sg_mc"></span>&nbsp;<span id="sg_sjh"></span></div>
+				</div>
+				<div style="float: right;">
+					<label>
+						<span class="" style="font-size: 14px;" id="sg_rq">未反馈</span>
+						<span class="mui-icon mui-icon-closeempty" style="" id="sg_ys"></span>
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<body>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../js/http.js"></script>
+		<script type="text/javascript" src="../layer/layer.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var sjblj = ""; //设计院路径
+			var ysblj = ""; //预算科路径
+			var qsFkyj = ""; //区所反馈意见
+			var kczt="0";
+			mui.plusReady(function initdata() {
+				var xmid = localStorage.getItem("xmid");
+				var bh = localStorage.getItem("bh");
+				if(bh == "ysb") { //预算部
+					/*$("#ys").css('display', '');*/
+					$("#qs").css('display', '');
+					$("#sj").css('display', '');
+					$("#sg").css('display', '');
+				} else if(bh == "qsb") { //区所部
+					$("#ys").css('display', '');
+					/*$("#qs").css('display', '');*/
+					$("#sj").css('display', '');
+					$("#sg").css('display', '');
+				} else if(bh == "sjb") { //设计部
+					$("#ys").css('display', '');
+					$("#qs").css('display', '');
+					/*$("#sj").css('display', '');*/
+					$("#sg").css('display', '');
+				} else if(bh == "sgb") { //施工部
+					$("#ys").css('display', '');
+					$("#qs").css('display', '');
+					$("#sj").css('display', '');
+					/*$("#sg").css('display', '');*/
+				}else{					
+					$("#ys").css('display', '');
+					$("#qs").css('display', '');
+					$("#sj").css('display', '');
+					$("#sg").css('display', '');
+				}
+
+				$.ajax({
+					type: "get",
+					url: common.ip + "/XkylxController/getFkpjKcbm",
+					async: true,
+					data: {
+						"xmid": xmid,
+						"kczt": kczt,
+					},
+					success: function(res) {
+						console.log(res);
+						var jsonObject = eval("(" + res + ")");
+						for(var i = 0; i < jsonObject.row.length; i++) {
+							if(jsonObject.row[i].kcbm == "1") { //设计院
+								$("#sjy_mc").text(jsonObject.row[i].username);
+								$("#sjy_sjh").text(jsonObject.row[i].mobilephone);
+								if(jsonObject.row[i].sffk == "1") { //是否反馈
+									$("#sjy_ri").text(jsonObject.row[i].fksj_vue); //设计院反馈日期
+									$("#sjy_ys").addClass("mui-icon mui-icon-checkmarkempty");
+								}
+							}
+							if(jsonObject.row[i].kcbm == "2") { //施工部
+								$("#sg_mc").text(jsonObject.row[i].username);
+								$("#sg_sjh").text(jsonObject.row[i].mobilephone);
+								if(jsonObject.row[i].sffk == "1") { //是否反馈
+									$("#sg_rq").text(jsonObject.row[i].fksj_vue); //施工部反馈日期
+									$("#sg_ys").addClass("mui-icon mui-icon-checkmarkempty");
+								}
+							}
+							if(jsonObject.row[i].kcbm == "3") { //区所
+								$("#qs_mc").text(jsonObject.row[i].username);
+								$("#qs_sjh").text(jsonObject.row[i].mobilephone);
+								if(jsonObject.row[i].sffk == "1") { //是否反馈
+									$("#qs_ri").text(jsonObject.row[i].fksj_vue); //区所反馈日期
+									$("#qs_ys").addClass("mui-icon mui-icon-checkmarkempty");
+									//qsFkyj = jsonObject.qsFkyj;
+								}
+							}
+							if(jsonObject.row[i].kcbm == "4") { //预算
+								$("#ys_mc").text(jsonObject.row[i].username);
+								$("#ys_sjh").text(jsonObject.row[i].mobilephone);
+								if(jsonObject.row[i].sffk == "1") { //是否反馈
+									$("#ys_rq").text(jsonObject.row[i].fksj_vue); //预算反馈日期
+									$("#ys_ys").addClass("mui-icon mui-icon-checkmarkempty");
+								}
+							}
+						}
+					}
+				});
+			});
+
+			//给退出登录绑定事件
+			mui('#fanhui').on('tap', 'h5', function(a) { //绑定所有a标签				
+				var btnArray = ['否', '是'];
+				mui.confirm('您确定要退出登录！', '温馨提示', btnArray, function(e) {
+					if(e.index == 1) {
+						goto("login.html", 2);
+					}
+					return false;
+				})
+			});
+
+			//给其他部门标签绑定事件
+			mui('#tiaozhuan').on('tap', 'li', function(a) { //绑定所有li标签	
+				var sjy = $("#sjy_ri").text();
+				var sgb = $("#sg_rq").text();
+				var qs = $("#qs_ri").text();
+				var ys = $("#ys_rq").text();
+				var name = this.getAttribute("name"); //跳转类别		          
+				if(name == "sjb") { //设计
+					if(sjy != "未反馈") {
+						goto("sjy_ck.html", 1);
+					} else {
+						layer.msg('未反馈部门！', {
+							time: 1000,
+						});
+					}
+				} else if(name == "qsb") { //区所
+					if(qs != "未反馈") {
+						//localStorage.setItem("qsFkyj", qsFkyj);
+						goto("qs_ck.html", 1);
+					} else {
+						layer.msg('未反馈部门！', {
+							time: 1000,
+						});
+					}
+				} else if(name == "ysb") { //预算
+					if(ys != "未反馈") {
+						goto("ysk_ck.html", 1);
+					} else {
+						layer.msg('未反馈部门！', {
+							time: 1000,
+						});
+					}
+				} else if(name == "sgb") { //施工
+					if(sgb != "未反馈") {
+						goto("sgdw_ck.html", 1);
+					} else {
+						layer.msg('未反馈部门！', {
+							time: 1000,
+						});
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.yj.dao.SbyjMapper">
+    <update id="elxedit">
+        update xm_sb
+        <set>
+            <if test="thh != null and thh != '' ">hh = #{hh},</if>
+            <if test="tmph != null and tmph != '' ">mph = #{mph},</if>
+            <if test="tazwz != null and tazwz != '' ">azwz = #{azwz},</if>
+            <if test="tbsm != null and tbsm != '' ">bsm = #{bsm},</if>
+            <if test="tsgdw_sbkj != null and tsgdw_sbkj != '' ">sgdw_sbkj = #{sgdw_sbkj},</if>
+            <if test="tpqbh != null and tpqbh != '' ">pqbh = #{pqbh},</if>
+            <if test="tsgsj != null and tsgsj != '' ">sgsj = #{sgsj},</if>
+            <if test="ttssj != null and ttssj != '' ">tssj = #{tssj},</if>
+            <if test="tds != null and tds != '' ">ds = #{ds},</if>
+            <if test="tsbcjbh != null and tsbcjbh != '' ">sbcjbh = #{sbcjbh},</if>
+            <if test="tsblxbh != null and tsblxbh != '' ">sblxbh = #{sblxbh},</if>
+            <if test="tsgry != null and tsgry != '' ">sgry = #{sgry},</if>
+            <if test="tsgryqzsj != null and tsgryqzsj != '' ">sgryqzsj = #{sgryqzsj},</if>
+            <if test="tyhqr != null and tyhqr != '' ">yhqr = #{yhqr},</if>
+            <if test="tyhqrqzsj != null and tyhqrqzsj != '' ">yhqrqzsj = #{yhqrqzsj}</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

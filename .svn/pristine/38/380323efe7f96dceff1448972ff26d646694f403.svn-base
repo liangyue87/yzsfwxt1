@@ -1,0 +1,111 @@
+/*登录*/
+
+.app-login-bg {
+	min-height: 500px;
+}
+
+.app-login-body {
+	height: 100%;
+	min-height: 500px;
+	background: url(../img/login.png) #e0e1db 50% 100% no-repeat;
+	background-size: 100% 100%;
+}
+
+.app-login-card {
+	/*border: 1px solid red;*/
+	width: 61%;
+	height: 36%;
+	left: 20%;
+	top: 46%;
+	position: absolute;
+}
+
+.app-icon {
+	font-family: Muiicons;
+	font-size: 24px;
+	font-weight: 400;
+	font-style: normal;
+	line-height: 1;
+	display: inline-block;
+	text-decoration: none;
+	-webkit-font-smoothing: antialiased;
+}
+
+
+/*.icon-loginus{ background-image:url(../img/username.png); background-position: 0% 50%; background-repeat: no-repeat; background-size:24px 24px; width:24px; height:24px;}
+.icon-loginps{background-image:url(../img/userpass.png); background-position: 0% 50%; background-repeat: no-repeat; background-size:24px 24px; width:24px; height:24px;}
+*/
+
+.app-input-row_name {
+	
+	width: 80%;
+	left: 13%;
+	position: absolute;
+}
+
+.app-input-row_pass {
+	
+	width: 80%;
+	left: 13%;
+	top: 25%;
+	position: absolute;
+}
+
+.app-input-row_butn {
+	
+	width: 95%;
+	left: 5%;
+	top: 75%;
+	position: absolute;
+}
+
+.app_username {
+	width: 80%;
+}
+
+.app_userpass {
+	width: 80%;
+}
+
+.app_imges_name {
+	height: 45px;
+	width: 40px;
+	display: inline-block;
+	line-height: 40px;
+	float: left;
+	padding: 8px;
+}
+
+.app_img_name {
+	background-image: url(../img/username.png);
+	background-position: 0% 50%;
+	background-repeat: no-repeat;
+	background-size: 24px 24px;
+	width: 24px;
+	height: 24px;
+}
+
+.app_imges_pass {
+	height: 45px;
+	width: 40px;
+	display: inline-block;
+	line-height: 40px;
+	float: left;
+	padding: 8px;
+}
+
+.app_img_pass {
+	background-image: url(../img/userpass.png);
+	background-position: 0% 50%;
+	background-repeat: no-repeat;
+	background-size: 24px 24px;
+	width: 24px;
+	height: 24px;
+}
+
+.userDiv {
+	border-bottom: 1px solid #ACACB4;
+	/*padding-left: 10%;*/
+	height: 50px;
+	margin-top: 5px;
+}

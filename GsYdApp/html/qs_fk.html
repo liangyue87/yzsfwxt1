@@ -1,0 +1,343 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+	</head>
+	<header class="mui-bar mui-bar-nav" style="background-color:#007aff" id="fanhui">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #FFFFFF"></a>
+		<h4 style=" text-align:center;padding-top: 7px;color: #FFFFFF;font-family: '黑体';">区所反馈</h4>
+		<h5 style="float: right;margin-top: -35px;color: #FFFFFF" class="mui-icon iconfont icon-diandian"></h5>
+	</header>
+	<ul class="mui-table-view" style="padding-top: 50px;" id="tiaozhuan">
+		<li class="mui-table-view-cell mui-collapse">
+			<a class="mui-navigate-right" href="#" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-home"></span>&nbsp;基本信息</a>
+			<div class="mui-collapse-content">
+				<p style="margin-top: 5px;"><span>项目名称：</span><span id="xmmc"></span></p>
+				<p style="margin-top: 5px;"><span>项目地址：</span><span id="xmdz"></span></p>
+				<p style="margin-top: 5px;"><span>联系人：</span><span id="lxr"></span></p>
+				<p style="margin-top: 5px;"><span>联系方式：</span><span id="lxfs"></span></p>
+				<p style="margin-top: 5px;"><span>项目经理：</span><span id="xmjl"></span></p>
+				<p style="margin-top: 5px;"><span>联系方式：</span><span id="jl_lxfs"></span></p>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" style="font-size: 14px;font-family: '黑体';" name="qtfk"><span class="mui-icon mui-icon-chatboxes"></span>&nbsp;查看其它部门反馈</a>
+		</li>
+		<li class="mui-table-view-cell" style="height:135px;">
+			<div class="" style="font-size: 14px;font-family: '黑体';"><span class="mui-icon mui-icon-chatbubble"></span>&nbsp;反馈意见</div>
+			<div style="padding-top: 15px;"><textarea id="fkyj" rows="2" placeholder="请输入您的意见与建议" style="font-size: 14px;font-family: '黑体';"></textarea></div>
+		</li>
+		<!--<li class="mui-table-view-cell" style="height: 95px;"><textarea id="fkyj" rows="2" placeholder="请输入您的意见与建议" style="font-size: 14px;font-family: '黑体';"></textarea></li>
+	-->
+		<li class="mui-table-view-cell">
+			<span class="mui-badge mui-icon mui-icon-plusempty"></span>
+			<a class="" style="font-size: 14px;font-family: '黑体';" name="xmzbgw"><span class="mui-icon mui-icon-chatbubble" onclick="xmzbgw()"></span>&nbsp;项目周边管网</a>
+		</li>
+		<div class="app-table-view">
+			<ul class="mui-table-view" style="font-size: 14px;font-family: '黑体';" id="zbgw">
+				<!--	<li class="mui-table-view-cell">
+					<div> 
+					<div style="float: left;width: 50%;">
+						<span>线路主路</span><span style="margin-left: 20px;color:#777777">北城新路</span>
+					</div>
+					<div style="float: right;width: 50%;">
+						<span>管线线路</span><span style="margin-left: 20px;color:#777777">5</span>
+					</div>
+
+					<span>管线在主路的</span><span style="margin-left: 3px;color:#777777">南</span><span style="margin-left: 3px;">侧，距主路中线</span>
+					<span style="margin-left: 3px;color:#777777">5</span><span style="margin-left: 3px;">米，正上方覆盖物</span><span style="margin-left: 3px;color:#777777">有市政道路绿化</span>
+					</div>
+						<div style="float: left;width: 50%;">
+							<span>管线口径</span><span style="margin-left: 20px;color:#777777">40</span>
+						</div>
+						<div style="float: right;width: 50%;">
+							<span>管线材质</span><span style="margin-left: 20px;color:#777777">PE管</span>
+						</div>
+						<div style="float: left;width: 50%;">
+							<span>调查人</span><span style="margin-left: 20px;color:#777777">居民科经理</span>
+						</div>
+						<div style="float: right;width: 50%;">
+							<span>调查时间</span><span style="margin-left: 20px;color:#777777">2019-6-10</span>
+						</div>
+					</div>
+				</li>-->
+			</ul>
+			<div>
+				<li class="mui-table-view-cell ">
+					<span class="mui-badge mui-icon mui-icon-plusempty "></span>
+					<a class=" " style="font-size: 14px;font-family: '黑体'; " name="jtwzcy"><span class="mui-icon mui-icon-chatbubble "></span>&nbsp;具体位置测压</a>
+				</li>
+				<ul class="mui-table-view" style="font-size: 14px;font-family: '黑体';" id="jtcy">
+					<!--<li class="mui-table-view-cell">
+				
+							<div style="float: left;width: 50%;">
+								<span>测压对象</span><span style="margin-left: 20px;color:#777777">输水管</span>
+							</div>
+							<div style="float: right;width: 50%;">
+								<span>测压时间</span><span style="margin-left: 20px;color:#777777">2019-6-15</span>
+							</div>
+							<div style="float: left;width: 50%;">
+								<span>测压点压力</span><span style="margin-left: 20px;color:#777777">5</span>
+							</div>
+							<div style="float: right;width: 50%;">
+								<span>测压点标高</span><span style="margin-left: 20px;color:#777777">5</span>
+							</div>
+							<div style="float: left;width: 50%;">
+								<span>并井通水</span><span style="margin-left: 20px;color:#777777">是</span>
+							</div>
+							<div style="float: right;width: 50%;">
+								<span>管网移交</span><span style="margin-left: 20px;color:#777777">否</span>
+							</div>
+							<div>
+								<span>备注</span><span style="margin-left: 20px;color:#777777">填写完整</span>
+							</div>	
+						
+					</li>-->
+				</ul>
+	</ul>
+	<div style="padding-top: 20px;padding-left: 5%;padding-bottom: 20%;">
+		<button type="button" onClick="qsSubmit()" style="width: 95%; height: 45px; background-color: #007aff; color: #FFFFFF;font-size: 14px;">保存</button>
+	</div>
+
+	<body>
+		<script src="../js/mui.min.js "></script>
+		<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../js/http.js"></script>
+		<script type="text/javascript" src="../layer/layer.js"></script>
+		<script type="text/javascript ">
+			mui.init();
+			mui.plusReady(function initdata() {
+				jbxx(); //基本信息
+				qs_fklr(); //区所反馈内容
+			});
+
+			var dl = 0; //防频繁点击登录按钮	
+			var btn = ["确认", "取消"];
+
+             var xmzbgw=0;
+			function qsSubmit() {
+				
+				var xmid = localStorage.getItem("xmid");
+				var fkyj = $("#fkyj").val();
+				if(fkyj == "" || fkyj == null) {
+					mui.alert("反馈意见不能为空！", "温馨提示");
+					return false;
+				}
+				if(xmzbgw <=0) {
+					mui.alert("项目周边管网不能为空！", "温馨提示");
+					return false;
+				}
+				mui.confirm("您正在递交工作结果，一旦递交确认后将不能打回或再次修改，你确定要递交吗？", '温馨提示', btn, function(e) {
+					if(e.index == 1) {
+						return false;
+					} else {
+						if(dl == 0) {
+							dl++;
+							var csqq = $.ajax({
+								type: "get",
+								url: common.ip + "/XkylxController/saveQsFk",
+								async: true,
+								data: {
+									"xmid": xmid,
+									"info": fkyj,
+									"type": "3",
+								},
+								timeout: 10000, //超时时间设置，单位毫秒
+								success: function(res) {
+									dl = 0;
+									var jsonObject = eval("(" + res + ")");
+									if(jsonObject.result = "success") {
+
+										mui.toast("保存成功");
+
+										goto("shouye.html", 2);
+									} else {
+										layer.msg('保存失败！', {
+											time: 1000,
+										});
+									}
+								},
+								error: function(XMLHttpRequest, status) {
+									if(status == 'timeout' || status == 'error') {
+										csqq.abort(); // 超时后中断请求
+										dl = 0;
+										mui.alert("请求超时！", "温馨提示：");
+
+									}
+								}
+							});
+						}
+					}
+				});
+			}
+
+			//给退出登录绑定事件
+			mui('#fanhui').on('tap', 'h5', function(a) { //绑定所有a标签				
+				var btnArray = ['否', '是'];
+				mui.confirm('您确定要退出登录！', '温馨提示', btnArray, function(e) {
+					if(e.index == 1) {
+						goto("login.html", 2);
+					}
+					return false;
+				})
+			});
+			//给其他部门标签绑定事件
+			mui('#tiaozhuan').on('tap', 'a', function(a) { //绑定所有li标签
+				var name = this.getAttribute("name"); //跳转类别
+
+				if(name == "qtfk") {
+					localStorage.setItem("bh", "qsb");
+					goto("qtbm_fk.html", 1);
+				} else if(name == "xmzbgw") {
+
+					goto("dcfl.html", 1);
+				} else if(name == "jtwzcy") {
+
+					goto("dcfl.html", 1);
+				}
+			});
+			//返回标签
+			mui('#fanhui').on('tap', 'a', function(a) { //绑定所有a标签							
+				goto("shouye.html", 2);
+			});
+			//列表
+			function qs_fklr(zbgw, jtcy) {
+				var xmid = localStorage.getItem("xmid");
+				$.ajax({
+					type: "get",
+					async: true,
+					url: common.ip + "/XkylxController/getQsfk",
+					data: {
+						"xmid": xmid,
+					},
+					success: function(res) {
+
+						var zbgw = "";
+						var jtcy = "";
+						var jsonObject = eval("(" + res + ")");
+						xmzbgw=jsonObject.zbgw.length;
+						for(var i = 0; i < jsonObject.zbgw.length; i++) {
+							if(jsonObject.zbgw[i].gxzl == null) {
+								jsonObject.zbgw[i].gxzl = "";
+							}
+							if(jsonObject.zbgw[i].gxld == null) {
+								jsonObject.zbgw[i].gxld = "";
+							}
+							if(jsonObject.zbgw[i].zlwz_str == null) {
+								jsonObject.zbgw[i].zlwz_str = "";
+							}
+							if(jsonObject.zbgw[i].gxjzl == null) {
+								jsonObject.zbgw[i].gxjzl = "";
+							}
+							if(jsonObject.zbgw[i].zsffgw_str == null) {
+								jsonObject.zbgw[i].zsffgw_str = "";
+							}
+							if(jsonObject.zbgw[i].kj_str == null) {
+								jsonObject.zbgw[i].kj_str = "";
+							}
+							if(jsonObject.zbgw[i].gxcz_str == null) {
+								jsonObject.zbgw[i].gxcz_str = "";
+							}
+							if(jsonObject.zbgw[i].dcr == null) {
+								jsonObject.zbgw[i].dcr = "";
+							}
+							if(jsonObject.zbgw[i].dcrq_str == null) {
+								jsonObject.zbgw[i].dcrq_str = "";
+							}
+							if(jsonObject.zbgw[i].bz == null) {
+								jsonObject.zbgw[i].bz = "";
+							}
+							zbgw += '<li class="mui-table-view-cell"><div>' +
+								'<div style="float: left;width: 50%;">' +
+								'<span>线路主路</span><span style="margin-left: 20px;color:#777777">' + jsonObject.zbgw[i].gxzl + '</span>' +
+								'</div>' +
+								'<div style="float: right;width: 50%;">' +
+								'<span>管线线路</span><span style="margin-left: 20px;color:#777777">' + jsonObject.zbgw[i].gxld + '</span>' +
+								'</div>' +
+								'<span>管线在主路的</span><span style="margin-left: 3px;color:#777777">' + jsonObject.zbgw[i].zlwz_str + '</span><span style="margin-left: 3px;">侧，距主路中线</span>' +
+								'<span style="margin-left: 3px;color:#777777">' + jsonObject.zbgw[i].gxjzl + '</span><span style="margin-left: 3px;">米，正上方覆盖物</span><span style="margin-left: 3px;color:#777777">' + jsonObject.zbgw[i].zsffgw_str + '</span></div>' +
+								'<div style="float: left;width: 50%;">' +
+								'<span>管线口径</span><span style="margin-left: 20px;color:#777777">' + jsonObject.zbgw[i].kj_str + '</span>' +
+								'</div>' +
+								'<div style="float: left;width: 50%;">' +
+								'<span>管线材质</span><span style="margin-left: 20px;color:#777777">' + jsonObject.zbgw[i].gxcz_str + '</span>' +
+								'</div>' +
+								'<div style="float: left;width: 50%;">' +
+								'<span>调查人</span><span style="margin-left: 20px;color:#777777">' + jsonObject.zbgw[i].dcr + '</span>' +
+								'</div>' +
+								'<div style="float: left;width: 50%;">' +
+								'<span>调查时间</span><span style="margin-left: 20px;color:#777777">' + jsonObject.zbgw[i].dcrq_str + '</span>' +
+								'</div>' +
+								'<div>' +
+								'<span>备注</span><span style="margin-left: 20px;color:#777777">' + jsonObject.zbgw[i].bz + '</span>' +
+								'</div>' +
+								'</li>';
+						}
+						for(var i = 0; i < jsonObject.jtcy.length; i++) {
+							if(jsonObject.jtcy[i].cydx == null) {
+								jsonObject.jtcy[i].cydx = "";
+							}
+							if(jsonObject.jtcy[i].cysj_str == null) {
+								jsonObject.jtcy[i].cysj_str = "";
+							}
+							if(jsonObject.jtcy[i].cydyl == null) {
+								jsonObject.jtcy[i].cydyl = "";
+							}
+							if(jsonObject.jtcy[i].cydbg == null) {
+								jsonObject.jtcy[i].cydbg = "";
+							}
+							if(jsonObject.jtcy[i].bz == null) {
+								jsonObject.jtcy[i].bz = "";
+							}
+							jtcy += '<li class="mui-table-view-cell">';
+							jtcy += '<div style="float: left;width: 50%;">';
+							jtcy += '<span>测压对象</span><span style="margin-left: 20px;color:#777777">' + jsonObject.jtcy[i].cydx + '</span>';
+							jtcy += '</div>';
+							jtcy += '<div style="float: right;width: 50%;">';
+							jtcy += '<span>测压时间</span><span style="margin-left: 20px;color:#777777">' + jsonObject.jtcy[i].cysj_str + '</span>';
+							jtcy += '</div>';
+							jtcy += '<div style="float: left;width: 50%;">';
+							jtcy += '<span>测压点压力</span><span style="margin-left: 20px;color:#777777">' + jsonObject.jtcy[i].cydyl + '</span>';
+							jtcy += '</div>';
+							jtcy += '<div style="float: right;width: 50%;">';
+							jtcy += '<span>测压点标高</span><span style="margin-left: 20px;color:#777777">' + jsonObject.jtcy[i].cydbg + '</span>';
+							jtcy += '</div>';
+							jtcy += '<div style="float: left;width: 50%;">';
+							if(jsonObject.jtcy[i].bwts == "1") {
+								jtcy += '<span>并井通水</span><span style="margin-left: 20px;color:#777777">是</span>';
+							} else {
+								jtcy += '<span>并井通水</span><span style="margin-left: 20px;color:#777777">否</span>';
+							}
+							jtcy += '</div>';
+							jtcy += '<div style="float: right;width: 50%;">';
+							if(jsonObject.jtcy[i].gwyj == "1") {
+								jtcy += '<span>管网移交</span><span style="margin-left: 20px;color:#777777">是</span>';
+							} else {
+								jtcy += '<span>管网移交</span><span style="margin-left: 20px;color:#777777">否</span>';
+							}
+							jtcy += '</div>';
+							jtcy += '<div style="float: left;width: 50%;">';
+							jtcy += '<span>调查人</span><span style="margin-left: 20px;color:#777777">' + jsonObject.jtcy[i].dcr + '</span>';
+							jtcy += '</div>';
+							jtcy += '<div style="float: left;width: 50%;">';
+							jtcy += '<span>调查时间</span><span style="margin-left: 20px;color:#777777">' + jsonObject.jtcy[i].dcrq_str + '</span>';
+							jtcy += '</div>';
+							jtcy += '<div>';
+							jtcy += '<span>备注</span><span style="margin-left: 20px;color:#777777">' + jsonObject.jtcy[i].bz + '</span>';
+							jtcy += '</div>';
+							jtcy += '</li>';
+						}
+						$("#zbgw").html(zbgw);
+						$("#jtcy").html(jtcy);
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>

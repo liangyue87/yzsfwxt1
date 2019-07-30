@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ljx.hfgsjt.xkybz.dao.XkylxMapper">
+    <select id="getWfRuInstByXmidAndPdefid" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfRuInstEntity">
+		select t.*,t.PROC_INST_ID procInstId,t.PDEF_ID pdefId from WF_RU_INST t WHERE 1=1
+		and	substr(pdef_id,0,1)='2'
+		and proc_inst_id in
+			(
+				select proc_inst_id from WF_RU_INST_CONTENT
+					where table_name in ('XM_INSTANCE','YWSL_XJXQSQB','YWSL_GSHBSQB','YWSL_CHGZSQB')
+				    and contentvalue = #{xmid}
+			)
+	</select>
+    <select id="getTaskByInstId" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfTaskEntity">
+        select t.*,t.PROC_INST_ID procInstId,t.C_ACTIVITYID cActivityid from WF_TASK t where proc_inst_id = #{instid}
+        <if test="nodekey!=null and nodekey!='' and attrvalue!=null and attrvalue!=''">
+            and c_activityid in (select activityid from WF_RE_NODEATTR where NODEKEY = #{nodekey} and ATTRVALUE =
+            #{attrvalue})
+        </if>
+    </select>
+    <select id="getTaskAllByInstId" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfTaskEntity">
+		select t.*,t.PROC_INST_ID procInstId,t.C_ACTIVITYID cActivityid from WF_TASK t where proc_inst_id = #{instid}
+	</select>
+    <select id="getXmxxFromFq" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetXckcxxView">
+        select * from GET_XCKC_FQ where id = #{id}
+    </select>
+    <select id="getXmxxFromSqd" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetXckcxxView">
+		select * from get_sqbxx where id = #{id}
+	</select>
+    <select id="getXckcxxByView" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetXckcxxView">
+        select * from get_xckcxx where id = #{id}
+    </select>
+    <select id="getQszprByQybm" resultType="java.lang.String">
+        select userid from XTGL_USER where userid in (
+        select userid from XTGL_USERROLE WHERE ROLEID = (
+          select ROLEID from XTGL_ROLE where roletype = (select qsbh from XTGL_QSDYB where qybh = #{qybm}) and NOTE = '区所分派人'))  and rownum = 1
+    </select>
+    <select id="getQsryRoleIdByQybm" resultType="java.lang.String">
+		select ROLEID from XTGL_ROLE where roletype = (select qsbh from XTGL_QSDYB where qybh = #{qybm}) and NOTE = '区所人员'
+	</select>
+    <select id="getXckcRwzbEntity" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcRwzbEntity">
+		select * from XCKC_RWZB where KCZT <![CDATA[ <> ]]> '6' and id = #{id}
+	</select>
+    <insert id="saveXmXckcRela" parameterType="java.util.Map">
+		insert into XM_XCKC_RELA values (#{id},#{xmid},#{xckcid})
+	</insert>
+    <select id="getKcrwfqTotal" resultType="java.lang.Integer">
+        select count(1) from GET_XCKC_FQ t
+        where 1=1
+        <if test="rwzt!=null and rwzt!=''">
+            and t.rwzt = #{rwzt}
+        </if>
+        <if test="xmjl!=null and xmjl!=''">
+            and t.xmjl = #{xmjl}
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh}, '%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd')<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd')<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd') +1
+        </if>
+    </select>
+    <select id="getKcrwfq" resultType="com.ljx.hfgsjt.entity.dto.xkybz.KcrwfqView">
+        select * from (
+        select rownum rn,s.* from (
+        select * from GET_XCKC_FQ t where 1=1
+        <if test="rwzt!=null and rwzt!=''">
+            and t.rwzt = #{rwzt}
+        </if>
+        <if test="xmjl!=null and xmjl!=''">
+            and t.xmjl = #{xmjl}
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd')<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd')<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd') +1
+        </if>
+        order by slrq desc ) s
+        where rownum <![CDATA[ <= ]]> #{endRow}
+        ) where rn <![CDATA[ >= ]]> #{startRow}
+    </select>
+
+    <!--<select id="getXckcZpTask" resultType="com.ljx.hfgsjt.entity.dto.XmInstanceEntity">
+        select to_char(t.SLSJ,'yyyy-mm-dd hh24:mi:ss') slsj_str,t.* from (select rownum rn,s.* from xm_instance s where id in
+            (select xmid from xm_xckc_rela where xckcid in
+                (select id from xckc_rwzb where kczt = '1' and id in
+                    (select kcrwzbid from xckc_rwcb t where t.kcbm = #{type})
+                )
+              or
+              )
+                and rownum <![CDATA[ <= ]]> #{endRow})t
+        where rn <![CDATA[ >= ]]> #{startRow}
+    </select>-->
+    <select id="getXckcZpTask" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetXckcxxView">
+		select * from GET_XCKCXX where id in(
+			select xmid from xm_xckc_rela where xckcid in
+				(select id from xckc_rwzb where kczt in ('1','2') and id in
+					(select kcrwzbid from xckc_rwcb t where t.kcbm = #{type} and t.ZPRY is null)
+				)
+			union all
+			select sqid from xckc_rwzb where kczt in ('1','2') and id in (select kcrwzbid from xckc_rwcb t where t.kcbm = #{type} and t.ZPRY is null)
+		)
+	</select>
+    <select id="getXckcZpTotal" resultType="java.lang.Integer">
+		select count(1) from xm_instance s where id in
+			(select xmid from xm_xckc_rela where xckcid in
+				(select id from xckc_rwzb where kczt = '1' and id in
+					(select kcrwzbid from xckc_rwcb t where t.kcbm = #{type})
+			))
+	</select>
+    <select id="getZpry" resultType="java.util.Map">
+		select a.*,nvl(b.num,0) num from
+			(select userid,username from xtgl_user where userid in (select userid from xtgl_userrole where roleid = #{roleid})) a
+				left join
+					(select zpry,count(1) num from xckc_rwcb where SFFK = '0' group by zpry) b on a.userid = b.zpry order by a.username
+	</select>
+    <select id="getXckcRwcb" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcRwcbEntity">
+        select * from xckc_rwcb where kcbm=#{type} and kcrwzbid in(
+        select id from xckc_rwzb where 1=1
+        <if test="kczt ==1 or kczt ==2 or kczt ==3 or kczt ==4 or kczt ==5 or kczt ==6">
+            and kczt=#{kczt}
+        </if>
+        <if test="kczt =='0' or kczt==0">
+            and kczt in ('1','2','3','4','5')
+        </if>
+        <if test="kczt ==''">
+            and kczt in ('1','2')
+        </if>
+        and (id in
+        (select xckcid from xm_xckc_rela where xmid = #{xmid})
+        or SQID = #{xmid})
+        )
+    </select>
+    <select id="findAllXckcRwcbBySffk" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcRwcbEntity">
+		select * from xckc_rwcb where sffk = #{sffk} and kcrwzbid in(
+			select id from xckc_rwzb where kczt='2' and (id in (select xckcid from xm_xckc_rela where xmid = #{xmid})
+		  or SQID =#{xmid})
+		)
+	</select>
+    <insert id="saveFj" parameterType="java.util.Map">
+		insert  into ${tablename} (id,kcfkid,fjlx_ej,fjlj,fjhz,fjmc,scr,scsj)values(
+		    #{id},#{kcfkid},#{fjlx_ej},#{fjlj},#{fjhz},#{fjmc},#{scr},sysdate
+		    )
+	</insert>
+    <insert id="savePjFj" parameterType="java.util.Map">
+		insert  into xckc_pj_fj (id,KCRWZBID,fjlx_ej,fjlj,fjhz,fjmc,scr,scsj)values(
+			#{id},#{kcrwzbid},#{fjlx_ej},#{fjlj},#{fjhz},#{fjmc},#{scr},sysdate
+		)
+	</insert>
+    <insert id="saveKcjgqrFj" parameterType="java.util.Map">
+		insert  into XCKC_KHYJ_FJ (id,KCRWZBID,fjlx_ej,fjlj,fjhz,fjmc,scr,scsj)values(
+				#{id},#{kcrwzbid},#{fjlx_ej},#{fjlj},#{fjhz},#{fjmc},#{scr},sysdate
+			)
+	</insert>
+    <select id="getGxkj" resultType="com.ljx.hfgsjt.entity.dto.CodeEntity">
+		select bh id,mc codename from xtgl_kj order by bh
+	</select>
+    <select id="getGxcz" resultType="com.ljx.hfgsjt.entity.dto.CodeEntity">
+		select bh id,mc codename from xtgl_gxcz order by bh
+	</select>
+    <select id="getZsffgw" resultType="com.ljx.hfgsjt.entity.dto.CodeEntity">
+		select bh id,mc codename from xtgl_gxsf order by bh
+	</select>
+    <select id="getZlwz" resultType="com.ljx.hfgsjt.entity.dto.CodeEntity">
+		select bh id,mc codename from xtgl_fx order by bh
+	</select>
+    <select id="getKcrwFk" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetXckcxxView">
+		select * from GET_XCKCXX where id in
+			(select xmid from xm_xckc_rela where xckcid in
+				(select id from xckc_rwzb where kczt in ('1','2') and id in
+					(select kcrwzbid from xckc_rwcb where kcbm=#{kcbm} and sffk ='0' and ZPRY is not null)
+				  )
+			  union all
+			 	select sqid from xckc_rwzb where kczt in ('1','2') and id in
+					(select kcrwzbid from xckc_rwcb where kcbm=#{kcbm} and sffk ='0' and ZPRY is not null)
+			  )
+	</select>
+
+    <select id="getKcrwPj" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetXckcxxView">
+		select * from get_xckcxx where id in
+			(select xmid from xm_xckc_rela where xckcid in
+				(select id from xckc_rwzb where kczt = '3' and id in
+					(select kcrwzbid from XCKC_RWCB t WHERE fksj is not null group by kcrwzbid)
+				)
+
+			 union all
+
+			 select sqid from xckc_rwzb where kczt = '3' and id in
+			 	(select kcrwzbid from XCKC_RWCB t WHERE fksj is not null group by kcrwzbid)
+			)
+	</select>
+
+    <select id="getKcrwYhqr" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetXckcxxView">
+		select * from GET_XCKCXX where id in
+		   (select xmid from xm_xckc_rela where xckcid in
+				(select id from xckc_rwzb where kczt = '4' and id in
+					(select kcrwzbid from XCKC_RWCB t WHERE fksj is not null group by kcrwzbid)
+				)
+			union all
+			select sqid from xckc_rwzb where kczt = '4' and id in
+				(select kcrwzbid from XCKC_RWCB t WHERE fksj is not null group by kcrwzbid)
+		   )
+	</select>
+    <select id="getKczbByXmid" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcRwzbEntity">
+        select * from xckc_rwzb where 1=1
+        <if test="kczt ==1 or kczt ==2 or kczt ==3 or kczt ==4 or kczt ==5 or kczt ==6">
+            and kczt=#{kczt}
+        </if>
+        <if test="kczt =='0' or kczt==0">
+            and kczt in ('1','2','3','4','5')
+        </if>
+        <if test="kczt ==''">
+            and kczt in ('1','2')
+        </if>
+        and (id in (select xckcid from xm_xckc_rela where xmid = #{xmid})
+        or sqid = #{xmid})
+    </select>
+    <delete id="deleteFkFj">
+		update ${tablename} set sc_flag = '1' where id = #{id}
+	</delete>
+    <select id="getXckcxx" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcRwzbEntity">
+		select * from xckc_rwzb where 1=1 and kczt in ('1','2','3','4','5')
+		and (id in (select xckcid from xm_xckc_rela where xmid = #{xmid})
+		or sqid = #{xmid})
+	</select>
+    <select id="getXckcRwzbIsDoneBySqdId" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcRwzbEntity">
+		select * from XCKC_RWZB where kczt in ('1','2','3','4','5') and SQID = #{id}
+	</select>
+    <select id="getKcbm" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcRwcbEntity">
+			select id,kcrwzbid,zpry,u.username,u.mobilephone, sfdc,sfxydc,dcsj,sffk,fkyj,fpr,fpsj,kcbm,fksj,to_char(fksj,'yyyy-MM-dd HH24:mi:ss') fksj_vue
+			from xckc_rwcb b
+			left join Xtgl_User u on b.zpry = u.userid
+			where kcrwzbid in
+			(select id from xckc_rwzb where id = #{kcrwzbid}) order by kcbm
+	</select>
+    <select id="showQsFk" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcFkQsEntity">
+		SELECT a.*,get_kj_str(a.gxkj) kj_str,get_gxcz_str(a.gxcz) gxcz_str,
+            get_zlwz_str(a.gxzzl) zlwz_str,get_zsffgw_str(a.gxzsf) zsffgw_str,
+		       to_char(a.DCRQ,'yyyy-mm-dd') dcrq_str,to_char(a.CYSJ,'yyyy-mm-dd hh24:mi') cysj_str
+            FROM XCKC_FK_QS a WHERE kcrwcbid = #{id} order by dcrq
+	</select>
+    <select id="getFkFjlb" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcFkFj">
+		  select t.*,to_char(t.SCSJ,'yyyy-mm-dd hh24:mi:ss') scsj_str, GET_FJZL_STR(t.fjlx_ej) fjlx_str, F_GET_USERNAME(t.scr) scr_str
+		         from ${tablename} t where t.KCFKID = #{kcrwcbid} and t.sc_flag ='0' order by scsj desc
+	</select>
+    <select id="getFkFjData_sjy" resultType="java.util.Map">
+		select t.id,t.name fjlxEjname,t.parentid,count(c.id) count from  XTGL_FJZLGL t
+left join (select * from XCKC_RWCB_FJ where sc_flag=0 and KCFKID = #{cbid}) c on t.id = c.fjlx_ej
+where t.parentid in (select id from XTGL_FJZLGL where type='sjyxkylx')
+group by t.sort,t.id,t.name,t.parentid
+order by t.sort,t.id,t.name,t.parentid
+	</select>
+    <select id="getFkFjData_sgdw" resultType="java.util.Map">
+        select t.id,t.name fjlxEjname,t.parentid,count(c.id) count from  XTGL_FJZLGL t
+        left join (select * from XCKC_FK_SGDW_FJ where sc_flag=0 and KCFKID = #{cbid}) c on t.id = c.fjlx_ej
+        where t.parentid in (select id from XTGL_FJZLGL where type='sgdwxkylx')
+        group by t.sort,t.id,t.name,t.parentid
+        order by t.sort,t.id,t.name,t.parentid
+    </select>
+    <select id="getPjFjlb" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcFkFj">
+        select t.*,to_char(t.SCSJ,'yyyy-mm-dd hh24:mi:ss') scsj_str, GET_FJZL_STR(t.fjlx_ej) fjlx_str, F_GET_USERNAME(t.scr) scr_str
+        from ${tablename} t where t.KCRWZBID = #{kcrwzbid} and t.sc_flag ='0' order by scsj desc
+    </select>
+    <select id="getSgdwFkFjlb" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcFkFj">
+		select t.*,to_char(t.SCSJ,'yyyy-mm-dd hh24:mi:ss') scsj_str, GET_FJZL_STR(t.fjlx_ej) fjlx_str, F_GET_USERNAME(t.scr) scr_str
+		from xckc_fk_sgdw_fj t where t.kcfkid = #{kcrwcbid} and t.sc_flag ='0'
+	</select>
+    <select id="getSgdwKcfk" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcFkSgdwEntity">
+		 select t.* from XCKC_FK_SGDW t where t.kcrwcbid = #{kcrwcbid}
+	</select>
+
+    <select id="getLxlb" resultType="com.ljx.hfgsjt.entity.dto.xkybz.GetSqbxxView">
+        select * from
+        (select rownum rn,s.* from( select * from GET_LXLB t where 1=1 and t.sflx = #{sflx}
+        <if test="xmjl!=null and xmjl!=''">
+            and t.xmjl = #{xmjl}
+        </if>
+        <if test="sqbh!=null and sqbh!=''">
+            and t.sqbh LIKE CONCAT('%',CONCAT(#{sqbh}, '%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd hh24:mi:ss')  <![CDATA[ >= ]]>  to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd hh24:mi:ss')  <![CDATA[ < ]]>  to_date(#{jssj},'yyyy-MM-dd') + 1
+        </if>
+        order by slrq desc ) s
+        where rownum <![CDATA[ <= ]]> #{endRow}
+        ) where rn <![CDATA[ >= ]]> #{startRow}
+    </select>
+
+    <select id="getLxlbTotal" resultType="java.lang.Integer">
+        select count(1) from GET_LXLB t where 1=1 and t.sflx = #{sflx}
+        <if test="sqbh!=null and sqbh!=''">
+            and t.sqbh LIKE CONCAT('%',CONCAT(#{sqbh}, '%'))
+        </if>
+        <if test="xmjl!=null and xmjl!=''">
+            and t.xmjl = #{xmjl}
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and to_date(t.slrq,'yyyy-MM-dd hh24:mi:ss')<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+    </select>
+
+    <select id="getCheckZxm" resultType="com.ljx.hfgsjt.entity.dto.XmInstanceEntity">
+        select * from
+        (select rownum rn,s.* from( select t.*,to_char(t.LXSJ,'yyyy-mm-dd') lxsj_str from XM_INSTANCE t where t.pxmid is
+        null
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh}, '%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and LXSJ  <![CDATA[ >= ]]>  to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and LXSJ <![CDATA[ < ]]>  to_date(#{jssj},'yyyy-MM-dd') + 1
+        </if>
+        order by LXSJ desc ) s
+        where rownum <![CDATA[ <= ]]> #{endRow}
+        ) where rn <![CDATA[ >= ]]> #{startRow}
+    </select>
+
+    <select id="getCheckZxmTotal" resultType="java.lang.Integer">
+        select count(1) from XM_INSTANCE t where t.pxmid is null
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh}, '%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.LXSJ <![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.LXSJ <![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd') + 1
+        </if>
+    </select>
+
+    <select id="getSsbxxJmk" resultType="com.ljx.hfgsjt.entity.xqsl.YwslXjxqsqbEntity">
+		select * from YWSL_XJXQSQB where id =#{id}
+	</select>
+
+    <select id="getSsbxxHgk" resultType="com.ljx.hfgsjt.entity.xqsl.YwslChgzsqbEntity">
+		select * from YWSL_CHGZSQB where id =#{id}
+	</select>
+
+    <select id="getSsbxxGsk" resultType="com.ljx.hfgsjt.entity.xqsl.YwslGshbsqbEntity">
+		select * from YWSL_GSHBSQB where id =#{id}
+	</select>
+
+    <select id="getXmCodeCheckbox" resultType="com.ljx.hfgsjt.entity.dto.CodeEntity">
+        SELECT codename,codevalue from XM_CODE WHERE PARENTID = (
+        SELECT ID from XM_CODE WHERE CODENAME = #{codename}
+        )
+        <if test="type !=null and type !=''">
+            and TYPE = #{type}
+        </if>
+        order by sort
+    </select>
+
+    <select id="getZxm" resultType="com.ljx.hfgsjt.entity.dto.XmInstanceEntity">
+		select * from XM_INSTANCE where PXMID is NULL
+	</select>
+
+    <update id="setXmidToLdxx">
+		update YWSL_XJXQSQ_LDXX set xmid = #{xmid} where SQID = #{sqid}
+	</update>
+
+    <update id="updateSsbSflx">
+		update ${tablename} set sflx = '1' where id = #{id}
+	</update>
+
+    <select id="getWfRuInstContentByInstId" resultType="com.ljx.hfgsjt.entity.dto.Activity.WfRuInstContentEntity">
+		select t.*,t.PROC_INST_ID procInstId,t.TABLE_NAME tableName from WF_RU_INST_CONTENT t where PROC_INST_ID = #{id}
+	</select>
+
+    <select id="findXmNumForParentId" resultType="java.lang.Integer">
+		select count(1) from XM_INSTANCE where PXMID = #{id}
+	</select>
+
+    <insert id="saveSlfj" parameterType="java.util.Map">
+        insert into xm_slfj(ID ,XMID
+        <if test="FJLX_YJ != null and FJLX_YJ != ''">
+            ,FJLX_YJ
+        </if>
+        <if test="FJLX_EJ != null and FJLX_EJ != ''">
+            ,FJLX_EJ
+        </if>
+        <if test="FJLJ != null and FJLJ != ''">
+            ,FJLJ
+        </if>
+        <if test="FJHZ != null and FJHZ != ''">
+            ,FJHZ
+        </if>
+        <if test="FJMC != null and FJMC != ''">
+            ,FJMC
+        </if>
+        <if test="SCR != null and SCR != ''">
+            ,SCR
+        </if>
+        <if test="SCSJ_STR != null and SCSJ_STR != ''">
+            ,SCSJ
+        </if>
+        ,SC_FLAG)
+        values( #{ID},#{XMID}
+        <if test="FJLX_YJ != null and FJLX_YJ != ''">
+            ,#{FJLX_YJ}
+        </if>
+        <if test="FJLX_EJ != null and FJLX_EJ != ''">
+            ,#{FJLX_EJ}
+        </if>
+        <if test="FJLJ != null and FJLJ != ''">
+            ,#{FJLJ}
+        </if>
+        <if test="FJHZ != null and FJHZ != ''">
+            ,#{FJHZ}
+        </if>
+        <if test="FJMC != null and FJMC != ''">
+            ,#{FJMC}
+        </if>
+        <if test="SCR != null and SCR != ''">
+            ,#{SCR}
+        </if>
+        <if test="SCSJ_STR != null and SCSJ_STR != ''">
+            ,to_date(#{SCSJ_STR},'yyyy-mm-dd hh24:mi:ss')
+        </if>
+        ,'0')
+    </insert>
+
+    <select id="findSqFjLb" resultType="java.util.Map">
+        select t.*,to_char(t.scsj,'yyyy-mm-dd hh24:mi:ss') scsj_str from ${tablename} t where ${name} = #{id} and sc_flag = '0'
+    </select>
+
+    <select id="getZlzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+		select t.id,t.name||'提供资料' codename,t.parentid,count(a.id) count from XTGL_FJZLGL t
+			left join ${tablename} a on t.id=a.fjlx_yj and a.sc_flag=0 and a.${fieldname} = #{sqdid}
+			where t.id= #{fjlx}
+			group by t.id,t.name,t.parentid
+		union all
+
+		select  t.id,t.name codename,t.parentid,count(b.id) count from XTGL_FJZLGL t
+			left join ${tablename} b on t.id = b.fjlx_ej and b.sc_flag=0 and b.${fieldname} = #{sqdid}
+			where t.parentid = #{fjlx}
+			group by t.id,t.name,t.parentid
+	</select>
+
+    <select id="getYhzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstYhzl">
+		select a.id,a.FJLX_YJ fjlxYj,a.FJLX_EJ fjlxEj,a.fjlj,a.fjhz,a.fjmc,b.USERNAME scr,to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj_vue from ${tablename} a
+			 left join XTGL_USER b on a.SCR=b.USERID
+		where ${fieldname} =#{sqdid} and FJLX_EJ=#{fjlx} and sc_flag=0
+	</select>
+
+    <select id="getQsfk" resultType="com.ljx.hfgsjt.entity.dto.xkybz.XckcFkQsEntity">
+        select a.mc kj_str,b.mc gxcz_str,c.mc zsffgw_str,d.mc zlwz_str,t.id,t.kcrwcbid,t.sjstgwdcid,t.dcnr,t.gxzl,t.gxld,t.gxjzl,t.gxzzl,t.gxzsf,t.gxkj,
+             t.gxcz,t.cydx,t.cysj,t.dcdwz,t.cydbg,t.cydyl,t.gwyj,t.bwts,t.dcr,t.dcrq,
+             to_char(t.dcrq,'yyyy-mm-dd') dcrq_str,to_char(t.cysj,'yyyy-mm-dd') cysj_str,
+             t.bz,t.xmid, t.cjr, t.cjsj,t.cydsd
+             from XCKC_FK_QS t  left join xtgl_kj a on t.gxkj=a.bh
+             left join XTGL_GXCZ b on t.gxcz=b.bh
+             left join XTGL_GXSF c on t.gxzsf=c.bh
+             left join XTGL_FX d on t.gxzzl=d.bh  where t.kcrwcbid=#{kcrwcbid} and t.dcnr=#{dcnr}
+			</select>
+</mapper>

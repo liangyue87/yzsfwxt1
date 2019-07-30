@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.zlgd.mapper.ZlgdMapper">
+
+    <select id="getProjectCount" resultType="java.lang.Integer">
+        select count(1)
+        from XM_INSTANCE t
+        where  t.PXMID is not null and t.STATUS='1'
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj <![CDATA[ < ]]> to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+    </select>
+    <select id="getProjectList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.ProjectModel">
+        select z.*
+        from (select ROWNUM rn,tt.* from(
+        select t.id, t.xmbh, t.xmmc, t.dwmc, t.xmdz, t.lxr,to_char(t.lxsj,'yyyy-MM-dd HH24:mi')lxsj,t.xmfzr
+        from XM_INSTANCE t
+        where t.PXMID is not null  and t.STATUS='1'
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+        order by t.lxsj desc
+        )tt)z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <!--配置返回游标中别名对应的resultMap -->
+    <resultMap type ="java.util.HashMap" id= "cursorMap">
+        <result column ="id" property="id" />
+        <result column ="codename" property="codename"  />
+        <result column ="parentid" property="parentid" />
+        <result column ="count" property="count"  />
+    </resultMap >
+    <!--注明statementType="CALLABLE"表示调用存储过程-->
+    <select id ="getZlzl" parameterType= "map" statementType="CALLABLE"  resultMap="cursorMap">
+        {call Get_XmZlqj(#{v_xmid, jdbcType=VARCHAR, mode=IN},
+        #{v_yjlx, jdbcType=VARCHAR, mode=IN},
+        #{p_cur, mode=OUT, jdbcType=CURSOR, resultMap=cursorMap})}
+        <!--传入传出参数要注明mode=IN/OUT 并要注明jdbcType（在网上可以查询mybatis支持哪些jdbcType类型），返回参数要注明对应的resultMap-->
+    </select >
+    <select id="getSjcgzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstYhzl">
+         select a.id,a.xmid,a.FJLX_YJ fjlxYj,a.FJLX_EJ fjlxEj,a.fjlj,a.fjhz,a.fjmc,b.USERNAME scr,
+        to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj_vue from SJST_RW_SJSTCG a
+        left join XTGL_USER b on a.SCR=b.USERID
+        where a.xmid=#{xmid} and a.FJLX_EJ=#{id}  and a.sc_flag=0
+    </select>
+    <select id="getYszl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstYhzl">
+        select a.id,a.FJLX_YJ fjlxYj,a.FJLX_EJ fjlxEj,a.fjlj,a.fjhz,a.fjmc,b.USERNAME scr,
+        to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj_vue from YS_RWFJ a
+        left join XTGL_USER b on a.SCR=b.USERID
+        left join YS_RWZB c on a.YSRWID=c.id
+        where c.xmid=#{xmid} and a.FJLX_EJ=#{id}  and a.sc_flag=0
+    </select>
+    <select id="getHtzl" resultType="com.ljx.hfgsjt.entity.dto.Sjst.SjstYhzl">
+        select a.id,a.FJLX_YJ fjlxYj,a.FJLX_EJ fjlxEj,a.fjlj,a.fjhz,a.fjmc,b.USERNAME scr,
+        to_char(a.SCSJ,'yyyy-MM-dd HH24:mi') scsj_vue from HT_QDZBFJ a
+        left join XTGL_USER b on a.SCR=b.USERID
+        left join HT_QDZB c on a.HTQDID=c.id
+        where c.xmid=#{xmid} and a.FJLX_EJ=#{id}  and a.sc_flag=0
+    </select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.zhcx.mapper.WtysMapper">
+
+
+
+
+
+    <select id="selectWtysList" resultType="com.ljx.hfgsjt.entity.zhcx.Wtysqk">
+        SELECT  id,xmmc,xmbh,to_char(yskssj,'yyyy-mm-dd hh24:mi:ss') yskssj,to_char(ysjssj,'yyyy-mm-dd hh24:mi:ss') ysjssj,mobilephone,username,
+        tygwysje,shbfysje,hbysje,sjysje,jlysje,ysze,yhqrsj from (
+          SELECT z2.*,rownum rn from (
+            select z.* from zhcx_wtyslb z where 1=1
+              <if test="xm!=null and xm!=''">and (z.xmmc LIKE '%'||#{xm}||'%' or z.xmbh LIKE '%'||#{xm}||'%')</if>
+              <if test="wtyszt!=null">and z.yszt=#{wtyszt}</if>
+            )z2 where rownum &lt; #{end}
+        )
+        WHERE rn &gt;= #{start}
+    </select>
+
+
+</mapper>

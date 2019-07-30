@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.zhcx.mapper.ZhysMapper">
+
+
+    <select id="selectZhysList" resultType="com.ljx.hfgsjt.entity.zhcx.ZhyaslbModel">
+        SELECT xmbh,xmmc,to_char(fqrq,'yyyy-mm-dd hh24:mi:ss') fqrq,to_char(yjyssj,'yyyy-mm-dd hh24:mi:ss') yjyssj,
+        to_char(sjyssj,'yyyy-mm-dd hh24:mi:ss') sjyssj,to_char(rwclsj,'yyyy-mm-dd hh24:mi:ss') rwclsj,fkjg from (
+        SELECT z2.*,rownum rn from (
+        select z.* from zhcx_zhyslb z where 1=1
+        <if test="xm!=null and xm!=''">and (z.xmmc LIKE '%'||#{xm}||'%' or z.xmbh LIKE '%'||#{xm}||'%')</if>
+        <if test="yszt!=null and yszt!=''">and z.zt=#{yszt}</if>
+        )z2 where rownum &lt; #{end}
+        )
+        WHERE rn &gt;= #{start}
+    </select>
+
+
+</mapper>

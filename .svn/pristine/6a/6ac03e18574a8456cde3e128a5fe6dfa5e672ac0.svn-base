@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.yj.dao.LdMapper">
+
+    <select id="getLdCount" resultType="java.lang.Integer">
+        select count(1) from xm_ld where XMID=#{xmid} and zt=1
+    </select>
+    <select id="getLdData" resultType="com.ljx.hfgsjt.entity.yj.XmLd">
+       select z.*,to_char(z.CJSJ,'yyyy-MM-dd HH24:mi')czsj_vue from (
+        select ROWNUM rn, t.*,h.xmbh ,i.username czr from xm_ld t
+        left join XM_INSTANCE h on h.ID=t.XMID
+        left join XTGL_USER i on i.USERID = t.CJR
+        where t.XMID = #{xmid}
+        order by t.CJSJ desc
+        )z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="LddhxData" resultType="com.ljx.hfgsjt.entity.yj.XmLd">
+        select t.* ,t.azrq azrq_vue ,a.HH sbbzh from XM_Ld
+    </select>
+    <select id="LddzjData" resultType="com.ljx.hfgsjt.entity.yj.XmXhs">
+        select t.ID djzid,t.DZJBH,t.ZT,t.LM,f.FJLJ path,to_char(t.AZRQ,'yyyy-MM-dd') azrq_vue,
+        (select count(1) from YJ_DZJZB_FJ where dzjid=t.id and SC_FLAG=0) fjnumber,
+        to_char(t.CZRQ,'yyyy-MM-dd HH24:mi') czrq_vue,t.htr,e.USERNAME cjr,b.id ,b.ldbh from YJ_DZJZB t
+        left join YJ_DZJCB a on a.DZJZBID =t.id
+        left join xm_ld b on b.id = a.LDID
+        left join XTGL_USER e on e.USERID = t.CZR
+        left join YJ_DZJZB_FJ f on f.DZJID=t.ID and f.SC_FLAG=0
+        where t.id=#{id} and a.DZJCBLXBH='06' and t.DZJLXBH='04'
+    </select>
+</mapper>

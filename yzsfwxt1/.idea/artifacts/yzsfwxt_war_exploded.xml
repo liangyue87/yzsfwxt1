@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="yzsfwxt:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/yzsfwxt_war_exploded</output-path>
+    <root id="root">
+      <element id="module-output" name="main" />
+    </root>
+  </artifact>
+</component>

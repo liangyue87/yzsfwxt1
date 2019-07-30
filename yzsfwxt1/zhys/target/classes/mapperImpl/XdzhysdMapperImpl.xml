@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.zhys.mapper.XdzhysdMapper">
+
+    <select id="selectXdzhysdCount" resultType="java.lang.Integer">
+        select count(a.id) from ZHYS_SQZB a left join XM_INSTANCE v on a.xmid=v.id
+        where 1=1
+        <if test="xmmc!=null and xmmc!=''">
+            and v.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="status!=null and status!=''">
+            and v.status =#{status}
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(v.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and v.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and v.lxsj<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and v.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and v.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and v.azlx =#{azlx}
+        </if>
+    </select>
+
+    <select id="selectXdzhysdList"  resultType="com.ljx.hfgsjt.entity.dto.Sjst.XmInstance">
+        select * from(
+        select  b.id,b.sqlx,b.slid,b.xmtzf,b.xmbh,b.azlx,b.sqbh,b.xmlb,b.xmswlxfl,b.qbid,b.status,b.slrbh,to_char(b.lxsj,'yyyy-mm-dd hh24:mi:ss')as lxsj_Str,b.xmfzr,
+        b.xmmc,b.lxr,b.lxrsjh,b.xmdz,b.dwmc,to_char(b.slsj,'yyyy-mm-dd hh24:mi:ss')as slsj_Str,a.id as sqzbid,a.zt,b.bmbm_Qs,
+       b.iszj,b.lxdh,b.xzqybh ,ROWNUM rn
+        from ZHYS_SQZB a left join XM_INSTANCE b on a.xmid=b.id
+        where 1=1
+        <if test="xmmc!=null and xmmc!=''">
+            and b.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="status!=null and status!=''">
+            and b.status =#{status}
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(b.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and b.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and b.lxsj<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and b.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and b.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and b.azlx =#{azlx}
+        </if>
+        ORDER BY b.lxsj DESC)
+        WHERE rn  &gt; ${page} AND rn  &lt;= ${pageSize}
+    </select>
+
+
+    <select id="getQsmc" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XzqyEntity">
+            select a.* from XTGL_GSS a  where a.bh=#{qybh}
+    </select>
+
+    <select id="getUser" resultType="com.ljx.hfgsjt.entity.dto.zhys.XmUserEntity">
+            select a.* from XTGL_USER a left join XTGL_USERROLE b on a.userid=b.userid where b.roleid=#{role}
+    </select>
+
+    <select id="selectRwzbid"  resultType="com.ljx.hfgsjt.entity.dto.Sjst.XmInstance">
+        select  b.id,b.sqlx,b.slid,b.xmtzf,b.xmbh,b.azlx,b.sqbh,b.xmlb,b.xmswlxfl,b.qbid,b.status,b.slrbh,b.lxsj,b.xmfzr,
+        b.xmmc,b.lxr,b.lxrsjh,b.xmdz,b.dwmc,to_char(b.slsj,'yyyy-mm-dd hh24:mi:ss')as slsj_Str,a.id as sqzbid,a.zt,b.bmbm_qs,
+        b.iszj,b.lxdh,b.xzqybh ,ROWNUM rn
+        from ZHYS_SQZB a left join XM_INSTANCE b on a.xmid=b.id
+        where a.xmid=#{xmid}
+
+    </select>
+
+
+    <!--各部门资料-->
+    <select id="selectBmzl" resultType="java.lang.Integer">
+        select count (a.id)
+        from ZHYS_RWCB_FJ a where a.zhyscbid=#{zhyscbid}
+    </select>
+    <select id="selectBmzllist" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.ZhysRwcbFjEntity">
+        select * from(
+      select t.id,t.zhyscbid,t.fjlx_yj, t.fjlx_ej,t.fjlj,t.fjhz,t.fjmc,t.scr,to_char(t.scsj,'yyyy-mm-dd hh24:mi:ss')as scsjStr,
+      t.sc_flag,t.shcr,t.shcsj,t.scsj1,ROWNUM rn from ZHYS_RWCB_FJ t where t.zhyscbid=#{zhyscbid})
+        WHERE rn  &gt; ${page} AND rn  &lt;= ${pageSize}
+    </select>
+
+</mapper>

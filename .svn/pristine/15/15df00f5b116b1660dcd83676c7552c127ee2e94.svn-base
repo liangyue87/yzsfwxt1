@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.zhys.mapper.SqzhysMapper">
+
+    <select id="selectSqzhysCount" resultType="java.lang.Integer">
+
+        select count(v.id) from V_SQZHYS v
+        where 1=1 and v.XMFZR = #{xmfzr}
+        <if test="xmmc!=null and xmmc!=''">
+            and v.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="status!=null and status!=''">
+            and v.status =#{status}
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(v.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and v.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and v.lxsj<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and v.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and v.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and v.azlx =#{azlx}
+        </if>
+
+    </select>
+
+    <select id="selectSqzhysList" resultType="com.ljx.hfgsjt.entity.dto.zhys.Sqzhys">
+        select * from (
+        select rownum rn,s.* from (
+        select v.*,a.codename from V_SQZHYS v left join XTGL_CODE a on v.azlx=a.codevalue where 1=1
+        and v.XMFZR = #{xmfzr}
+        <if test="xmmc!=null and xmmc!=''">
+            and v.xmmc LIKE '%' || #{xmmc} || '%'
+        </if>
+        <if test="status!=null and status!=''">
+            and v.status =#{status}
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and  UPPER(v.xmbh)like UPPER ('%' || #{xmbh} || '%')
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and v.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and v.lxsj<![CDATA[ <= ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and v.lxr LIKE '%' || #{lxr} || '%'
+        </if>
+        <if test="xmdz!=null and xmdz!=''">
+            and v.xmdz LIKE '%' || #{xmdz} || '%'
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and v.azlx =#{azlx}
+        </if>
+        order by v.slsj desc ) s
+        where rownum <![CDATA[ <= ]]> #{endRow}
+        ) where rn <![CDATA[ >= ]]> #{startRow}
+    </select>
+
+    <!--居民表附件数量-->
+    <select id="selectJmCount" resultType="java.lang.Integer">
+        select count (a.id)
+        from YWSL_XJXQSQB_FJ a left join YWSL_XJXQSQB b on a.ywsl_xjxqsqbid=b.id where b.sqbh=#{sqbh}
+    </select>
+    <select id="selectJmlist" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.YwslXjxqsqbFjEntity">
+        select * from(
+      select a.id,a.ywsl_xjxqsqbid,a.fjlx_yj, a.fjlx_ej,a.fjlj,a.fjhz,a.fjmc, a.scr,a.scsj,
+      to_char(a.scsj,'yyyy-mm-dd hh24:mi:ss')as scsjStr,a.sc_flag,a.shcr,a.shcsj,ROWNUM rn
+      from YWSL_XJXQSQB_FJ a left join YWSL_XJXQSQB b on a.ywsl_xjxqsqbid=b.id where b.sqbh=${sqbh}  ORDER BY a.scsj DESC)
+        WHERE rn  &gt; ${page} AND rn  &lt;= ${pageSize}
+    </select>
+
+    <!--工商表附件数量-->
+    <select id="selectGsCount" resultType="java.lang.Integer">
+          select count(a.id)
+      from YWSL_GSHBSQB_FJ a left join YWSL_GSHBSQB b on a.ywsl_gshbsqbid=b.id where b.sqbh=#{sqbh}
+    </select>
+    <select id="selectGslist" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.YwslGshbsqbFjEntity">
+       select * from(
+       select a.id, a.ywsl_gshbsqbid,a.fjlx_yj, a.fjlx_ej,a.fjlj,a.fjhz,a.fjmc, a.scr, a.scsj,
+       to_char(a.scsj,'yyyy-mm-dd hh24:mi:ss')as scsjStr, a.sc_flag, a.shcr,a.shcsj,ROWNUM rn
+       from YWSL_GSHBSQB_FJ a left join YWSL_GSHBSQB b on a.ywsl_gshbsqbid=b.id where b.sqbh=${sqbh}  ORDER BY a.scsj DESC)
+        WHERE rn  &gt; ${page} AND rn  &lt;= ${pageSize}
+    </select>
+
+    <!--户外表附件数量-->
+    <select id="selectHwCount" resultType="java.lang.Integer">
+          select count(a.id)
+      from YWSL_CHGZSQB_FJ a left join YWSL_CHGZSQB b on a.ywsl_chgzsqbid=b.id where b.sqbh=#{sqbh}
+    </select>
+    <select id="selectHwlist" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.YwslChgzsqbFjEntity">
+    select * from(
+       select a.id, a.ywsl_chgzsqbid,a.fjlx_yj,a.fjlx_ej, a.fjlj,a.fjhz, a.fjmc,a.scr,a.scsj,
+       to_char(a.scsj,'yyyy-mm-dd hh24:mi:ss')as scsjStr,a.sc_flag,a.shcr,a.shcsj,ROWNUM rn
+       from YWSL_CHGZSQB_FJ a left join YWSL_CHGZSQB b on a.ywsl_chgzsqbid=b.id where b.sqbh=#{sqbh}  ORDER BY a.scsj DESC)
+        WHERE rn  &gt; #{page} AND rn  &lt;= #{pageSize}
+    </select>
+
+    <!--设计成果数量-->
+    <select id="selectSjcgCount" resultType="java.lang.Integer">
+     select count(a.id)
+       from SJST_RW_SJSTCG a  left join XTGL_FJZLGL b on a.fjlx_yj=b.id where b.type='sjcg'and a.xmid=#{xmid}
+    </select>
+    <select id="selectSjcglist" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.SjstRwSjstcgEntity">
+    select * from(
+     select a.id, a.sjstrzwid,a.fjlx_yj,a.fjlx_ej,a.fjlj, a.fjhz,a.fjmc,a.scr,a.scsj, a.sc_flag,a.shcr,
+     a.shcsj,a.sfgd, a.gdr,a.gdsj,a.xmid,to_char(a.scsj,'yyyy-mm-dd hh24:mi:ss')as scsjStr,ROWNUM rn
+        from SJST_RW_SJSTCG a left join XTGL_FJZLGL b on a.fjlx_yj=b.id where b.type='sjcg'and a.xmid=#{xmid}  ORDER BY a.scsj DESC)
+        WHERE rn  &gt; #{page} AND rn  &lt;= #{pageSize}
+    </select>
+    <!--施工资料数量-->
+    <select id="selectSgCount" resultType="java.lang.Integer">
+     select count(a.id)
+       from SGXT_BGXX_FJ a  left join SGXT_BGXX b on a.sgxt_bgxxid=b.id left join SGXT_RWB c on b.sgrwid=c.id where c.xmid=#{xmid}
+    </select>
+    <select id="selectSglist" resultType="com.ljx.hfgsjt.entity.dto.zhys.SgxtBgxxFjEntity">
+  select * from(
+       select a.id,a.sgxt_bgxxid,a.fjlx_yj, a.fjlx_ej,a.fjlj,a.fjhz,a.fjmc,a.scr,a.scsj,
+       to_char(a.scsj,'yyyy-mm-dd hh24:mi:ss')as scsjStr,a.sc_flag,a.shcr,a.shcsj,ROWNUM rn
+       from SGXT_BGXX_FJ a left join SGXT_BGXX b on a.sgxt_bgxxid=b.id left join SGXT_RWB c on b.sgrwid=c.id where c.xmid=${xmid}  ORDER BY a.scsj DESC)
+        WHERE rn  &gt; ${page} AND rn  &lt;= ${pageSize}
+    </select>
+
+
+    <!--庭院数量-->
+    <select id="selectTysl" resultType="java.lang.Integer">
+        select count(a.id) from XM_TY a  where a.xmid=#{xmid}
+    </select>
+    <select id="selectTyList" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.XmTyEntity">
+       select * from(
+       select a.id,a.xmid,a.bh,a.mc,a.cjr,to_char(a.cjsj,'yyyy-mm-dd hh24:mi:ss') as cjsj_str ,b.username,a.zt, ROWNUM rn
+       from XM_TY a left join XTGL_USER b on a.cjr=b.userid where a.xmid=#{xmid} ORDER BY a.cjsj DESC)
+        WHERE rn  &gt; #{page} AND rn  &lt;= #{pageSize}
+    </select>
+
+    <!--楼栋数量-->
+    <select id="selectLdsl" resultType="java.lang.Integer">
+        select count(a.id) from XM_LD a  where a.xmid=#{xmid}
+    </select>
+    <select id="selectLdList" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.XmLdEntity">
+       select * from(
+       select a.id,a.xmid,tyid,a.ldbh,a.ldmc,a.cjr,to_char(a.cjsj,'yyyy-mm-dd hh24:mi:ss') as cjsj_str ,b.username,a.zt,a.lfsx,a.ghhs, ROWNUM rn
+       from XM_LD a left join XTGL_USER b on a.cjr=b.userid where a.xmid=#{xmid} ORDER BY a.cjsj DESC)
+        WHERE rn  &gt; #{page} AND rn  &lt;= #{pageSize}
+    </select>
+
+    <!--地下室数量-->
+    <select id="selectDxssl" resultType="java.lang.Integer">
+        select count(a.id) from XM_DXS a  where a.xmid=#{xmid}
+    </select>
+    <select id="selectDxsList"  parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.XmDxsEntity">
+      select * from(
+       select a.id,a.xmid,a.bh,a.mc,a.cjr,to_char(a.cjsj,'yyyy-mm-dd hh24:mi:ss') as cjsj_str ,b.username,a.zt, ROWNUM rn
+       from XM_DXS a left join XTGL_USER b on a.cjr=b.userid where a.xmid=#{xmid} ORDER BY a.cjsj DESC)
+        WHERE rn  &gt; #{page} AND rn  &lt;= #{pageSize}
+    </select>
+
+    <!--泵房数量-->
+    <select id="selectBfsl" resultType="java.lang.Integer">
+        select count(a.id) from XM_BF a  where a.xmid=#{xmid}
+    </select>
+    <select id="selectBfList" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.XmBfEntity">
+    select * from(
+       select a.id,a.xmid,a.bh,a.mc,a.cjr,to_char(a.cjsj,'yyyy-mm-dd hh24:mi:ss') as cjsj_str ,b.username,a.zt, ROWNUM rn
+       from XM_BF a left join XTGL_USER b on a.cjr=b.userid where a.xmid=#{xmid} ORDER BY a.cjsj DESC)
+        WHERE rn  &gt; #{page} AND rn  &lt;= #{pageSize}
+    </select>
+
+    <!--水箱数量-->
+    <select id="selectSxsl" resultType="java.lang.Integer">
+        select count(a.id) from XM_SX a  where a.xmid=#{xmid}
+    </select>
+    <select id="selectSxList" parameterType="map" resultType="com.ljx.hfgsjt.entity.dto.zhys.XmSxEntity">
+  select * from(
+       select a.id,a.xmid,a.bfid,a.sxbh,a.sxmc,a.cd,a.kd,a.gd,a.rj,a.cjr,to_char(a.cjsj,'yyyy-mm-dd hh24:mi:ss') as cjsj_str ,b.username,a.zt, ROWNUM rn
+       from XM_SX a left join XTGL_USER b on a.cjr=b.userid where a.xmid=#{xmid} ORDER BY a.cjsj DESC)
+        WHERE rn  &gt; #{page} AND rn  &lt;= #{pageSize}
+    </select>
+
+
+    <insert id="insertZhysSqzb" parameterType="com.ljx.hfgsjt.entity.dto.zhys.ZhysSqzb">
+        insert into ZHYS_SQZB
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="rwbh != null">
+                RWBH,
+            </if>
+            <if test="xmid != null">
+                XMID,
+            </if>
+            <if test="fqr != null">
+                FQR,
+            </if>
+            <if test="fqrq != null">
+                FQRQ,
+            </if>
+            <if test="rwclsj != null">
+                RWCLSJ,
+            </if>
+            <if test="zt != null">
+                ZT,
+            </if>
+            <if test="bz != null">
+                BZ,
+            </if>
+            <if test="yjyssj != null">
+                YJYSSJ,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="rwbh != null">
+                #{rwbh,jdbcType=VARCHAR},
+            </if>
+            <if test="xmid != null">
+                #{xmid,jdbcType=VARCHAR},
+            </if>
+            <if test="fqr != null">
+                #{fqr,jdbcType=VARCHAR},
+            </if>
+            <if test="fqrq != null">
+                #{fqrq,jdbcType=DATE},
+            </if>
+            <if test="rwclsj != null">
+                #{rwclsj,jdbcType=DATE},
+            </if>
+            <if test="zt != null">
+                #{zt,jdbcType=DECIMAL},
+            </if>
+            <if test="bz != null">
+                #{bz,jdbcType=VARCHAR},
+            </if>
+            <if test="yjyssj != null">
+                #{yjyssj,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+
+
+    <parameterMap type="java.util.Map" id="texuChangeMap">
+        <parameter property="v_stop_run" jdbcType="INTEGER" mode="IN"/>
+        <parameter property="p_result" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    <select id="texuChange" parameterMap="texuChangeMap" statementType="CALLABLE" resultType="String">
+      {call p_get_number(
+        ?,?
+      )}
+</select>
+
+
+    <!--查询综合验收默认人-->
+    <select id="getZhysmrr"  resultType="com.ljx.hfgsjt.entity.dto.zhys.XmUserEntity">
+        select a.* from XTGL_USER a left join XTGL_USERROLE b on a.userid=b.userid left join WF_ACTIVITY_ROLE c on b.roleid=c.roleid
+             where c.activityid=#{pdefid}
+            </select>
+
+</mapper>

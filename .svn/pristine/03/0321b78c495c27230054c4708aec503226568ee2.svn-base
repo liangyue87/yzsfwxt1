@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljx.hfgsjt.yj.dao.BwyjMapper">
+<select id="getProjectCount" resultType="java.lang.Integer">
+select count(1) from XM_INSTANCE t
+where  t.PXMID is not null and t.STATUS='1'
+    <if test="isfq==2 or isfq=='2'">
+        and not exists (select 1 from get_all_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+    </if>
+    <if test="isfq==1 or isfq=='1'">
+        and exists (select 1 from get_all_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+    </if>
+    <if test="iswc==2 or iswc=='2'">
+        and exists (select 1 from wf_ru_inst_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+    </if>
+    <if test="iswc==1 or iswc=='1'">
+        and exists (select 1 from wf_hi_inst_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+    </if>
+    <if test="xmbh!=null and xmbh!=''">
+        and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+    </if>
+    <if test="azlx!=null and azlx!=''">
+        and t.AZLX =#{azlx}
+    </if>
+    <if test="dwmc!=null and dwmc!=''">
+        and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+    </if>
+    <if test="xmmc!=null and xmmc!=''">
+        and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+    </if>
+    <if test="lxr!=null and lxr!=''">
+        and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+    </if>
+    <if test="kssj!=null and kssj!=''">
+        and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+    </if>
+    <if test="jssj!=null and jssj!=''">
+        and t.lxsj<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd')+1
+    </if>
+</select>
+
+    <select id="getProjectList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.ProjectModel">
+select z.* from (
+        select ROWNUM rn,tt.* from (
+        select t.id, t.xmbh, t.xmmc, t.dwmc, t.xmdz, t.lxr, to_char(t.lxsj,'yyyy-MM-dd HH24:mi') lxsj,t.xmfzr,d.codename azlx,
+        (select count(1) from wf_hi_inst_content where contenttype='bwyj' and contentvalue=t.id) iswcs
+        from XM_INSTANCE t
+        left join XTGL_CODE d on d.CODEVALUE=t.AZLX
+        where t.PXMID is not null and t.STATUS='1'
+        <if test="isfq==2 or isfq=='2'">
+            and not exists (select 1 from get_all_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+        </if>
+        <if test="isfq==1 or isfq=='1'">
+            and exists (select 1 from get_all_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+        </if>
+        <if test="iswc==2 or iswc=='2'">
+            and exists (select 1 from wf_ru_inst_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+        </if>
+        <if test="iswc==1 or iswc=='1'">
+            and exists (select 1 from wf_hi_inst_content a where a.contenttype='bwyj' and a.contentvalue=t.id)
+        </if>
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="xmmc!=null and xmmc!=''">
+            and t.xmmc LIKE CONCAT('%',CONCAT(#{xmmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and t.AZLX =#{azlx}
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+        order by t.lxsj desc
+        )tt
+)z
+where z.rn between #{startRow} and #{endRow}
+    </select>
+<select id="getFmCount" resultType="java.lang.Integer">
+    select count(1) from xm_fm where XMID=#{xmid} and zt=1
+</select>
+    <select id="getFmData" resultType="com.ljx.hfgsjt.entity.yj.XmFm">
+        select z.*,to_char(z.AZRQ,'yyyy-MM-dd')azrq_vue,to_char(z.CZSJ,'yyyy-MM-dd HH24:mi')czsj_vue from (
+        select ROWNUM rn, tt.* from (
+        select t.*,a.MC fmkj,b.MC fmlx,c.MC fmzy,d.MC zdfs,e.MC zdfx,f.MC jgcz,j.mc fgcz,g.MC jgxs,h.XMBH,i.USERNAME czrname,k.HH sbbzh,
+        (select count(1) from yj_dzjcb where fmid=t.ID)yzdzj
+         from XM_FM t
+        left join xtgl_fmkj a on a.BH = t.FMKJBH
+        left join XTGL_FMLX b on b.BH = t.FMLXBH
+        left join XTGL_FMZY c on c.BH = t.FMZYBH
+        left join xtgl_zdfs d on d.BH = t.ZDFSBH
+        left join XTGL_ZDFX e on e.BH = t.ZDFXBH
+        left join XTGL_JGCZ f on f.BH = t.FJGCZBH
+        left join XTGL_JGXS g on g.BH = t.FJGXSBH
+        left join XM_INSTANCE h on h.ID=t.XMID
+        left join XTGL_USER i on i.USERID = t.CZR
+        left join XTGL_FGCZ j on j.BH = t.FGCZBH
+        left join XM_SB k  on k.ID = t.SBID
+        where t.XMID = #{xmid}
+        order by t.CZSJ desc
+        )tt
+        )z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getSbCount" resultType="java.lang.Integer">
+        select count(1) from XM_SB where xm_id=#{xmid} and zt=0
+    </select>
+    <select id="getSbData" resultType="com.ljx.hfgsjt.entity.dto.Sjst.XmSb">
+        select z.* from (
+        select ROWNUM rn,tt.* from (
+        select  t.HHLXBH,t.hh,t.id,
+        (select c.codename from XTGL_CODE c where t.HYFLBH=c.codevalue and c.parentid=(select id from XTGL_CODE where type='hyfl')) hyflname,
+        t.HYFLBH,t.YYZX_HYFLBH yyzxHyflbh,
+        (select d.codename from XTGL_CODE d where t.YYZX_HYFLBH=d.codevalue and d.parentid=(select id from XTGL_CODE where type='hyfl')) yshyfl,
+        t.AZWZ,t.SGDW_SBKJ sgdwSbkj,a.mc sgdwSbkjName,t.YYZX_BSM yyzxBsm,t.YYZX_HH yyzxhh from XM_SB t
+        left join XTGL_KJ a on t.SGDW_SBKJ=a.bh
+        where t.XM_ID = #{xmid} and zt=0
+        order by t.SLRQ desc
+        )tt
+        )z
+        where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getFmkj" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from xtgl_fmkj t
+    </select>
+    <select id="getFmlx" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from XTGL_FMLX t
+    </select>
+    <select id="getFmzy" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from XTGL_FMZY t
+    </select>
+    <select id="getZdfs" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from xtgl_zdfs t
+    </select>
+    <select id="getZdfx" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from XTGL_ZDFX t
+    </select>
+    <select id="getfjgcz" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from XTGL_JGCZ t
+    </select>
+    <select id="getFjgxs" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from XTGL_JGXS t
+    </select>
+    <select id="getFgcz" resultType="com.ljx.hfgsjt.entity.dto.Sjst.CodeModel">
+        select t.MC codename,t.BH codevalue from XTGL_FGCZ t
+    </select>
+    <select id="fmpzHandle" resultType="com.ljx.hfgsjt.entity.yj.XmFm">
+        select t.*,t.azrq azrq_vue,k.HH sbbzh,a.MC fmkj,b.MC fmlx,c.MC fmzy,d.MC zdfs,e.MC zdfx,f.MC jgcz,j.mc fgcz,g.MC jgxs from XM_FM t
+        left join xtgl_fmkj a on a.BH = t.FMKJBH
+        left join XTGL_FMLX b on b.BH = t.FMLXBH
+        left join XTGL_FMZY c on c.BH = t.FMZYBH
+        left join xtgl_zdfs d on d.BH = t.ZDFSBH
+        left join XTGL_ZDFX e on e.BH = t.ZDFXBH
+        left join XTGL_JGCZ f on f.BH = t.FJGCZBH
+        left join XTGL_JGXS g on g.BH = t.FJGXSBH
+        left join XTGL_FGCZ j on j.BH = t.FGCZBH
+        left join XM_SB k  on k.ID = t.SBID
+        where t.id=#{id}
+    </select>
+    <update id="fmpzDelete">
+        update XM_FM set zt=#{zt},CZR=#{czr},czsj=#{czsj} where id = #{id}
+    </update>
+    <select id="getDzjlbCount" resultType="java.lang.Integer">
+        select count(1) from YJ_DZJZB where XMID=#{xmid} and zt <![CDATA[ <> ]]> 3
+    </select>
+    <select id="getDzjlbData" resultType="com.ljx.hfgsjt.entity.yj.YjDzjzb">
+select z.* from (
+select ROWNUM rn,aa.* from (select t.id,t.dzjbh,t.dzjlxbh,a.mc dzjlxbhname,get_dzjmc(t.id) dzjmc,t.lm,to_char(t.azrq,'yyyy-MM-dd') azrq_vue,
+to_char(t.czrq,'yyyy-MM-dd HH24:mi')czrq_vue,c.username czr,t.htr,t.zt,d.FJLJ path from YJ_DZJZB  t
+left join xtgl_dzjzblx a on t.dzjlxbh=a.bh
+left join xtgl_user c on c.userid=t.czr
+left join YJ_DZJZB_FJ d on d.DZJID=t.ID
+where t.xmid=#{xmid} and t.zt <![CDATA[ <> ]]> 3
+order by t.czrq desc
+) aa
+)z
+where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getfmdzjData" resultType="com.ljx.hfgsjt.entity.yj.YjDzjzb">
+    select t.id,t.dzjbh,t.lm,t.zt,t.htr,to_char(t.azrq,'yyyy-MM-dd HH24:mi') azrq_vue,a.fmid,b.FMBH,d.FJLJ path,(select count(1) from YJ_DZJZB_FJ where dzjid=t.id) fjnumber from YJ_DZJZB t
+left join yj_dzjcb a on t.id=a.dzjzbid
+left join XM_FM b on a.FMID=b.ID
+left join YJ_DZJZB_FJ d on d.DZJID=t.ID
+where t.id=#{id}
+    </select>
+    <update id="dzjHandleDelete">
+        UPDATE YJ_DZJZB SET  zt=#{zt},czr=#{userid},czrq=sysdate where id=#{id}
+    </update>
+    <select id="getNextNode" resultType="java.lang.String">
+        select a.nextnode from WF_RE_NODE a
+       where a.activityid = #{activityId} and a.DIRECTION=#{direction}
+    </select>
+    <select id="getCbid" resultType="com.ljx.hfgsjt.entity.yj.YjDzjcb">
+        select * from YJ_DZJCB where DZJZBID=#{id}
+    </select>
+    <select id="getrwblr" resultType="java.util.Map">
+select z.* from(
+        select ROWNUM rn,b.USERID,c.MOBILEPHONE from XM_INSTANCE t
+        left join XTGL_ROLE a on t.BMBM_QS=a.ROLETYPE
+        left join XTGL_USERROLE b on b.ROLEID=a.ROLEID
+        left join XTGL_USER c on c.USERID=b.USERID
+        where t.ID=#{xmid} and a.NOTE='区所分派人'
+        )z where z.rn=1
+    </select>
+    <select id="getDzjid" resultType="java.lang.String">
+        select t.id from YJ_DZJZB t where t.XMID=#{xmid}
+    </select>
+    <select id="submitShow" resultType="java.lang.Integer">
+        select count(1) from XM_INSTANCE c where c.id=#{xmid} and c.id in (
+        select d.contentvalue from wf_ru_inst_content d where LOWER (d.table_name) = 'xm_instance' and LOWER
+        (d.contentname) = 'id' and d.proc_inst_id in (
+        select e.proc_inst_id from wf_ru_inst e where e.pdef_id in ('90010')))
+    </select>
+    <select id="getQsBwyjlbCount" resultType="java.lang.Integer">
+select count(1)
+        from XM_INSTANCE t
+        left join yj_bwyjzb c on t.id=c.xmid
+        left join XTGL_CODE d on d.CODEVALUE=t.AZLX
+        where c.QSYSRY = #{xmfzr}
+        and t.PXMID is not null and t.STATUS='1'
+        and t.id in (select a.contentvalue
+        from wf_ru_inst_content a
+        where lower(a.table_name) = 'xm_instance'
+        and lower(a.contentname) = 'id'
+        and a.proc_inst_id in
+        (select b.proc_inst_id
+        from WF_RU_INST b
+        where b.pdef_id = #{activityId}
+        and b.PROCSTATUS = 1))
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and t.AZLX =#{azlx}
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd hh24:mi:ss')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd hh24:mi:ss')+1
+        </if>
+
+    </select>
+    <select id="getQsBwyjlbList" resultType="com.ljx.hfgsjt.entity.dto.Sjst.ProjectModel">
+        select z.id,z.xmbh,z.xmfzr,z.xmmc,z.dwmc,z.xmdz,z.lxr,to_char(z.lxsj,'yyyy-MM-dd HH24:mi'),z.azlx from (
+select ROWNUM rn,aa.* from( select t.id, t.xmbh, t.xmmc, t.dwmc, t.xmdz, t.lxr, t.lxsj,t.xmfzr,d.codename azlx
+from XM_INSTANCE t
+left join yj_bwyjzb c on t.id=c.xmid
+left join XTGL_CODE d on d.CODEVALUE=t.AZLX
+where c.QSYSRY = #{xmfzr} and t.PXMID is not null and t.STATUS='1'
+ and t.id in (select a.contentvalue
+        from wf_ru_inst_content a
+        where lower(a.table_name) = 'xm_instance'
+        and lower(a.contentname) = 'id'
+        and a.proc_inst_id in
+        (select b.proc_inst_id
+        from WF_RU_INST b
+        where b.pdef_id = #{activityId}
+        and b.PROCSTATUS = 1))
+        <if test="xmbh!=null and xmbh!=''">
+            and t.xmbh LIKE CONCAT('%',CONCAT(#{xmbh},'%'))
+        </if>
+        <if test="azlx!=null and azlx!=''">
+            and t.AZLX =#{azlx}
+        </if>
+        <if test="dwmc!=null and dwmc!=''">
+            and t.dwmc LIKE CONCAT('%',CONCAT(#{dwmc},'%'))
+        </if>
+        <if test="lxr!=null and lxr!=''">
+            and t.lxr LIKE CONCAT('%',CONCAT(#{lxr},'%'))
+        </if>
+        <if test="kssj!=null and kssj!=''">
+            and t.lxsj<![CDATA[ >= ]]>to_date(#{kssj},'yyyy-MM-dd')
+        </if>
+        <if test="jssj!=null and jssj!=''">
+            and t.lxsj<![CDATA[ < ]]>to_date(#{jssj},'yyyy-MM-dd')+1
+        </if>
+order by t.lxsj desc)aa
+)z
+where z.rn between #{startRow} and #{endRow}
+    </select>
+    <select id="getxmyjCount" resultType="java.lang.String">
+        select t.ID from YJ_BWYJZB t where t.XMID=#{xmid} and t.YJFSBH is not null
+    </select>
+</mapper>
