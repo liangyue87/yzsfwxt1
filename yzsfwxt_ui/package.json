@@ -24,7 +24,7 @@
     "jsplumb": "^2.9.3",
     "less": "^3.9.0",
     "nprogress": "^0.2.0",
-    "prismjs": "^1.8.4",
+    "prismjs": "^1.27.0",
     "qs": "^6.6.0",
     "script-load": "^0.1.0",
     "url-template": "^2.0.8",
